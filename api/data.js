@@ -55,7 +55,35 @@ export default function handler(req, res) {
           { "number": "500+", "label": "Active Students" },
           { "number": "50+", "label": "Black Belts" },
           { "number": "100%", "label": "Satisfaction" }
-        ]
+        ],
+        "values": [
+          {
+            "icon": "Shield",
+            "title": "Discipline",
+            "description": "We instill self-discipline and respect through structured training"
+          },
+          {
+            "icon": "Heart",
+            "title": "Integrity",
+            "description": "We uphold the highest standards of honesty and ethical conduct"
+          },
+          {
+            "icon": "Target",
+            "title": "Excellence",
+            "description": "We strive for continuous improvement in all aspects of training"
+          },
+          {
+            "icon": "Users",
+            "title": "Community",
+            "description": "We foster a supportive environment where everyone belongs"
+          }
+        ],
+        "cta": {
+          "title": "Join Our Legacy",
+          "text": "Become part of a tradition of excellence. Start your martial arts journey with Hawk Taekwondo today.",
+          "buttonLabel": "Get Started Now",
+          "buttonLink": "/contact"
+        }
       },
       "programs": [
         {

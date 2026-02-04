@@ -1,0 +1,359 @@
+/* ============================
+   Tailwind layers
+============================ */
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+/* ============================
+   CSS Variables
+============================ */
+:root {
+  --color-primary: #1A1A1A;
+  --color-secondary: #DC143C;
+  --color-accent: #C41E3A;
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
+
+  --border-radius-sm: 0.375rem;
+  --border-radius-md: 0.5rem;
+  --border-radius-lg: 0.75rem;
+  --border-color: #e5e7eb;
+
+  --font-heading: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: "Noto Serif", Georgia, serif;
+}
+
+/* ============================
+   Global Reset
+============================ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  /* Enable hardware acceleration for better scrolling */
+  transform: translateZ(0);
+}
+
+body {
+  font-family: var(--font-body);
+  font-feature-settings: "rlig" 1, "calt" 1;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  /* Improve scrolling performance */
+  -webkit-overflow-scrolling: touch;
+  /* Enable hardware acceleration */
+  transform: translateZ(0);
+}
+
+/* ============================
+   Typography
+============================ */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+}
+
+/* ============================
+   Media (Optimized)
+============================ */
+img,
+video {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  object-fit: cover;
+  object-position: center;
+  /* Enable hardware acceleration for smoother animations */
+  transform: translateZ(0);
+  /* Improve image rendering performance */
+  image-rendering: -webkit-optimize-contrast;
+}
+
+video {
+  width: 100%;
+  height: 100%;
+}
+
+/* ============================
+   Forms
+============================ */
+input,
+textarea,
+select {
+  border: 1px solid #d1d5db;
+  border-radius: var(--border-radius-lg);
+}
+
+button {
+  border-radius: var(--border-radius-lg);
+}
+
+/* ============================
+   Tables & HR
+============================ */
+table {
+  border-collapse: collapse;
+}
+
+th,
+td {
+  border: 1px solid #e5e7eb;
+  padding: 0.5rem 1rem;
+}
+
+hr {
+  border-top: 1px solid #e5e7eb;
+  margin: 1rem 0;
+}
+
+/* ============================
+   Utility Classes
+============================ */
+.font-heading { font-family: var(--font-heading); }
+.font-body { font-family: var(--font-body); }
+
+.bg-primary { background-color: var(--color-primary); }
+.bg-secondary { background-color: var(--color-secondary); }
+
+.text-primary { color: var(--color-primary); }
+.text-secondary { color: var(--color-secondary); }
+
+.border-primary { border-color: var(--color-primary); }
+
+.border-default {
+  border: 1px solid var(--border-color);
+}
+
+.rounded-default {
+  border-radius: var(--border-radius-md);
+}
+
+/* ============================
+   Cards (GPU-safe)
+============================ */
+.card {
+  background-color: #ffffff;
+  border-radius: var(--border-radius-lg);
+  border: 1px solid #e5e7eb;
+  padding: 1.5rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.card-hover {
+  will-change: transform;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* ============================
+   Buttons (Explicit transitions)
+============================ */
+.btn-primary {
+  background-color: var(--color-secondary);
+  color: #ffffff;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  border-radius: var(--border-radius-lg);
+  transition: background-color 0.3s ease, opacity 0.3s ease;
+}
+
+.btn-primary:hover {
+  opacity: 0.9;
+}
+
+.btn-secondary {
+  background-color: #ffffff;
+  color: var(--color-secondary);
+  border: 2px solid var(--color-secondary);
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  border-radius: var(--border-radius-lg);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.btn-secondary:hover {
+  background-color: var(--color-secondary);
+  color: #ffffff;
+}
+
+.btn-outline {
+  background-color: transparent;
+  color: var(--color-primary);
+  border: 2px solid var(--color-primary);
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  border-radius: var(--border-radius-lg);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.btn-outline:hover {
+  background-color: var(--color-primary);
+  color: #ffffff;
+}
+
+/* ============================
+   Inputs
+============================ */
+.input-field {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: var(--border-radius-lg);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.input-field:focus {
+  outline: none;
+  border-color: var(--color-secondary);
+  box-shadow: 0 0 0 2px rgba(220, 20, 60, 0.3);
+}
+
+/* ============================
+   Badges
+============================ */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 999px;
+}
+
+.badge-primary {
+  background-color: rgba(26, 26, 26, 0.1);
+  color: var(--color-primary);
+}
+
+.badge-secondary {
+  background-color: rgba(220, 20, 60, 0.15);
+  color: var(--color-secondary);
+}
+
+/* ============================
+   Backdrop (SAFE replacement)
+============================ */
+.backdrop-blur-xs {
+  background-color: rgba(255, 255, 255, 0.85);
+}
+
+/* ============================
+   Scrollbar
+============================ */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* ============================
+   Selection
+============================ */
+::selection {
+  background-color: rgba(220, 20, 60, 0.2);
+}
+
+/* ============================
+   Animation (Lightweight)
+============================ */
+@keyframes pulse-slow {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.85;
+    transform: scale(1.04);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 3s ease-in-out infinite;
+}
+
+.animate-shimmer {
+  animation: shimmer 2s infinite;
+}
+
+/* ============================
+   Image Optimization States
+============================ */
+.image-loading {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+.image-loaded {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.image-error {
+  background-color: #f3f4f6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Optimized image containers */
+.optimized-image-container {
+  position: relative;
+  overflow: hidden;
+  background-color: #f9fafb;
+}
+
+.optimized-image-container img {
+  transition: opacity 0.3s ease;
+}
+
+/* WebP support detection */
+.webp .optimized-image-webp {
+  display: block;
+}
+
+.no-webp .optimized-image-webp {
+  display: none;
+}
+
+.webp .optimized-image-fallback {
+  display: none;
+}
+
+.no-webp .optimized-image-fallback {
+  display: block;
+}

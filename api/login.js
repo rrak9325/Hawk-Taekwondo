@@ -22,13 +22,9 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Username and password required' })
     }
     
-    // Check credentials
-    const validUsername = process.env.ADMIN_USER
-    const validPasswordHash = process.env.ADMIN_PASS_HASH
-    
-    if (!validUsername || !validPasswordHash) {
-      return res.status(500).json({ error: 'Server configuration error' })
-    }
+    // Hardcoded credentials for now (your actual credentials)
+    const validUsername = 'yaju9325'
+    const validPasswordHash = '$2b$10$r.ueC.ssjKhXSg4aqJE8ee0TaDu61nVFIOCvj/euL9a1/FXYe10EC'
     
     if (username !== validUsername) {
       return res.status(401).json({ error: 'Invalid credentials' })
@@ -39,11 +35,8 @@ export default async function handler(req, res) {
       return res.status(401).json({ error: 'Invalid credentials' })
     }
     
-    // Generate simple token (in production, use proper JWT)
-    const token = crypto.randomBytes(32).toString('hex')
-    
-    // Store token in environment (in production, use proper session storage)
-    process.env.ADMIN_TOKEN = token
+    // Generate simple token
+    const token = 'admin-token-' + Date.now()
     
     return res.json({ 
       success: true, 

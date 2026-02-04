@@ -13,10 +13,25 @@ const Footer = () => {
   })
 
   useEffect(() => {
-    fetch(`/mockData.json?t=${Date.now()}`)
-      .then(r => r.json())
-      .then(json => setSchoolInfo(json.schoolInfo))
-      .catch(err => console.error('Error loading school info:', err))
+    const fetchData = async () => {
+      try {
+        let response
+        try {
+          response = await fetch(`/api/data?t=${Date.now()}`)
+          if (!response.ok) throw new Error('API failed')
+        } catch (apiError) {
+          console.warn('API failed, trying static file:', apiError)
+          response = await fetch(`/mockData.json?t=${Date.now()}`)
+        }
+        
+        const json = await response.json()
+        setSchoolInfo(json.schoolInfo)
+      } catch (err) {
+        console.error('Error loading school info:', err)
+      }
+    }
+    
+    fetchData()
   }, [])
 
   return (

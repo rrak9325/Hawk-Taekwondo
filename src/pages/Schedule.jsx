@@ -10,9 +10,25 @@ export default function Schedule() {
   const [selectedClass, setSelectedClass] = useState(null)
 
   useEffect(() => {
-    fetch(`/mockData.json?t=${Date.now()}`)
-      .then(r => r.json())
-      .then(setData)
+    const fetchData = async () => {
+      try {
+        let response
+        try {
+          response = await fetch(`/api/data?t=${Date.now()}`)
+          if (!response.ok) throw new Error('API failed')
+        } catch (apiError) {
+          console.warn('API failed, trying static file:', apiError)
+          response = await fetch(`/mockData.json?t=${Date.now()}`)
+        }
+        
+        const json = await response.json()
+        setData(json)
+      } catch (error) {
+        console.error('Failed to load data:', error)
+      }
+    }
+    
+    fetchData()
   }, [])
 
   if (!data) return null

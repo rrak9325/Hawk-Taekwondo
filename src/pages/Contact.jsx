@@ -11,22 +11,33 @@ export default function Contact() {
   useEffect(() => {
     let isMounted = true
     
-    fetch('/mockData.json')
-      .then(r => {
-        if (!r.ok) throw new Error('Failed to load data')
-        return r.json()
-      })
-      .then(json => {
+    // Try API first, fallback to static file
+    const fetchData = async () => {
+      try {
+        let response
+        try {
+          response = await fetch('/api/data')
+          if (!response.ok) throw new Error('API failed')
+        } catch (apiError) {
+          console.warn('API failed, trying static file:', apiError)
+          response = await fetch('/mockData.json')
+        }
+        
+        if (!response.ok) throw new Error('Failed to load data')
+        const json = await response.json()
+        
         if (isMounted) {
           setData(json)
           setReady(true)
         }
-      })
-      .catch(e => {
+      } catch (e) {
         if (isMounted) {
           setError(e.message)
         }
-      })
+      }
+    }
+    
+    fetchData()
 
     return () => {
       isMounted = false

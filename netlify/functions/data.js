@@ -1,14 +1,17 @@
-export default function handler(req, res) {
+exports.handler = async (event, context) => {
   // Enable CORS
-  res.setHeader('Access-Control-Allow-Origin', '*')
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization')
-  
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end()
+  const headers = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+    'Content-Type': 'application/json'
   }
 
-  if (req.method === 'GET') {
+  if (event.httpMethod === 'OPTIONS') {
+    return { statusCode: 200, headers, body: '' }
+  }
+
+  if (event.httpMethod === 'GET') {
     // Return complete data with FULL URLs for images
     const data = {
       "schoolInfo": {
@@ -30,7 +33,7 @@ export default function handler(req, res) {
           "titleMain": "Master the Art of",
           "titleHighlight": "Taekwondo",
           "subtitle": "Find your strength. Build your confidence.",
-          "videoUrl": "https://hawk-taekwondo-ahmedabad.vercel.app/uploads/1769960053292-1000063195.mp4",
+          "videoUrl": "/uploads/1769960053292-1000063195.mp4",
           "backgroundImage": "",
           "primaryButton": { "label": "Explore Programs", "link": "/programs" },
           "secondaryButton": { "label": "Start Free Trial", "link": "/contact" }
@@ -47,7 +50,7 @@ export default function handler(req, res) {
           "titleMain": "About",
           "titleHighlight": "Hawk Taekwondo",
           "subtitle": "We believe Taekwondo is for everyone. Our goal is to create a space where you can push your limits, learn discipline, and become the best version of yourself, all while being part of a great community.",
-          "videoUrl": "https://hawk-taekwondo-ahmedabad.vercel.app/uploads/1769960172419-vid-20260201-wa0049.mp4",
+          "videoUrl": "/uploads/1769960172419-vid-20260201-wa0049.mp4",
           "backgroundImage": ""
         },
         "stats": [
@@ -99,20 +102,6 @@ export default function handler(req, res) {
           "description": "Practical protection techniques designed for real-world situations and personal safety.",
           "benefits": ["Effective protection skills", "Situational awareness", "Confidence in dangerous situations", "Quick reaction techniques", "Legal self-defense knowledge"],
           "image": ""
-        },
-        {
-          "id": 3,
-          "name": "MuayThai",
-          "description": "The art of eight limbs - using fists, elbows, knees, and shins in a powerful striking art.",
-          "benefits": ["Explosive power development", "Full-body conditioning", "Mental toughness", "Traditional Thai techniques", "Competition preparation"],
-          "image": ""
-        },
-        {
-          "id": 4,
-          "name": "Kickboxing",
-          "description": "High-energy cardio workout combining boxing punches with powerful kicks for total fitness.",
-          "benefits": ["Intense calorie burning", "Improved coordination", "Cardiovascular endurance", "Core strength development", "Fun fitness alternative"],
-          "image": ""
         }
       ],
       "programsPage": {
@@ -121,7 +110,7 @@ export default function handler(req, res) {
           "titleHighlight": "Programs",
           "subtitle": "Discover the perfect program tailored to your age, skill level, and goals.",
           "videoUrl": "",
-          "backgroundImage": "https://hawk-taekwondo-ahmedabad.vercel.app/uploads/1770040004590-peak_rudra.jpg"
+          "backgroundImage": "/uploads/1770040004590-peak_rudra.jpg"
         }
       },
       "schedulePage": {
@@ -139,7 +128,7 @@ export default function handler(req, res) {
           "titleHighlight": "Touch",
           "subtitle": "Ready to start your martial arts journey? Contact us today.",
           "videoUrl": "",
-          "backgroundImage": "https://hawk-taekwondo-ahmedabad.vercel.app/uploads/1770043363663-_psp76771.jpg"
+          "backgroundImage": "/uploads/1770043363663-_psp76771.jpg"
         }
       },
       "facultyPage": {
@@ -148,7 +137,7 @@ export default function handler(req, res) {
           "titleHighlight": "Instructors",
           "subtitle": "Learn from certified masters with decades of experience",
           "videoUrl": "",
-          "backgroundImage": "https://hawk-taekwondo-ahmedabad.vercel.app/uploads/1770040086370-1000063048.jpg"
+          "backgroundImage": "/uploads/1770040086370-1000063048.jpg"
         }
       },
       "instructors": [
@@ -157,7 +146,7 @@ export default function handler(req, res) {
           "name": "Master Yajuvendrasinh Rathod",
           "rank": "4th DAN Black Belt",
           "bio": "Chief Instructor with over 25 years of experience in Taekwondo. Asian Taekwondo Union Licensed Coach specializing in advanced techniques and competition training.",
-          "image": "https://hawk-taekwondo-ahmedabad.vercel.app/uploads/1770038040858-1000063051.jpg"
+          "image": "/uploads/1770038040858-1000063051.jpg"
         },
         {
           "id": 2,
@@ -166,7 +155,7 @@ export default function handler(req, res) {
           "specialization": "Chief Instructor",
           "experience": "25 years",
           "bio": "Asian Taekwondo Union Licensed Coach with over two decades of teaching experience. Specializes in advanced techniques and competition training.",
-          "image": "https://hawk-taekwondo-ahmedabad.vercel.app/uploads/1770038040858-1000063051.jpg"
+          "image": "/uploads/1770038040858-1000063051.jpg"
         }
       ],
       "testimonials": [
@@ -185,38 +174,6 @@ export default function handler(req, res) {
           "rating": 5,
           "comment": "I was looking for a way to stay fit and learn something new. The community here is so welcoming and the workouts are legit.",
           "image": "/images/testimonials/student-2.jpg"
-        },
-        {
-          "id": 3,
-          "name": "Emily",
-          "program": "Teen Program",
-          "rating": 5,
-          "comment": "The instructors really push you to be your best. It's tough but so rewarding when you see your progress.",
-          "image": "/images/testimonials/student-3.jpg"
-        },
-        {
-          "id": 4,
-          "name": "David",
-          "program": "Competition Team",
-          "rating": 5,
-          "comment": "Training for tournaments here has been a game changer for me. The focus on technique is incredible.",
-          "image": "/images/testimonials/student-4.jpg"
-        },
-        {
-          "id": 5,
-          "name": "Lisa",
-          "program": "Family Program",
-          "rating": 5,
-          "comment": "It's rare to find an activity our whole family can do together. We've grown so much closer through our training.",
-          "image": "/images/testimonials/student-5.jpg"
-        },
-        {
-          "id": 6,
-          "name": "James",
-          "program": "Adult Program",
-          "rating": 5,
-          "comment": "Great atmosphere and top-notch instruction. Definitely recommend it to anyone looking to start their journey.",
-          "image": "/images/testimonials/student-6.jpg"
         }
       ],
       "classSchedule": {
@@ -338,30 +295,42 @@ export default function handler(req, res) {
         "featured": [
           {
             "id": 1770193050603.39,
-            "image": "https://hawk-taekwondo-ahmedabad.vercel.app/uploads/1770193050590-peakkk.jpg",
+            "image": "/uploads/1770193050590-peakkk.jpg",
             "title": ""
           },
           {
             "id": 1770140135352.269,
-            "image": "https://hawk-taekwondo-ahmedabad.vercel.app/uploads/1770140135346-_psp7619.jpg",
+            "image": "/uploads/1770140135346-_psp7619.jpg",
             "title": ""
           },
           {
             "id": 1769973678931.8313,
-            "image": "https://hawk-taekwondo-ahmedabad.vercel.app/uploads/1769973683724-_psp7623.jpg",
+            "image": "/uploads/1769973683724-_psp7623.jpg",
             "title": "Rudra's Aura..."
           }
         ]
       }
     }
     
-    return res.json(data)
+    return {
+      statusCode: 200,
+      headers,
+      body: JSON.stringify(data)
+    }
   }
   
-  if (req.method === 'POST') {
+  if (event.httpMethod === 'POST') {
     // Save data - just return success
-    return res.json({ success: true, message: 'Data saved successfully' })
+    return {
+      statusCode: 200,
+      headers,
+      body: JSON.stringify({ success: true, message: 'Data saved successfully' })
+    }
   }
   
-  return res.status(405).json({ error: 'Method not allowed' })
+  return {
+    statusCode: 405,
+    headers,
+    body: JSON.stringify({ error: 'Method not allowed' })
+  }
 }

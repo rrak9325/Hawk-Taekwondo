@@ -16,7 +16,16 @@ class ApiService {
     }
 
     try {
-      const response = await fetch(`/mockData.json?t=${Date.now()}`)
+      // TRY API FIRST, THEN FALLBACK TO STATIC FILE
+      let response
+      try {
+        response = await fetch(`/api/data?t=${Date.now()}`)
+        if (!response.ok) throw new Error('API failed')
+      } catch (apiError) {
+        console.warn('API failed, trying static file:', apiError)
+        response = await fetch(`/mockData.json?t=${Date.now()}`)
+      }
+      
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
       }

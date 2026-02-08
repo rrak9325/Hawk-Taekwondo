@@ -54,33 +54,23 @@ export class DataService {
 
   async updateSchoolData(data) {
     try {
-      console.log('🔄 Updating school data...')
-      console.log('📊 Data size:', JSON.stringify(data).length, 'bytes')
-      console.log('🔑 Has token:', !!apiClient.token)
-      
-      // Always try to use the backend API in development
-      // Only fall back to file download in production without API
       const isProduction = import.meta.env.PROD
       const hasApiUrl = import.meta.env.VITE_API_URL
       
-      console.log('🏗️ Environment:', { isProduction, hasApiUrl })
-      
       if (isProduction && !hasApiUrl) {
         // Production mode without API - download file
-        console.log('📥 Using download mode (production without API)')
         this.downloadDataFile(data)
         this.clearCache()
         return { success: true, mode: 'download' }
       }
       
       // Development mode or production with API - use backend
-      console.log('🌐 Using API mode')
       const response = await apiClient.post('/api/data', data)
-      console.log('✅ API response received:', response)
+      console.log('✅ Admin changes saved successfully')
       this.clearCache()
       return { success: true, mode: 'api', data: response }
     } catch (error) {
-      console.error('❌ Failed to update school data:', error)
+      console.error('Failed to update school data:', error)
       return { 
         success: false, 
         error: error.message || 'Failed to update data' 

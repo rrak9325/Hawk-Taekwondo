@@ -21,29 +21,21 @@ export class DataController {
 
   async updateData(req, res) {
     try {
-      console.log('📥 Received data update request')
-      console.log('📊 Request body size:', JSON.stringify(req.body).length, 'bytes')
-      console.log('🔐 Auth header:', req.headers.authorization ? 'Present' : 'Missing')
-      
       // Basic validation
       if (!req.body || typeof req.body !== 'object') {
-        console.log('❌ Invalid payload')
         return res.status(400).json({ error: 'Invalid payload' })
       }
 
-      console.log('🔄 Calling data service...')
       const result = await dataService.updateSchoolData(req.body)
-      console.log('📤 Data service result:', result)
       
       if (result.success) {
-        console.log('✅ Data update successful')
+        console.log('✅ Admin data updated successfully')
         res.json({ success: true })
       } else {
-        console.log('❌ Data update failed:', result.error)
         res.status(result.status || 500).json({ error: result.error })
       }
     } catch (error) {
-      console.error('💥 Update data controller error:', error)
+      console.error('Update data controller error:', error)
       res.status(500).json({ error: 'Internal server error' })
     }
   }

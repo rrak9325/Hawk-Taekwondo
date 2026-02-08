@@ -9,13 +9,12 @@ export class UploadService {
       const formData = new FormData()
       formData.append('file', file)
 
-      console.log('📤 Uploading file:', file.name, 'Size:', file.size, 'Type:', file.type)
-      console.log('🔐 Token available:', !!apiClient.token)
+      console.log(`📤 Uploading: ${file.name} (${(file.size / 1024 / 1024).toFixed(2)}MB)`)
 
       // Use upload method which doesn't set Content-Type header
       const response = await apiClient.upload('/api/upload', formData)
       
-      console.log('✅ Upload response:', response)
+      console.log(`✅ Upload complete: ${file.name}`)
       return { 
         success: true, 
         data: response 

@@ -106,7 +106,6 @@ export default function AdminNew() {
         
         // Normalize schedule batches from object to array if needed
         if (data?.classSchedule?.batches && !Array.isArray(data.classSchedule.batches)) {
-          console.log('🔄 Converting schedule batches from object to array')
           data = {
             ...data,
             classSchedule: {
@@ -117,7 +116,6 @@ export default function AdminNew() {
         }
         
         setData(data)
-        console.log('✅ Data loaded and normalized')
       } else {
         throw new Error(result.error)
       }
@@ -174,9 +172,6 @@ export default function AdminNew() {
           ...updated.classSchedule,
           dailySchedule: dailySchedule
         }
-        console.log('📅 Auto-updated daily schedule after field change')
-        console.log('🔄 Current batches:', batches)
-        console.log('📅 Generated daily schedule:', dailySchedule)
       }
       
       return updated
@@ -184,18 +179,12 @@ export default function AdminNew() {
   }, [updateDailySchedule])
 
   const handleSave = async () => {
-    console.log('🔄 Save button clicked!')
-    console.log('📊 Data exists:', !!data)
-    console.log('💾 Current saving state:', saving)
-    
     if (!data) {
-      console.log('❌ No data to save')
       addToast('error', 'No data to save')
       return
     }
     
     setSaving(true)
-    console.log('🚀 Starting save process...')
     
     try {
       // Ensure data is in the correct format before saving
@@ -203,32 +192,24 @@ export default function AdminNew() {
       
       // Ensure schedule batches are in array format for consistency
       if (dataToSave.classSchedule?.batches && !Array.isArray(dataToSave.classSchedule.batches)) {
-        console.log('🔄 Converting batches to array format for save')
         dataToSave.classSchedule.batches = Object.values(dataToSave.classSchedule.batches)
       }
       
-      console.log('📤 Saving data with schedule batches:', dataToSave.classSchedule?.batches?.length || 0)
-      
       const result = await dataService.updateSchoolData(dataToSave)
-      console.log('📥 Save result:', result)
       
       if (result.success) {
         if (result.mode === 'download') {
-          console.log('📥 Download mode success')
           addToast('success', 'Downloaded mockData.json. Replace public/mockData.json and redeploy.')
         } else {
-          console.log('🌐 API mode success')
           addToast('success', 'Data saved successfully! Changes are now live.')
         }
       } else {
-        console.log('❌ Save failed:', result.error)
         throw new Error(result.error)
       }
     } catch (error) {
-      console.error('💥 Save error:', error)
+      console.error('Save error:', error)
       addToast('error', `Save failed: ${error.message}`)
     } finally {
-      console.log('🏁 Save process complete')
       setSaving(false)
     }
   }
@@ -962,7 +943,6 @@ export default function AdminNew() {
                       <div className="flex gap-3">
                         <button
                           onClick={() => {
-                            console.log('🔄 Refreshing daily schedule...')
                             setData(prev => {
                               const currentBatches = Array.isArray(prev.classSchedule?.batches) 
                                 ? prev.classSchedule.batches 
@@ -975,7 +955,6 @@ export default function AdminNew() {
                                   dailySchedule: dailySchedule
                                 }
                               }
-                              console.log('📅 Daily schedule refreshed:', updated.classSchedule.dailySchedule)
                               return updated
                             })
                             addToast('success', 'Schedule refreshed!')
@@ -986,7 +965,6 @@ export default function AdminNew() {
                         </button>
                         <button
                           onClick={() => {
-                            console.log('🔄 Adding new batch...')
                             const newBatch = {
                               name: 'New Batch',
                               days: ['Monday'],
@@ -1009,8 +987,6 @@ export default function AdminNew() {
                                   dailySchedule: dailySchedule
                                 }
                               }
-                              console.log('✅ New batch added:', updated.classSchedule.batches)
-                              console.log('📅 Daily schedule updated:', updated.classSchedule.dailySchedule)
                               return updated
                             })
                             addToast('success', 'New batch added!')
@@ -1037,7 +1013,6 @@ export default function AdminNew() {
                             <button
                               onClick={() => {
                                 if (!confirm('Delete this batch?')) return
-                                console.log('🗑️ Deleting batch:', index)
                                 setData(prev => {
                                   const currentBatches = Array.isArray(prev.classSchedule?.batches) 
                                     ? prev.classSchedule.batches 
@@ -1054,8 +1029,6 @@ export default function AdminNew() {
                                       dailySchedule: dailySchedule
                                     }
                                   }
-                                  console.log('✅ Batch deleted, remaining:', updated.classSchedule.batches)
-                                  console.log('📅 Daily schedule updated:', updated.classSchedule.dailySchedule)
                                   return updated
                                 })
                                 addToast('success', 'Batch deleted!')

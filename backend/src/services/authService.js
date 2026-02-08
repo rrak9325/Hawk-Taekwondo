@@ -9,8 +9,9 @@ export class AuthService {
   constructor() {
     this.loginAttempts = new Map()
     this.activeSessions = new Set()
-    this.MAX_LOGIN_ATTEMPTS = 5
-    this.LOCKOUT_TIME = 15 * 60 * 1000 // 15 minutes
+    this.MAX_LOGIN_ATTEMPTS = 3 // Reduced from 5 to 3
+    this.LOCKOUT_TIME = 30 * 60 * 1000 // Increased to 30 minutes
+    this.PROGRESSIVE_DELAY = true // Add progressive delays
   }
 
   async login(credentials, clientIP) {
@@ -21,10 +22,20 @@ export class AuthService {
     const rateLimitResult = this.checkRateLimit(attemptKey)
     
     if (!rateLimitResult.allowed) {
+      console.log(`🚫 Login blocked - Too many attempts from IP: ${clientIP}, User: ${username}`)
       return {
         success: false,
         status: 429,
         error: rateLimitResult.message
+      }
+    }
+
+    // Add progressive delay based on failed attempts
+    if (this.PROGRESSIVE_DELAY) {
+      const attempts = this.loginAttempts.get(attemptKey)
+      if (attempts && attempts.count > 0) {
+        const delay = Math.min(attempts.count * 1000, 5000) // Max 5 second delay
+        await new Promise(resolve => setTimeout(resolve, delay))
       }
     }
 
@@ -39,7 +50,7 @@ export class AuthService {
       const token = crypto.randomBytes(32).toString('hex')
       this.activeSessions.add(token)
       
-      console.log('Login successful for:', username)
+      console.log(`✅ Login successful - User: ${username}, IP: ${clientIP}`)
       return {
         success: true,
         token
@@ -47,8 +58,9 @@ export class AuthService {
     } else {
       // Record failed attempt
       this.recordFailedAttempt(attemptKey)
+      const attempts = this.loginAttempts.get(attemptKey)
       
-      console.log('Login failed for:', username)
+      console.log(`❌ Login failed - User: ${username}, IP: ${clientIP}, Attempts: ${attempts.count}/${this.MAX_LOGIN_ATTEMPTS}`)
       return {
         success: false,
         status: 401,
@@ -60,6 +72,7 @@ export class AuthService {
   async logout(token) {
     if (token) {
       this.activeSessions.delete(token)
+      console.log('👋 User logged out')
     }
   }
 

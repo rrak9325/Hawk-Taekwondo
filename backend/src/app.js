@@ -28,13 +28,24 @@ export function createApp() {
     crossOriginResourcePolicy: { policy: "cross-origin" }
   }))
 
-  // Rate limiting
+  // General API rate limiting
   const limiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
     max: 100, // limit each IP to 100 requests per windowMs
     message: 'Too many requests from this IP'
   })
   app.use('/api', limiter)
+
+  // Strict rate limiting for login endpoint (brute-force protection)
+  const loginLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 5, // Only 5 login attempts per 15 minutes per IP
+    skipSuccessfulRequests: true, // Don't count successful logins
+    message: 'Too many login attempts. Please try again later.',
+    standardHeaders: true,
+    legacyHeaders: false,
+  })
+  app.use('/api/login', loginLimiter)
 
   // CORS configuration
   app.use(cors({

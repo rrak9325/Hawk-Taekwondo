@@ -174,7 +174,6 @@ Message: ${formData.message}`
                     referrerPolicy="no-referrer-when-downgrade"
                     title="Hawk Taekwondo Location"
                     onError={(e) => {
-                      console.log('Map failed to load, showing fallback')
                       e.target.style.display = 'none'
                       e.target.parentElement.innerHTML = `
                         <div class="w-full h-full bg-gray-100 flex items-center justify-center">

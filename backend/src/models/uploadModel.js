@@ -36,6 +36,37 @@ export class UploadModel {
     }
   }
 
+  async saveImageDirect(file) {
+    try {
+      console.log('📤 Uploading image to Cloudinary:', file.name)
+      
+      // Upload to Cloudinary
+      const result = await cloudinary.uploader.upload(file.tempFilePath, {
+        resource_type: 'image',
+        folder: 'hawk-taekwondo/images',
+        use_filename: true,
+        unique_filename: true
+      })
+
+      // Clean up temp file
+      if (fs.existsSync(file.tempFilePath)) {
+        fs.unlinkSync(file.tempFilePath)
+      }
+
+      console.log('✅ Image uploaded to Cloudinary:', result.secure_url)
+      
+      return {
+        url: result.secure_url,
+        publicId: result.public_id,
+        filename: result.original_filename,
+        size: result.bytes
+      }
+    } catch (error) {
+      console.error('Cloudinary image upload error:', error)
+      throw error
+    }
+  }
+
   async saveProcessedImages(processedImages) {
     try {
       const results = []

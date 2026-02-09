@@ -1,5 +1,8 @@
 {
   "version": 2,
+  "buildCommand": "npm run vercel-build",
+  "outputDirectory": "frontend/dist",
+  "installCommand": "npm install",
   "builds": [
     {
       "src": "backend/server.js",
@@ -16,12 +19,11 @@
       "dest": "backend/server.js"
     },
     {
-      "src": "/(.*\\..+)",
-      "dest": "frontend/dist/$1"
+      "handle": "filesystem"
     },
     {
       "src": "/(.*)",
-      "dest": "frontend/dist/index.html"
+      "dest": "/index.html"
     }
   ]
 }

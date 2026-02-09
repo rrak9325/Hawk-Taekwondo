@@ -11,6 +11,7 @@
     "start:frontend": "cd frontend && npm run dev",
     "start:backend": "cd backend && npm run start",
     "build": "cd frontend && npm run build",
+    "vercel-build": "cd frontend && npm install && npm run build && cd ../backend && npm install",
     "build:frontend": "cd frontend && npm run build",
     "build:backend": "echo 'Backend build complete (no build step needed for Node.js)'",
     "build:full": "npm run install:all && npm run build",

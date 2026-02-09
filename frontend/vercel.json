@@ -1,6 +1,10 @@
 {
   "routes": [
     {
+      "src": "/mockData.json",
+      "dest": "/mockData.json"
+    },
+    {
       "handle": "filesystem"
     },
     {

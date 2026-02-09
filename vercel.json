@@ -1,16 +1,21 @@
 {
-  "installCommand": "cd frontend && npm install && cd ../backend && npm install",
-  "buildCommand": "npm run build",
-  "outputDirectory": "frontend/dist",
-  "framework": null,
-  "rewrites": [
+  "version": 2,
+  "builds": [
     {
-      "source": "/api/:path*",
-      "destination": "backend/server.js"
+      "src": "frontend/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "dist"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "handle": "filesystem"
     },
     {
-      "source": "/uploads/:path*",
-      "destination": "backend/server.js"
+      "src": "/(.*)",
+      "dest": "/index.html"
     }
   ]
 }

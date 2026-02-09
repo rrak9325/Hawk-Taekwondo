@@ -91,6 +91,7 @@ export default function Faculty() {
                           loading={i < 2 ? 'eager' : 'lazy'}
                           decoding="async"
                           onError={(e) => {
+                            console.log('Instructor image failed to load:', instructor.image)
                             e.target.style.display = 'none'
                             e.target.parentElement.innerHTML = `
                               <div class="w-48 h-48 bg-gradient-to-br from-primary/10 to-secondary/10 rounded-full flex items-center justify-center border-4 border-white shadow-xl">

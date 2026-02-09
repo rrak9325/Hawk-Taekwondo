@@ -1,29 +1,24 @@
 {
-  "version": 2,
-  "buildCommand": "npm run vercel-build",
-  "outputDirectory": "frontend/dist",
-  "installCommand": "npm install",
-  "builds": [
+  "rewrites": [
     {
-      "src": "backend/server.js",
-      "use": "@vercel/node"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "backend/server.js"
+      "source": "/api/:path*",
+      "destination": "/api/:path*"
     },
     {
-      "src": "/uploads/(.*)",
-      "dest": "backend/server.js"
+      "source": "/assets/:path*",
+      "destination": "/assets/:path*"
     },
     {
-      "handle": "filesystem"
+      "source": "/uploads/:path*",
+      "destination": "/uploads/:path*"
     },
     {
-      "src": "/(.*)",
-      "dest": "/index.html"
+      "source": "/images/:path*",
+      "destination": "/images/:path*"
+    },
+    {
+      "source": "/((?!api|assets|uploads|images).*)",
+      "destination": "/index.html"
     }
   ]
 }

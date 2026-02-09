@@ -6,21 +6,35 @@ import uploadService from '../services/uploadService.js'
 export class UploadController {
   async uploadFile(req, res) {
     try {
+      console.log('📤 Upload request received')
+      console.log('📋 Headers:', req.headers)
+      console.log('📁 Files:', req.files ? Object.keys(req.files) : 'No files')
+      console.log('🔐 Auth:', req.headers.authorization ? 'Present' : 'Missing')
+
       if (!req.files || !req.files.file) {
+        console.log('❌ No file in request')
         return res.status(400).json({ error: 'No file uploaded' })
       }
 
       const file = req.files.file
+      console.log('📄 File details:', {
+        name: file.name,
+        size: file.size,
+        mimetype: file.mimetype,
+        tempFilePath: file.tempFilePath
+      })
+
       const result = await uploadService.processUpload(file)
       
       if (result.success) {
-        console.log(`📤 File uploaded - Name: ${file.name}, Size: ${(file.size / 1024 / 1024).toFixed(2)}MB, Type: ${file.mimetype}`)
+        console.log('✅ Upload successful:', result.data)
         res.json(result.data)
       } else {
+        console.log('❌ Upload failed:', result.error)
         res.status(result.status || 500).json({ error: result.error })
       }
     } catch (error) {
-      console.error('Upload controller error:', error)
+      console.error('💥 Upload controller error:', error)
       res.status(500).json({ error: 'Upload failed: ' + error.message })
     }
   }

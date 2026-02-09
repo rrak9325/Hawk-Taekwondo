@@ -102,27 +102,80 @@ export class UploadService {
 
   async processImage(file) {
     try {
-      console.log('🖼️ Uploading image directly to Cloudinary:', file.name)
+      console.log('🖼️ Starting image processing for:', file.name)
+      console.log('📊 Sharp available:', imageProcessor.isAvailable())
       
-      // Upload directly to Cloudinary without Sharp processing
-      const result = await uploadModel.saveImageDirect(file)
+      // If Sharp is not available, save file directly
+      if (!imageProcessor.isAvailable()) {
+        console.log('⚠️ Sharp not available, saving file directly')
+        const result = await uploadModel.saveVideo(file) // Use video save method for direct file save
+        return {
+          success: true,
+          data: {
+            url: result.url,
+            type: 'image',
+            originalSize: file.size,
+            optimizedSize: result.size,
+            compressionRatio: '0',
+            format: 'original',
+            filename: result.filename
+          }
+        }
+      }
+
+      console.log('🔄 Processing with Sharp...')
+      // Process with image optimization
+      const processedImages = await imageProcessor.process(file)
       
+      console.log('💾 Saving processed images...')
+      // Save processed images
+      const saveResults = await uploadModel.saveProcessedImages(processedImages)
+      
+      // Return best format (WebP preferred)
+      const bestImage = saveResults.find(img => img.format === 'webp') || saveResults[0]
+      
+      console.log('✅ Image processing complete:', bestImage.filename)
       return {
         success: true,
         data: {
-          url: result.url,
+          url: bestImage.url,
           type: 'image',
           originalSize: file.size,
-          filename: result.filename,
-          publicId: result.publicId
+          optimizedSize: bestImage.size,
+          compressionRatio: bestImage.compressionRatio,
+          format: bestImage.format,
+          dimensions: bestImage.dimensions,
+          filename: bestImage.filename,
+          allFormats: saveResults,
+          savings: `${bestImage.compressionRatio}% smaller`
         }
       }
     } catch (error) {
-      console.error('💥 Image upload error:', error)
-      return {
-        success: false,
-        status: 500,
-        error: 'Image upload failed: ' + error.message
+      console.error('💥 Image processing error:', error)
+      
+      // Fallback: save original file
+      try {
+        console.log('🔄 Falling back to direct file save')
+        const result = await uploadModel.saveVideo(file)
+        return {
+          success: true,
+          data: {
+            url: result.url,
+            type: 'image',
+            originalSize: file.size,
+            optimizedSize: result.size,
+            compressionRatio: '0',
+            format: 'original',
+            filename: result.filename
+          }
+        }
+      } catch (fallbackError) {
+        console.error('💥 Fallback save failed:', fallbackError)
+        return {
+          success: false,
+          status: 500,
+          error: 'Image processing and fallback failed'
+        }
       }
     }
   }

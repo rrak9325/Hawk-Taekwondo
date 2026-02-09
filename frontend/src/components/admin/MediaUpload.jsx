@@ -14,7 +14,8 @@ export default function MediaUpload({
   const [uploadProgress, setUploadProgress] = useState(0)
   const [compressionStats, setCompressionStats] = useState(null)
 
-  // Debug logging removed - only essential logs kept
+  // Debug logging
+  console.log(`MediaUpload - ${label}:`, { value, isVideo, hasValue: !!value })
 
   const handleUpload = async (e) => {
     const file = e.target.files[0]
@@ -172,7 +173,7 @@ export default function MediaUpload({
                   console.error('Image load error:', e.target.src)
                 }}
                 onLoad={() => {
-                  // Image loaded successfully
+                  console.log('Image loaded successfully:', value)
                 }}
               />
             )}

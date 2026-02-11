@@ -4,8 +4,19 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
 
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: undefined
+      }
+    }
+  },
+
   server: {
     host: true,                     // allows access from network (0.0.0.0)
+    headers: {
+      'Content-Security-Policy': "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: http: https://res.cloudinary.com; media-src 'self' https: http: https://res.cloudinary.com; font-src 'self' data:; connect-src 'self' https://hawktaekwondo.onrender.com http://localhost:3001 https://res.cloudinary.com;"
+    },
 
     // Allow ngrok domain + localhost
     allowedHosts: [

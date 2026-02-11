@@ -19,7 +19,7 @@
       "titleMain": "Master the Art of",
       "titleHighlight": "Taekwondo",
       "subtitle": "Find your strength. Build your confidence.",
-      "videoUrl": "/uploads/1770308838021-1000063195.mp4",
+      "videoUrl": "",
       "backgroundImage": "",
       "primaryButton": {
         "label": "Explore Programs",
@@ -354,28 +354,7 @@
     ]
   },
   "gallery": {
-    "featured": [
-      {
-        "id": 1770653670755.851,
-        "image": "/uploads/1770653670747-wowwww.jpg",
-        "title": ""
-      },
-      {
-        "id": 1770477581885.5278,
-        "image": "/uploads/1770477581559-peakkk-800x600.webp",
-        "title": ""
-      },
-      {
-        "id": 1770477575609.7527,
-        "image": "/uploads/1770477575300-NNknfdnsdina-800x600.webp",
-        "title": ""
-      },
-      {
-        "id": 1770477571356.6843,
-        "image": "/uploads/1770477571036-_PSP7619-800x600.webp",
-        "title": ""
-      }
-    ]
+    "featured": []
   },
   "videos": [
     {

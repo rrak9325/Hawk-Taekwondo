@@ -5,7 +5,7 @@
     "mission": "We believe Taekwondo is for everyone. Our goal is to create a space where you can push your limits, learn discipline, and become the best version of yourself, all while being part of a great community.",
     "founded": 2010,
     "address": "First Floor, Mangalya Complex, above Vadwala Auto, opp. Anjali BRTS, Pankaj Society, Bhatta, Vasna, Ahmedabad, Gujarat 380007",
-    "phone": "+91 848782929",
+    "phone": "+91 8487829291",
     "email": "httc.tkd29@gmail.com",
     "mapLink": "https://www.google.com/maps/place/Hawk+Taekwondo+Training+Centre/@23.0039668,72.5541008,17z/data=!3m1!4b1!4m6!3m5!1s0x395e851bc7092e07:0x21ae1c75bac35a33!8m2!3d23.0039668!4d72.5541008!16s%2Fg%2F11d_tj5tvw?hl=en-GB&entry=ttu&g_ep=EgoyMDI2MDEyOC4wIKXMDSoKLDEwMDc5MjA3M0gBUAM%3D",
     "hours": [
@@ -19,7 +19,7 @@
       "titleMain": "Master the Art of",
       "titleHighlight": "Taekwondo",
       "subtitle": "Find your strength. Build your confidence.",
-      "videoUrl": "/boxing.mp4",
+      "videoUrl": "/uploads/1770308838021-1000063195.mp4",
       "backgroundImage": "",
       "primaryButton": {
         "label": "Explore Programs",
@@ -59,7 +59,7 @@
       "titleHighlight": "Hawk Taekwondo",
       "subtitle": "We believe Taekwondo is for everyone. Our goal is to create a space where you can push your limits, learn discipline, and become the best version of yourself, all while being part of a great community.",
       "videoUrl": "",
-      "backgroundImage": "/images/hero/image1.webp"
+      "backgroundImage": "https://res.cloudinary.com/dem7arres/image/upload/v1770794357/hawk-taekwondo/images/tmp-3-93361770794359024_iqwaid.jpg"
     },
     "stats": [
       {
@@ -110,8 +110,19 @@
   },
   "programs": {
     "0": {
+      "id": 1770567240668,
+      "name": "Kickboxing",
+      "description": "Hybrid striking martial art and combat sport combining punches and kicks",
+      "benefits": [
+        "Improved cardiovascular endurance and stamina",
+        "Full-body strength and muscle toning",
+        "Enhanced coordination, agility, and power"
+      ],
+      "image": ""
+    },
+    "1": {
       "id": 1,
-      "name": "Taekwonddo",
+      "name": "Taekwondo",
       "description": "Traditional Korean martial art focusing on high kicks, jumping and spinning kicks, and fast kicking techniques.",
       "benefits": [
         "Improved flexibility and balance",
@@ -122,7 +133,7 @@
       ],
       "image": ""
     },
-    "1": {
+    "2": {
       "id": 2,
       "name": "Self Defence",
       "description": "Practical protection techniques designed for real-world situations and personal safety.",
@@ -135,7 +146,7 @@
       ],
       "image": ""
     },
-    "2": {
+    "3": {
       "id": 3,
       "name": "MuayThai",
       "description": "The art of eight limbs - using fists, elbows, knees, and shins in a powerful striking art.",
@@ -147,19 +158,6 @@
         "Competition preparation"
       ],
       "image": ""
-    },
-    "3": {
-      "id": 4,
-      "name": "Kickboxing",
-      "description": "High-energy cardio workout combining boxing punches with powerful kicks for total fitness.",
-      "benefits": [
-        "Intense calorie burning",
-        "Improved coordination",
-        "Cardiovascular endurance",
-        "Core strength development",
-        "Fun fitness alternative"
-      ],
-      "image": ""
     }
   },
   "programsPage": {
@@ -168,7 +166,7 @@
       "titleHighlight": "Programs",
       "subtitle": "Discover the perfect program tailored to your age, skill level, and goals.",
       "videoUrl": "",
-      "backgroundImage": "/images/hero/image1.webp"
+      "backgroundImage": ""
     }
   },
   "schedulePage": {
@@ -186,7 +184,7 @@
       "titleHighlight": "Touch",
       "subtitle": "Ready to start your martial arts journey? Contact us today.",
       "videoUrl": "",
-      "backgroundImage": "/images/instructors/a.webp"
+      "backgroundImage": "https://res.cloudinary.com/dem7arres/image/upload/v1770793523/hawk-taekwondo/images/tmp-4-71201770793525861_uiqjzg.gif"
     }
   },
   "facultyPage": {
@@ -195,25 +193,27 @@
       "titleHighlight": "Instructors",
       "subtitle": "Learn from certified masters with decades of experience",
       "videoUrl": "",
-      "backgroundImage": "/images/instructors/b.jpeg"
+      "backgroundImage": ""
     }
   },
   "instructors": {
     "0": {
-      "id": 1770128800536,
-      "name": "Master Yajuvendrasinh Rathod",
-      "rank": "4th DAN Black Belt",
-      "bio": "Chief Instructor with over 25 years of experience in Taekwondo. Asian Taekwondo Union Licensed Coach specializing in advanced techniques and competition training.",
-      "image": "/images/instructors/a.webp"
+      "id": 1770791917387,
+      "name": "Jeffery Epstein",
+      "rank": "????",
+      "specialization": "CEO of the world",
+      "experience": "67 years ig",
+      "bio": "",
+      "image": ""
     },
     "1": {
       "id": 2,
-      "name": "Yajuvendrasinh RATHODd",
+      "name": "Yajuvendrasinh RATHOD",
       "rank": "4th DAN Black Belt",
       "specialization": "Chief Instructor",
       "experience": "25 years",
       "bio": "Asian Taekwondo Union Licensed Coach with over two decades of teaching experience. Specializes in advanced techniques and competition training.",
-      "image": "/images/instructors/b.jpeg"
+      "image": ""
     },
     "2": {
       "id": 3,
@@ -225,64 +225,7 @@
       "image": ""
     }
   },
-  "testimonials": [
-    {
-      "id": 1,
-      "name": "Sarah",
-      "program": "Kids Program",
-      "rating": 5,
-      "comment": "My daughter loves it here. Her confidence has skyrocketed since she started training with the team.",
-      "image": "/images/testimonials/student-1.jpg"
-    },
-    {
-      "id": 2,
-      "name": "Mike",
-      "program": "Adult Program",
-      "rating": 5,
-      "comment": "I was looking for a way to stay fit and learn something new. The community here is so welcoming and the workouts are legit.",
-      "image": "/images/testimonials/student-2.jpg"
-    },
-    {
-      "id": 3,
-      "name": "Emily",
-      "program": "Teen Program",
-      "rating": 5,
-      "comment": "The instructors really push you to be your best. It's tough but so rewarding when you see your progress.",
-      "image": "/images/testimonials/student-3.jpg"
-    },
-    {
-      "id": 4,
-      "name": "David",
-      "program": "Competition Team",
-      "rating": 5,
-      "comment": "Training for tournaments here has been a game changer for me. The focus on technique is incredible.",
-      "image": "/images/testimonials/student-4.jpg"
-    },
-    {
-      "id": 5,
-      "name": "Lisa",
-      "program": "Family Program",
-      "rating": 5,
-      "comment": "It's rare to find an activity our whole family can do together. We've grown so much closer through our training.",
-      "image": "/images/testimonials/student-5.jpg"
-    },
-    {
-      "id": 6,
-      "name": "James",
-      "program": "Adult Program",
-      "rating": 5,
-      "comment": "Great atmosphere and top-notch instruction. Definitely recommend it to anyone looking to start their journey.",
-      "image": "/images/testimonials/student-6.jpg"
-    },
-    {
-      "id": 1769960817374,
-      "name": "BROCHACHO",
-      "program": "Adult Program",
-      "rating": 5,
-      "comment": "THIS MIGHT BE THE BEST TAEKWONDO CLASSES EVER",
-      "image": ""
-    }
-  ],
+  "testimonials": [],
   "classSchedule": {
     "batches": [
       {
@@ -297,17 +240,6 @@
         "description": "Perfect for young martial artists to build discipline and confidence"
       },
       {
-        "name": "Kids & Youth Batch",
-        "days": [
-          "Tuesday",
-          "Thursday",
-          "Saturday"
-        ],
-        "time": "5:00 PM - 6:00 PM",
-        "ageGroup": "Ages 4-17",
-        "description": "Alternative schedule for young students"
-      },
-      {
         "name": "Adults Batch",
         "days": [
           "Tuesday",
@@ -317,6 +249,17 @@
         "time": "6:00 PM - 7:00 PM",
         "ageGroup": "Ages 18+",
         "description": "Comprehensive training for adult practitioners"
+      },
+      {
+        "name": "Kids & Youth Batch",
+        "days": [
+          "Saturday",
+          "Tuesday",
+          "Thursday"
+        ],
+        "time": "5.00 to 6.00 PM",
+        "ageGroup": "Ages 4-17",
+        "description": "Perfect for young martial artists to build discipline and confidence"
       }
     ],
     "dailySchedule": [
@@ -335,16 +278,16 @@
         "day": "Tuesday",
         "classes": [
           {
-            "name": "Kids & Youth Batch",
-            "time": "5:00 PM - 6:00 PM",
-            "ageGroup": "Ages 4-17",
-            "type": "Youth"
-          },
-          {
             "name": "Adults Batch",
             "time": "6:00 PM - 7:00 PM",
             "ageGroup": "Ages 18+",
             "type": "Adult"
+          },
+          {
+            "name": "Kids & Youth Batch",
+            "time": "5.00 to 6.00 PM",
+            "ageGroup": "Ages 4-17",
+            "type": "Youth"
           }
         ]
       },
@@ -363,16 +306,16 @@
         "day": "Thursday",
         "classes": [
           {
-            "name": "Kids & Youth Batch",
-            "time": "5:00 PM - 6:00 PM",
-            "ageGroup": "Ages 4-17",
-            "type": "Youth"
-          },
-          {
             "name": "Adults Batch",
             "time": "6:00 PM - 7:00 PM",
             "ageGroup": "Ages 18+",
             "type": "Adult"
+          },
+          {
+            "name": "Kids & Youth Batch",
+            "time": "5.00 to 6.00 PM",
+            "ageGroup": "Ages 4-17",
+            "type": "Youth"
           }
         ]
       },
@@ -391,16 +334,16 @@
         "day": "Saturday",
         "classes": [
           {
-            "name": "Kids & Youth Batch",
-            "time": "5:00 PM - 6:00 PM",
-            "ageGroup": "Ages 4-17",
-            "type": "Youth"
-          },
-          {
             "name": "Adults Batch",
             "time": "6:00 PM - 7:00 PM",
             "ageGroup": "Ages 18+",
             "type": "Adult"
+          },
+          {
+            "name": "Kids & Youth Batch",
+            "time": "5.00 to 6.00 PM",
+            "ageGroup": "Ages 4-17",
+            "type": "Youth"
           }
         ]
       },
@@ -413,19 +356,24 @@
   "gallery": {
     "featured": [
       {
-        "id": 1770193050603.39,
-        "image": "/images/instructors/a.webp",
+        "id": 1770653670755.851,
+        "image": "/uploads/1770653670747-wowwww.jpg",
         "title": ""
       },
       {
-        "id": 1770140135352.269,
-        "image": "/images/instructors/b.jpeg",
+        "id": 1770477581885.5278,
+        "image": "/uploads/1770477581559-peakkk-800x600.webp",
         "title": ""
       },
       {
-        "id": 1769973678931.8313,
-        "image": "/images/hero/image1.webp",
-        "title": "Rudra's Aura..."
+        "id": 1770477575609.7527,
+        "image": "/uploads/1770477575300-NNknfdnsdina-800x600.webp",
+        "title": ""
+      },
+      {
+        "id": 1770477571356.6843,
+        "image": "/uploads/1770477571036-_PSP7619-800x600.webp",
+        "title": ""
       }
     ]
   },

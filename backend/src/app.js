@@ -31,10 +31,32 @@ export function createApp() {
         defaultSrc: ["'self'"],
         scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
         styleSrc: ["'self'", "'unsafe-inline'"],
-        imgSrc: ["'self'", "data:", "https:", "http:", "https://res.cloudinary.com"],
-        mediaSrc: ["'self'", "https:", "http:", "https://res.cloudinary.com"],
+        imgSrc: [
+          "'self'", 
+          "data:", 
+          "blob:",
+          "https://res.cloudinary.com",
+          "https://*.cloudinary.com"
+        ],
+        mediaSrc: [
+          "'self'", 
+          "blob:",
+          "https://res.cloudinary.com",
+          "https://*.cloudinary.com"
+        ],
         fontSrc: ["'self'", "data:"],
-        connectSrc: ["'self'", "https://hawktaekwondo.onrender.com", "http://localhost:3001", "https://res.cloudinary.com"],
+        connectSrc: [
+          "'self'", 
+          "https://hawktaekwondo.onrender.com", 
+          "http://localhost:3001",
+          "https://res.cloudinary.com",
+          "https://*.cloudinary.com",
+          "https://api.cloudinary.com"
+        ],
+        frameSrc: ["'none'"],
+        objectSrc: ["'none'"],
+        baseUri: ["'self'"],
+        formAction: ["'self'"],
       },
     },
   }))

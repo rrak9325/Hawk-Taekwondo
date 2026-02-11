@@ -25,7 +25,18 @@ export function createApp() {
 
   // Security middleware
   app.use(helmet({
-    crossOriginResourcePolicy: { policy: "cross-origin" }
+    crossOriginResourcePolicy: { policy: "cross-origin" },
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
+        styleSrc: ["'self'", "'unsafe-inline'"],
+        imgSrc: ["'self'", "data:", "https:", "http:", "https://res.cloudinary.com"],
+        mediaSrc: ["'self'", "https:", "http:", "https://res.cloudinary.com"],
+        fontSrc: ["'self'", "data:"],
+        connectSrc: ["'self'", "https://hawktaekwondo.onrender.com", "http://localhost:3001", "https://res.cloudinary.com"],
+      },
+    },
   }))
 
   // General API rate limiting

@@ -53,7 +53,7 @@ export function createApp() {
           "https://*.cloudinary.com",
           "https://api.cloudinary.com"
         ],
-        frameSrc: ["'none'"],
+        frameSrc: ["'self'", "https://www.google.com", "https://maps.google.com"],
         objectSrc: ["'none'"],
         baseUri: ["'self'"],
         formAction: ["'self'"],

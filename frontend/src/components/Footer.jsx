@@ -127,7 +127,13 @@ const Footer = () => {
                 <Facebook className="w-5 h-5 text-white" />
               </a>
               <a
-                href="https://www.instagram.com/hawktaekwondo?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="
+                href="instagram://user?username=hawktaekwondo"
+                onClick={(e) => {
+                  // Fallback to web if app not installed
+                  setTimeout(() => {
+                    window.location.href = "https://www.instagram.com/hawktaekwondo/";
+                  }, 500);
+                }}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="p-2 bg-gradient-to-br from-purple-500 via-pink-500 to-orange-400 rounded-lg hover:from-purple-600 hover:via-pink-600 hover:to-orange-500 transition-all"

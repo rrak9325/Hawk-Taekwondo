@@ -22,7 +22,7 @@ export default function Hero({
   }
 
   return (
-    <div className="hero-container">
+    <div className="hero-container relative w-full">
       <div className="hero-background-wrapper">
         {videoUrl ? (
           <video
@@ -33,6 +33,7 @@ export default function Hero({
             webkit-playsinline="true"
             preload="auto"
             poster={backgroundImage}
+            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 min-w-full min-h-full w-auto h-auto object-cover"
           >
             <source src={videoUrl} type="video/mp4" />
           </video>

@@ -53,18 +53,33 @@ export default function About() {
       transition={{ duration: 0.7 }}
     >
       {/* Hero – Full width legacy statement */}
-      <section className="relative min-h-[80vh] md:min-h-[90vh] flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-white via-gray-50/80 to-white" />
+      <section className="relative min-h-[80vh] md:min-h-[90vh] flex items-center justify-center overflow-hidden w-full">
+        <div className="absolute inset-0 bg-gradient-to-b from-white via-gray-50/80 to-white z-10" />
 
-        {/* Hero media placeholder – full bleed */}
-        <div className="absolute inset-0">
-          {/* ← Insert hero image or video here (dojo, Master Vijaysinh, champions, etc.) */}
-          <div className="w-full h-full bg-gray-100 flex items-center justify-center text-gray-400 text-2xl font-medium">
-            [ Hero – Hawk Taekwondo Training Centre ]
-          </div>
+        {/* Hero media – full bleed */}
+        <div className="absolute inset-0 w-full h-full overflow-hidden">
+          {about?.hero?.videoUrl ? (
+            <video
+              src={about.hero.videoUrl}
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 min-w-full min-h-full w-auto h-auto object-cover"
+            />
+          ) : about?.hero?.backgroundImage ? (
+            <div
+              className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat"
+              style={{
+                backgroundImage: `url(${about.hero.backgroundImage})`
+              }}
+            />
+          ) : (
+            <div className="w-full h-full bg-gray-100" />
+          )}
         </div>
 
-        <div className="relative z-10 container mx-auto px-6 text-center">
+        <div className="relative z-20 container mx-auto px-6 text-center">
           <motion.h1
             initial={{ y: 60, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
@@ -101,12 +116,7 @@ export default function About() {
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
               className="aspect-[4/3] lg:aspect-square rounded-2xl overflow-hidden shadow-2xl border-8 border-red-100 bg-gray-100"
-            >
-              {/* ← Large tribute image or video of Master Vijaysinh Rathod or early days → */}
-              <div className="w-full h-full flex items-center justify-center text-gray-400 text-xl font-medium text-center px-6">
-                [ Master Vijaysinh Rathod – Founder Image / Video ]
-              </div>
-            </motion.div>
+            />
 
             {/* Text right */}
             <motion.div
@@ -175,12 +185,7 @@ export default function About() {
                 </div>
 
                 <div className="order-1 md:order-2">
-                  <div className="aspect-video rounded-2xl overflow-hidden shadow-2xl border-8 border-red-50 bg-gray-100">
-                    {/* ← Founding / early academy image or video → */}
-                    <div className="w-full h-full flex items-center justify-center text-gray-400 text-xl">
-                      [ 1985 – Founding Era Image / Video ]
-                    </div>
-                  </div>
+                  <div className="aspect-video rounded-2xl overflow-hidden shadow-2xl border-8 border-red-50 bg-gray-100" />
                 </div>
               </div>
             </motion.div>
@@ -195,12 +200,7 @@ export default function About() {
             >
               <div className="grid md:grid-cols-2 gap-12 md:gap-16 items-center">
                 <div>
-                  <div className="aspect-video rounded-2xl overflow-hidden shadow-2xl border-8 border-red-50 bg-gray-100">
-                    {/* ← Champions, black belts, competitions image/video → */}
-                    <div className="w-full h-full flex items-center justify-center text-gray-400 text-xl">
-                      [ Champions & National-Level Achievements ]
-                    </div>
-                  </div>
+                  <div className="aspect-video rounded-2xl overflow-hidden shadow-2xl border-8 border-red-50 bg-gray-100" />
                 </div>
 
                 <div className="md:pl-12">
@@ -268,12 +268,7 @@ export default function About() {
                 </div>
 
                 <div className="order-1 md:order-2">
-                  <div className="aspect-video rounded-2xl overflow-hidden shadow-2xl border-8 border-red-50 bg-gray-100">
-                    {/* ← Current training, Master Yajuvendrasinh leading class → */}
-                    <div className="w-full h-full flex items-center justify-center text-gray-400 text-xl">
-                      [ Today – Master Yajuvendrasinh Rathod & Training ]
-                    </div>
-                  </div>
+                  <div className="aspect-video rounded-2xl overflow-hidden shadow-2xl border-8 border-red-50 bg-gray-100" />
                 </div>
               </div>
             </motion.div>

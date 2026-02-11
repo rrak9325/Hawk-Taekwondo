@@ -9,19 +9,18 @@ export class UploadService {
       const formData = new FormData()
       formData.append('file', file)
 
-      console.log('📤 Uploading file:', file.name, 'Size:', file.size, 'Type:', file.type)
-      console.log('🔐 Token available:', !!apiClient.token)
+      console.log(`📤 Uploading: ${file.name} (${(file.size / 1024 / 1024).toFixed(2)}MB)`)
 
       // Use upload method which doesn't set Content-Type header
       const response = await apiClient.upload('/api/upload', formData)
       
-      console.log('✅ Upload response:', response)
+      console.log(`✅ Upload complete: ${file.name}`)
       return { 
         success: true, 
         data: response 
       }
     } catch (error) {
-      console.error('💥 File upload failed:', error)
+      console.error('File upload failed:', error)
       return { 
         success: false, 
         error: error.message || 'Upload failed' 
@@ -29,13 +28,21 @@ export class UploadService {
     }
   }
 
-  async deleteFile(filePath) {
+  async deleteFile(urlOrPublicId) {
     try {
+      console.log('🗑️ Deleting file:', urlOrPublicId)
+      
+      // Send the URL or publicId to backend
       const response = await apiClient.request('/api/file', {
         method: 'DELETE',
-        body: JSON.stringify({ filePath })
+        body: JSON.stringify({ 
+          url: urlOrPublicId,
+          publicId: urlOrPublicId,
+          filePath: urlOrPublicId 
+        })
       })
       
+      console.log('✅ File deleted')
       return { success: true, data: response }
     } catch (error) {
       console.error('File deletion failed:', error)

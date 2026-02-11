@@ -59,11 +59,11 @@
       "titleHighlight": "Hawk Taekwondo",
       "subtitle": "We believe Taekwondo is for everyone. Our goal is to create a space where you can push your limits, learn discipline, and become the best version of yourself, all while being part of a great community.",
       "videoUrl": "",
-      "backgroundImage": ""
+      "backgroundImage": "https://res.cloudinary.com/dem7arres/image/upload/v1770794357/hawk-taekwondo/images/tmp-3-93361770794359024_iqwaid.jpg"
     },
     "stats": [
       {
-        "number": "15+",
+        "number": "40+",
         "label": "Years Experience"
       },
       {
@@ -184,7 +184,7 @@
       "titleHighlight": "Touch",
       "subtitle": "Ready to start your martial arts journey? Contact us today.",
       "videoUrl": "",
-      "backgroundImage": ""
+      "backgroundImage": "https://res.cloudinary.com/dem7arres/image/upload/v1770793523/hawk-taekwondo/images/tmp-4-71201770793525861_uiqjzg.gif"
     }
   },
   "facultyPage": {
@@ -198,6 +198,15 @@
   },
   "instructors": {
     "0": {
+      "id": 1770791917387,
+      "name": "Jeffery Epstein",
+      "rank": "????",
+      "specialization": "CEO of the world",
+      "experience": "67 years ig",
+      "bio": "",
+      "image": ""
+    },
+    "1": {
       "id": 2,
       "name": "Yajuvendrasinh RATHOD",
       "rank": "4th DAN Black Belt",
@@ -206,7 +215,7 @@
       "bio": "Asian Taekwondo Union Licensed Coach with over two decades of teaching experience. Specializes in advanced techniques and competition training.",
       "image": ""
     },
-    "1": {
+    "2": {
       "id": 3,
       "name": "Rohan Sahani",
       "rank": "1st DAN Black Belt",
@@ -216,64 +225,7 @@
       "image": ""
     }
   },
-  "testimonials": [
-    {
-      "id": 1,
-      "name": "Sarah",
-      "program": "Kids Program",
-      "rating": 5,
-      "comment": "My daughter loves it here. Her confidence has skyrocketed since she started training with the team.",
-      "image": "/images/testimonials/student-1.jpg"
-    },
-    {
-      "id": 2,
-      "name": "Mike",
-      "program": "Adult Program",
-      "rating": 5,
-      "comment": "I was looking for a way to stay fit and learn something new. The community here is so welcoming and the workouts are legit.",
-      "image": "/images/testimonials/student-2.jpg"
-    },
-    {
-      "id": 3,
-      "name": "Emily",
-      "program": "Teen Program",
-      "rating": 5,
-      "comment": "The instructors really push you to be your best. It's tough but so rewarding when you see your progress.",
-      "image": "/images/testimonials/student-3.jpg"
-    },
-    {
-      "id": 4,
-      "name": "David",
-      "program": "Competition Team",
-      "rating": 5,
-      "comment": "Training for tournaments here has been a game changer for me. The focus on technique is incredible.",
-      "image": "/images/testimonials/student-4.jpg"
-    },
-    {
-      "id": 5,
-      "name": "Lisa",
-      "program": "Family Program",
-      "rating": 5,
-      "comment": "It's rare to find an activity our whole family can do together. We've grown so much closer through our training.",
-      "image": "/images/testimonials/student-5.jpg"
-    },
-    {
-      "id": 6,
-      "name": "James",
-      "program": "Adult Program",
-      "rating": 5,
-      "comment": "Great atmosphere and top-notch instruction. Definitely recommend it to anyone looking to start their journey.",
-      "image": "/images/testimonials/student-6.jpg"
-    },
-    {
-      "id": 1769960817374,
-      "name": "BROCHACHO",
-      "program": "Adult Program",
-      "rating": 5,
-      "comment": "THIS MIGHT BE THE BEST TAEKWONDO CLASSES EVER",
-      "image": ""
-    }
-  ],
+  "testimonials": [],
   "classSchedule": {
     "batches": [
       {

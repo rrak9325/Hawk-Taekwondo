@@ -6,50 +6,43 @@ import uploadService from '../services/uploadService.js'
 export class UploadController {
   async uploadFile(req, res) {
     try {
-      console.log('📤 Upload request received')
-      console.log('📋 Headers:', req.headers)
-      console.log('📁 Files:', req.files ? Object.keys(req.files) : 'No files')
-      console.log('🔐 Auth:', req.headers.authorization ? 'Present' : 'Missing')
-
       if (!req.files || !req.files.file) {
-        console.log('❌ No file in request')
         return res.status(400).json({ error: 'No file uploaded' })
       }
 
       const file = req.files.file
-      console.log('📄 File details:', {
-        name: file.name,
-        size: file.size,
-        mimetype: file.mimetype,
-        tempFilePath: file.tempFilePath
-      })
+      console.log(`📤 Uploading: ${file.name} (${(file.size / 1024 / 1024).toFixed(2)}MB)`)
 
       const result = await uploadService.processUpload(file)
       
       if (result.success) {
-        console.log('✅ Upload successful:', result.data)
+        console.log(`✅ Upload complete: ${file.name}`)
         res.json(result.data)
       } else {
-        console.log('❌ Upload failed:', result.error)
         res.status(result.status || 500).json({ error: result.error })
       }
     } catch (error) {
-      console.error('💥 Upload controller error:', error)
+      console.error('Upload controller error:', error)
       res.status(500).json({ error: 'Upload failed: ' + error.message })
     }
   }
 
   async deleteFile(req, res) {
     try {
-      const { filePath } = req.body
+      const { filePath, url, publicId } = req.body
       
-      if (!filePath) {
-        return res.status(400).json({ error: 'filePath required' })
+      // Accept either filePath, url, or publicId
+      const identifier = publicId || url || filePath
+      
+      if (!identifier) {
+        return res.status(400).json({ error: 'File identifier required (url, publicId, or filePath)' })
       }
 
-      const result = await uploadService.deleteFile(filePath)
+      console.log('🗑️ Delete request for:', identifier)
+      const result = await uploadService.deleteFile(identifier)
       
       if (result.success) {
+        console.log('✅ File deleted successfully')
         res.json(result.data)
       } else {
         res.status(result.status || 500).json({ error: result.error })

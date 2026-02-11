@@ -236,9 +236,34 @@ export default function AdminNew() {
   const handleUpload = useCallback(async (path, e) => {
     // Check if this is from the new MediaUpload component with result
     if (e.result) {
-      // New optimized upload system
+      // New optimized upload system - store both URL and publicId
+      const currentValue = getNestedValue(data, path)
+      
+      // If there's an old file, delete it from Cloudinary
+      if (currentValue && typeof currentValue === 'string' && currentValue.includes('cloudinary')) {
+        try {
+          await uploadService.deleteFile(currentValue)
+        } catch (err) {
+          console.warn('Failed to delete old file:', err)
+        }
+      }
+      
       updateField(path, e.result.url)
       addToast('success', `🔥 BEAST MODE: ${e.result.savings} compression! Format: ${e.result.format}`)
+      
+      // Auto-save after upload
+      setTimeout(async () => {
+        try {
+          const updatedData = updateNested(data, path, e.result.url)
+          const result = await dataService.updateSchoolData(updatedData)
+          if (result.success) {
+            console.log('✅ Auto-saved after upload')
+          }
+        } catch (err) {
+          console.warn('Auto-save failed:', err)
+        }
+      }, 500)
+      
       return
     }
 
@@ -252,34 +277,93 @@ export default function AdminNew() {
       return
     }
 
-    if (file.size > 200 * 1024 * 1024) { // Increased to 200MB for BEAST MODE
+    if (file.size > 200 * 1024 * 1024) {
       addToast('error', `File too big (${(file.size / 1024 / 1024).toFixed(1)}MB) — max 200MB`)
       return
     }
 
     try {
-      addToast('info', `🚀 BEAST MODE uploading ${file.name}...`)
-      const result = await uploadService.uploadFile(file)
-      if (result.success) {
-        updateField(path, result.data.url)
-      } else {
-        throw new Error(result.error)
+      addToast('info', `🚀 Uploading ${file.name}...`)
+      
+      // Delete old file from Cloudinary if exists
+      const currentValue = getNestedValue(data, path)
+      if (currentValue && typeof currentValue === 'string' && currentValue.includes('cloudinary')) {
+        try {
+          await uploadService.deleteFile(currentValue)
+        } catch (err) {
+          console.warn('Failed to delete old file:', err)
+        }
       }
       
-      // Show compression stats if available
-      if (result.compressionRatio) {
-        addToast('success', `🔥 ${file.name} uploaded! ${result.savings} compression (${result.format})`)
+      const result = await uploadService.uploadFile(file)
+      if (result.success) {
+        const newUrl = result.data.url
+        updateField(path, newUrl)
+        addToast('success', `${file.name} uploaded to Cloudinary!`)
+        
+        // Auto-save after upload
+        setTimeout(async () => {
+          try {
+            const updatedData = updateNested(data, path, newUrl)
+            const saveResult = await dataService.updateSchoolData(updatedData)
+            if (saveResult.success) {
+              console.log('✅ Auto-saved after upload')
+              addToast('success', '💾 Saved automatically!')
+            }
+          } catch (err) {
+            console.warn('Auto-save failed:', err)
+            addToast('warning', 'Upload successful but auto-save failed. Click Save Changes.')
+          }
+        }, 500)
       } else {
-        addToast('success', `${file.name} uploaded!`)
+        throw new Error(result.error)
       }
     } catch (error) {
       addToast('error', `Upload failed: ${error.message}`)
     }
-  }, [updateField, addToast])
+  }, [data, updateField, addToast])
+
+  // Helper to delete media from Cloudinary
+  const handleDelete = useCallback(async (path) => {
+    const currentValue = getNestedValue(data, path)
+    
+    if (currentValue && typeof currentValue === 'string' && currentValue.includes('cloudinary')) {
+      try {
+        await uploadService.deleteFile(currentValue)
+        addToast('success', 'File deleted from Cloudinary')
+      } catch (err) {
+        console.warn('Failed to delete from Cloudinary:', err)
+        addToast('warning', 'File removed from site (Cloudinary deletion failed)')
+      }
+    }
+    
+    updateField(path, '')
+    
+    // Auto-save after delete
+    setTimeout(async () => {
+      try {
+        const updatedData = updateNested(data, path, '')
+        const result = await dataService.updateSchoolData(updatedData)
+        if (result.success) {
+          console.log('✅ Auto-saved after delete')
+          addToast('success', '💾 Saved automatically!')
+        }
+      } catch (err) {
+        console.warn('Auto-save failed:', err)
+        addToast('warning', 'Delete successful but auto-save failed. Click Save Changes.')
+      }
+    }, 500)
+  }, [data, updateField, addToast])
+
+  // Helper to get nested value
+  const getNestedValue = (obj, path) => {
+    return path.split('.').reduce((current, key) => current?.[key], obj)
+  }
 
   const navItems = useMemo(() => [
     { id: 'school', icon: Info, label: 'School Info', color: 'blue' },
     { id: 'media', icon: Video, label: 'Media', color: 'purple' },
+    { id: 'about', icon: Info, label: 'About Page', color: 'indigo' },
     { id: 'programs', icon: Package, label: 'Programs', color: 'green' },
     { id: 'schedule', icon: Calendar, label: 'Schedule', color: 'orange' },
     { id: 'instructors', icon: Users, label: 'Instructors', color: 'pink' },
@@ -290,10 +374,12 @@ export default function AdminNew() {
   const colorMap = useMemo(() => ({
     blue: 'from-blue-500 to-cyan-500',
     purple: 'from-purple-500 to-pink-500',
+    indigo: 'from-indigo-500 to-purple-500',
     green: 'from-green-500 to-emerald-500',
     pink: 'from-pink-500 to-rose-500',
     yellow: 'from-yellow-500 to-orange-500',
-    cyan: 'from-cyan-500 to-blue-500'
+    cyan: 'from-cyan-500 to-blue-500',
+    orange: 'from-orange-500 to-red-500'
   }), [])
 
   if (loading) {
@@ -628,14 +714,14 @@ export default function AdminNew() {
                       label="Background Image"
                       value={data[page].hero.backgroundImage}
                       onUpload={e => handleUpload(`${page}.hero.backgroundImage`, e)}
-                      onDelete={() => updateField(`${page}.hero.backgroundImage`, '')}
+                      onDelete={() => handleDelete(`${page}.hero.backgroundImage`)}
                       darkMode={darkMode}
                     />
                     <MediaUpload
                       label="Video"
                       value={data[page].hero.videoUrl}
                       onUpload={e => handleUpload(`${page}.hero.videoUrl`, e)}
-                      onDelete={() => updateField(`${page}.hero.videoUrl`, '')}
+                      onDelete={() => handleDelete(`${page}.hero.videoUrl`)}
                       isVideo
                       darkMode={darkMode}
                     />
@@ -665,6 +751,142 @@ export default function AdminNew() {
                   </div>
                 </AdminCard>
               ))}
+            </div>
+          )}
+
+          {activeTab === 'about' && data && (
+            <div className="space-y-6">
+              {/* About Hero */}
+              <AdminCard title="About Page Hero" darkMode={darkMode}>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                  <MediaUpload
+                    label="Background Image"
+                    value={data.about?.hero?.backgroundImage}
+                    onUpload={e => handleUpload('about.hero.backgroundImage', e)}
+                    onDelete={() => handleDelete('about.hero.backgroundImage')}
+                    darkMode={darkMode}
+                  />
+                  <MediaUpload
+                    label="Video"
+                    value={data.about?.hero?.videoUrl}
+                    onUpload={e => handleUpload('about.hero.videoUrl', e)}
+                    onDelete={() => handleDelete('about.hero.videoUrl')}
+                    isVideo
+                    darkMode={darkMode}
+                  />
+                </div>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-6">
+                  <AdminInput
+                    label="Title Main"
+                    value={data.about?.hero?.titleMain || ''}
+                    onChange={v => updateField('about.hero.titleMain', v)}
+                    darkMode={darkMode}
+                  />
+                  <AdminInput
+                    label="Title Highlight"
+                    value={data.about?.hero?.titleHighlight || ''}
+                    onChange={v => updateField('about.hero.titleHighlight', v)}
+                    darkMode={darkMode}
+                  />
+                  <div className="lg:col-span-2">
+                    <AdminInput
+                      label="Subtitle"
+                      value={data.about?.hero?.subtitle || ''}
+                      onChange={v => updateField('about.hero.subtitle', v)}
+                      isTextarea
+                      darkMode={darkMode}
+                    />
+                  </div>
+                </div>
+              </AdminCard>
+
+              {/* Stats */}
+              <AdminCard title="Statistics" darkMode={darkMode}>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                  {(data.about?.stats || []).map((stat, index) => (
+                    <div key={index} className={`p-4 rounded-xl border ${darkMode ? 'bg-slate-800 border-slate-700' : 'bg-white border-gray-200'}`}>
+                      <AdminInput
+                        label="Number"
+                        value={stat.number || ''}
+                        onChange={v => updateField(`about.stats.${index}.number`, v)}
+                        placeholder="e.g., 15+"
+                        darkMode={darkMode}
+                      />
+                      <AdminInput
+                        label="Label"
+                        value={stat.label || ''}
+                        onChange={v => updateField(`about.stats.${index}.label`, v)}
+                        placeholder="e.g., Years Experience"
+                        darkMode={darkMode}
+                      />
+                    </div>
+                  ))}
+                </div>
+              </AdminCard>
+
+              {/* Core Values */}
+              <AdminCard title="Core Values" darkMode={darkMode}>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {(data.about?.values || []).map((value, index) => (
+                    <div key={index} className={`p-6 rounded-xl border ${darkMode ? 'bg-slate-800 border-slate-700' : 'bg-white border-gray-200'}`}>
+                      <AdminInput
+                        label="Icon Name"
+                        value={value.icon || ''}
+                        onChange={v => updateField(`about.values.${index}.icon`, v)}
+                        placeholder="e.g., Shield, Heart, Target, Users"
+                        darkMode={darkMode}
+                      />
+                      <AdminInput
+                        label="Title"
+                        value={value.title || ''}
+                        onChange={v => updateField(`about.values.${index}.title`, v)}
+                        darkMode={darkMode}
+                      />
+                      <AdminInput
+                        label="Description"
+                        value={value.description || ''}
+                        onChange={v => updateField(`about.values.${index}.description`, v)}
+                        isTextarea
+                        darkMode={darkMode}
+                      />
+                    </div>
+                  ))}
+                </div>
+              </AdminCard>
+
+              {/* CTA Section */}
+              <AdminCard title="Call to Action" darkMode={darkMode}>
+                <div className="space-y-4">
+                  <AdminInput
+                    label="Title"
+                    value={data.about?.cta?.title || ''}
+                    onChange={v => updateField('about.cta.title', v)}
+                    darkMode={darkMode}
+                  />
+                  <AdminInput
+                    label="Text"
+                    value={data.about?.cta?.text || ''}
+                    onChange={v => updateField('about.cta.text', v)}
+                    isTextarea
+                    darkMode={darkMode}
+                  />
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                    <AdminInput
+                      label="Button Label"
+                      value={data.about?.cta?.buttonLabel || ''}
+                      onChange={v => updateField('about.cta.buttonLabel', v)}
+                      darkMode={darkMode}
+                    />
+                    <AdminInput
+                      label="Button Link"
+                      value={data.about?.cta?.buttonLink || ''}
+                      onChange={v => updateField('about.cta.buttonLink', v)}
+                      placeholder="e.g., /contact"
+                      darkMode={darkMode}
+                    />
+                  </div>
+                </div>
+              </AdminCard>
             </div>
           )}
 
@@ -732,7 +954,7 @@ export default function AdminNew() {
                     <MediaUpload
                       value={program.image}
                       onUpload={e => handleUpload(`programs.${key}.image`, e)}
-                      onDelete={() => updateField(`programs.${key}.image`, '')}
+                      onDelete={() => handleDelete(`programs.${key}.image`)}
                       darkMode={darkMode}
                     />
                     <div className="space-y-4">
@@ -822,7 +1044,7 @@ export default function AdminNew() {
                     <MediaUpload
                       value={instructor.image}
                       onUpload={e => handleUpload(`instructors.${key}.image`, e)}
-                      onDelete={() => updateField(`instructors.${key}.image`, '')}
+                      onDelete={() => handleDelete(`instructors.${key}.image`)}
                       rounded
                       darkMode={darkMode}
                     />
@@ -907,7 +1129,7 @@ export default function AdminNew() {
                     <MediaUpload
                       value={testimonial.image}
                       onUpload={e => handleUpload(`testimonials.${index}.image`, e)}
-                      onDelete={() => updateField(`testimonials.${index}.image`, '')}
+                      onDelete={() => handleDelete(`testimonials.${index}.image`)}
                       rounded
                       darkMode={darkMode}
                     />
@@ -1202,33 +1424,52 @@ export default function AdminNew() {
                         const files = Array.from(e.target.files || [])
                         if (!files.length) return
 
+                        addToast('info', `Uploading ${files.length} file(s) to Cloudinary...`)
                         const uploaded = []
+                        
                         for (const file of files) {
                           try {
                             const res = await uploadService.uploadFile(file)
                             if (res.success) {
                               uploaded.push({
                                 id: Date.now() + Math.random(),
-                              image: res.data.url,
-                              title: ''
-                            })
-                          } else {
-                            throw new Error(res.error)
-                          }
+                                image: res.data.url,
+                                publicId: res.data.publicId,
+                                title: ''
+                              })
+                            } else {
+                              throw new Error(res.error)
+                            }
                           } catch (err) {
                             addToast('error', `Failed: ${file.name}`)
                           }
                         }
 
                         if (uploaded.length > 0) {
-                          setData(prev => ({
-                            ...prev,
+                          const newGalleryData = {
+                            ...data,
                             gallery: {
-                              ...prev.gallery,
-                              featured: [...uploaded, ...(prev.gallery?.featured || [])]
+                              ...data.gallery,
+                              featured: [...uploaded, ...(data.gallery?.featured || [])]
                             }
-                          }))
-                          addToast('success', `${uploaded.length} file${uploaded.length > 1 ? 's' : ''} added`)
+                          }
+                          
+                          setData(newGalleryData)
+                          addToast('success', `${uploaded.length} file(s) uploaded to Cloudinary!`)
+                          
+                          // Auto-save gallery uploads
+                          setTimeout(async () => {
+                            try {
+                              const result = await dataService.updateSchoolData(newGalleryData)
+                              if (result.success) {
+                                console.log('✅ Gallery auto-saved')
+                                addToast('success', '💾 Gallery saved automatically!')
+                              }
+                            } catch (err) {
+                              console.warn('Gallery auto-save failed:', err)
+                              addToast('warning', 'Upload successful but auto-save failed. Click Save Changes.')
+                            }
+                          }, 500)
                         }
                       }}
                     />
@@ -1247,33 +1488,52 @@ export default function AdminNew() {
                       const files = Array.from(e.target.files || [])
                       if (!files.length) return
 
+                      addToast('info', `Uploading ${files.length} file(s) to Cloudinary...`)
                       const uploaded = []
+                      
                       for (const file of files) {
                         try {
                           const res = await uploadService.uploadFile(file)
                           if (res.success) {
                             uploaded.push({
                               id: Date.now() + Math.random(),
-                            image: res.data.url,
-                            title: ''
-                          })
-                        } else {
-                          throw new Error(res.error)
-                        }
+                              image: res.data.url,
+                              publicId: res.data.publicId,
+                              title: ''
+                            })
+                          } else {
+                            throw new Error(res.error)
+                          }
                         } catch (err) {
                           addToast('error', `Failed: ${file.name}`)
                         }
                       }
 
                       if (uploaded.length > 0) {
-                        setData(prev => ({
-                          ...prev,
+                        const newGalleryData = {
+                          ...data,
                           gallery: {
-                            ...prev.gallery,
-                            featured: [...uploaded, ...(prev.gallery?.featured || [])]
+                            ...data.gallery,
+                            featured: [...uploaded, ...(data.gallery?.featured || [])]
                           }
-                        }))
-                        addToast('success', `${uploaded.length} file${uploaded.length > 1 ? 's' : ''} added`)
+                        }
+                        
+                        setData(newGalleryData)
+                        addToast('success', `${uploaded.length} file(s) uploaded to Cloudinary!`)
+                        
+                        // Auto-save gallery uploads
+                        setTimeout(async () => {
+                          try {
+                            const result = await dataService.updateSchoolData(newGalleryData)
+                            if (result.success) {
+                              console.log('✅ Gallery auto-saved')
+                              addToast('success', '💾 Gallery saved automatically!')
+                            }
+                          } catch (err) {
+                            console.warn('Gallery auto-save failed:', err)
+                            addToast('warning', 'Upload successful but auto-save failed. Click Save Changes.')
+                          }
+                        }, 500)
                       }
                     }}
                   />
@@ -1281,11 +1541,16 @@ export default function AdminNew() {
 
                 <button
                   onClick={async () => {
-                    if (!confirm('Clean unused media files?')) return
+                    if (!confirm('This will delete all unused images/videos from Cloudinary that are not being used on the website. Continue?')) return
                     try {
+                      addToast('info', '🔍 Scanning Cloudinary for unused files...')
                       const res = await uploadService.cleanupOrphanFiles()
                       if (res.success) {
-                        addToast('success', `Cleaned ${res.data.deletedCount} files`)
+                        if (res.data.deletedCount > 0) {
+                          addToast('success', `🎉 Cleaned ${res.data.deletedCount} unused files from Cloudinary!`)
+                        } else {
+                          addToast('success', '✨ No unused files found - everything is clean!')
+                        }
                         fetchData()
                       } else {
                         throw new Error(res.error)
@@ -1296,7 +1561,7 @@ export default function AdminNew() {
                   }}
                   className="bg-gradient-to-r from-yellow-500 to-orange-500 text-white px-5 py-3 rounded-xl font-medium shadow-lg hover:shadow-orange-500/30 transition-all"
                 >
-                  <Trash2 size={18} className="inline mr-2" /> Clean Media
+                  <Trash2 size={18} className="inline mr-2" /> Clean Unused Media
                 </button>
               </div>
 
@@ -1314,16 +1579,44 @@ export default function AdminNew() {
                     />
                     <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center gap-3">
                       <button
-                        onClick={() => {
-                          if (!confirm('Delete this image?')) return
-                          setData(prev => {
-                            const newFeatured = [...prev.gallery.featured]
-                            newFeatured.splice(index, 1)
-                            return {
-                              ...prev,
-                              gallery: { ...prev.gallery, featured: newFeatured }
+                        onClick={async () => {
+                          if (!confirm('Delete this image from Cloudinary?')) return
+                          
+                          // Delete from Cloudinary
+                          if (media.image && media.image.includes('cloudinary')) {
+                            try {
+                              await uploadService.deleteFile(media.image)
+                              addToast('success', 'Deleted from Cloudinary')
+                            } catch (err) {
+                              console.warn('Failed to delete from Cloudinary:', err)
+                              addToast('warning', 'Removed from gallery (Cloudinary deletion failed)')
                             }
-                          })
+                          }
+                          
+                          // Remove from gallery
+                          const newGalleryData = {
+                            ...data,
+                            gallery: {
+                              ...data.gallery,
+                              featured: data.gallery.featured.filter((_, i) => i !== index)
+                            }
+                          }
+                          
+                          setData(newGalleryData)
+                          
+                          // Auto-save after delete
+                          setTimeout(async () => {
+                            try {
+                              const result = await dataService.updateSchoolData(newGalleryData)
+                              if (result.success) {
+                                console.log('✅ Gallery auto-saved after delete')
+                                addToast('success', '💾 Gallery saved automatically!')
+                              }
+                            } catch (err) {
+                              console.warn('Gallery auto-save failed:', err)
+                              addToast('warning', 'Delete successful but auto-save failed. Click Save Changes.')
+                            }
+                          }, 500)
                         }}
                         className="bg-white text-black p-3 rounded-xl hover:bg-red-500 hover:text-white transition-colors shadow-lg"
                       >

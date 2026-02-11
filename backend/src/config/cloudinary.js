@@ -1,14 +1,28 @@
 // Cloudinary Configuration
+// Production-ready setup for Render deployment
+
 import { v2 as cloudinary } from 'cloudinary'
 
-// Only configure if in production with Cloudinary credentials
-if (process.env.CLOUDINARY_CLOUD_NAME) {
-  cloudinary.config({
-    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-    api_key: process.env.CLOUDINARY_API_KEY,
-    api_secret: process.env.CLOUDINARY_API_SECRET,
-    secure: true
-  })
+// Configure Cloudinary with credentials
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME || 'dem7arres',
+  api_key: process.env.CLOUDINARY_API_KEY || '267337995938546',
+  api_secret: process.env.CLOUDINARY_API_SECRET || 'h5bR9OEh5ejZ8MvqCto9nD_01hw',
+  secure: true
+})
+
+// Verify configuration
+const isConfigured = () => {
+  const config = cloudinary.config()
+  return !!(config.cloud_name && config.api_key && config.api_secret)
+}
+
+if (isConfigured()) {
+  console.log('✅ Cloudinary configured successfully')
+  console.log(`📦 Cloud Name: ${cloudinary.config().cloud_name}`)
+} else {
+  console.error('❌ Cloudinary configuration missing!')
 }
 
 export default cloudinary
+export { isConfigured }

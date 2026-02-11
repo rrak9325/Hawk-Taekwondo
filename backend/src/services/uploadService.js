@@ -4,6 +4,12 @@
 import uploadModel from '../models/uploadModel.js'
 import imageProcessor from '../utils/imageProcessor.js'
 import fileValidator from '../utils/fileValidator.js'
+import fs from 'fs'
+import path from 'path'
+import { fileURLToPath } from 'url'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 export class UploadService {
   async processUpload(file) {
@@ -54,14 +60,68 @@ export class UploadService {
     }
   }
 
-  async processGenericFile(file) {
+  async processVideo(file) {
     try {
-      console.log(`📄 Processing generic file: ${file.name}`)
-      const result = await uploadModel.saveVideo(file) // Use video save method for any file
+      const result = await uploadModel.saveVideo(file)
       return {
         success: true,
         data: {
           url: result.url,
+          publicId: result.publicId,
+          type: 'video',
+          originalSize: file.size,
+          filename: result.filename,
+          format: result.format
+        }
+      }
+    } catch (error) {
+      console.error('Video processing error:', error)
+      return {
+        success: false,
+        status: 500,
+        error: 'Video processing failed: ' + error.message
+      }
+    }
+  }
+
+  async processImage(file) {
+    try {
+      console.log('🖼️ Uploading image to Cloudinary:', file.name)
+      
+      const result = await uploadModel.saveImageDirect(file)
+      
+      return {
+        success: true,
+        data: {
+          url: result.url,
+          publicId: result.publicId,
+          type: 'image',
+          originalSize: file.size,
+          filename: result.filename,
+          format: result.format,
+          width: result.width,
+          height: result.height
+        }
+      }
+    } catch (error) {
+      console.error('💥 Image upload error:', error)
+      return {
+        success: false,
+        status: 500,
+        error: 'Image upload failed: ' + error.message
+      }
+    }
+  }
+
+  async processGenericFile(file) {
+    try {
+      console.log(`📄 Processing generic file: ${file.name}`)
+      const result = await uploadModel.saveVideo(file)
+      return {
+        success: true,
+        data: {
+          url: result.url,
+          publicId: result.publicId,
           type: 'file',
           originalSize: file.size,
           filename: result.filename,
@@ -73,55 +133,7 @@ export class UploadService {
       return {
         success: false,
         status: 500,
-        error: 'File processing failed'
-      }
-    }
-  }
-
-  async processVideo(file) {
-    try {
-      const result = await uploadModel.saveVideo(file)
-      return {
-        success: true,
-        data: {
-          url: result.url,
-          type: 'video',
-          originalSize: file.size,
-          filename: result.filename
-        }
-      }
-    } catch (error) {
-      console.error('Video processing error:', error)
-      return {
-        success: false,
-        status: 500,
-        error: 'Video processing failed'
-      }
-    }
-  }
-
-  async processImage(file) {
-    try {
-      console.log('🖼️ Uploading image directly:', file.name)
-      
-      // Upload directly without Sharp processing
-      const result = await uploadModel.saveImageDirect(file)
-      
-      return {
-        success: true,
-        data: {
-          url: result.url,
-          type: 'image',
-          originalSize: file.size,
-          filename: result.filename
-        }
-      }
-    } catch (error) {
-      console.error('💥 Image upload error:', error)
-      return {
-        success: false,
-        status: 500,
-        error: 'Image upload failed: ' + error.message
+        error: 'File processing failed: ' + error.message
       }
     }
   }
@@ -145,7 +157,23 @@ export class UploadService {
 
   async cleanupOrphanFiles() {
     try {
-      const result = await uploadModel.cleanupOrphans()
+      // Read current mockData.json to get all used URLs
+      const mockDataPath = path.join(__dirname, '../../../public/mockData.json')
+      
+      let mockData = {}
+      try {
+        const fileContent = fs.readFileSync(mockDataPath, 'utf-8')
+        mockData = JSON.parse(fileContent)
+      } catch (err) {
+        console.warn('Could not read mockData.json:', err.message)
+        return {
+          success: false,
+          status: 500,
+          error: 'Could not read mockData.json: ' + err.message
+        }
+      }
+      
+      const result = await uploadModel.cleanupOrphans(mockData)
       return {
         success: true,
         data: result
@@ -155,7 +183,7 @@ export class UploadService {
       return {
         success: false,
         status: 500,
-        error: 'Cleanup failed'
+        error: 'Cleanup failed: ' + error.message
       }
     }
   }

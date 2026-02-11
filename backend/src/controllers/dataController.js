@@ -2,6 +2,7 @@
 // Handles school data HTTP requests
 
 import dataService from '../services/dataService.js'
+import { sanitizeInput } from '../utils/security.js'
 
 export class DataController {
   async getData(req, res) {
@@ -31,8 +32,10 @@ export class DataController {
         return res.status(400).json({ error: 'Invalid payload' })
       }
 
-      console.log('🔄 Calling data service...')
-      const result = await dataService.updateSchoolData(req.body)
+      // Sanitize input data
+      const sanitizedData = sanitizeInput(req.body)
+      console.log('🔄 Calling data service with sanitized data...')
+      const result = await dataService.updateSchoolData(sanitizedData)
       console.log('📤 Data service result:', result)
       
       if (result.success) {

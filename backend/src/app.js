@@ -13,6 +13,7 @@ import { fileURLToPath } from 'url'
 import { ensureDirectories, UPLOADS_PATH } from './config/database.js'
 import routes from './routes/index.js'
 import errorMiddleware from './middlewares/errorMiddleware.js'
+import { sanitizeInput } from './utils/security.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -80,7 +81,30 @@ export function createApp() {
   })
   app.use('/api/login', loginLimiter)
 
-  // CORS configuration
+  // Security middleware - Input sanitization for all requests
+  app.use((req, res, next) => {
+    // Sanitize query parameters (create new sanitized object)
+    if (req.query) {
+      const sanitizedQuery = sanitizeInput(req.query)
+      // Replace the query object
+      Object.keys(req.query).forEach(key => {
+        delete req.query[key]
+      })
+      Object.assign(req.query, sanitizedQuery)
+    }
+    
+    // Sanitize body (except for file uploads and already parsed JSON)
+    if (req.body && typeof req.body === 'object' && !req.files) {
+      const sanitizedBody = sanitizeInput(req.body)
+      // Replace the body object
+      Object.keys(req.body).forEach(key => {
+        delete req.body[key]
+      })
+      Object.assign(req.body, sanitizedBody)
+    }
+    
+    next()
+  })
   app.use(cors({
     origin: (origin, callback) => {
       if (!origin) return callback(null, true)
@@ -113,18 +137,21 @@ export function createApp() {
     maxAge: 86400 // 24 hours
   }))
 
-  // File upload middleware - Accept any file type and size
+  // File upload middleware - SAFE file size limits and validation
   app.use(fileUpload({
-    limits: { fileSize: Infinity }, // No file size limit
+    limits: { 
+      fileSize: 50 * 1024 * 1024, // 50MB limit per file
+      files: 10 // Max 10 files per request
+    },
     useTempFiles: true,
     tempFileDir: os.tmpdir(),
     safeFileNames: true,
     preserveExtension: true,
-    abortOnLimit: false, // Don't abort on large files
+    abortOnLimit: true, // Abort on size limit exceeded
     parseNested: true,
     createParentPath: true,
     upsert: true,
-    debug: false // Set to true for debugging
+    debug: false
   }))
 
   // Body parsing middleware (conditional) - No size limits

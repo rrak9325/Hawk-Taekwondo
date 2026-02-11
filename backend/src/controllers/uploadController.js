@@ -2,6 +2,7 @@
 // Handles file upload HTTP requests
 
 import uploadService from '../services/uploadService.js'
+import { validateFileUpload } from '../utils/security.js'
 
 export class UploadController {
   async uploadFile(req, res) {
@@ -11,6 +12,13 @@ export class UploadController {
       }
 
       const file = req.files.file
+      
+      // Validate file before processing
+      const validation = validateFileUpload(file)
+      if (!validation.isValid) {
+        return res.status(400).json({ error: validation.error })
+      }
+
       console.log(`📤 Uploading: ${file.name} (${(file.size / 1024 / 1024).toFixed(2)}MB)`)
 
       const result = await uploadService.processUpload(file)

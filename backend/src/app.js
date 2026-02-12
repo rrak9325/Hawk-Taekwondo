@@ -81,7 +81,11 @@ export function createApp() {
   })
   app.use('/api/login', loginLimiter)
 
-  // Security middleware - Input sanitization for all requests
+  // Body parsing middleware - Always parse JSON and URL-encoded
+  app.use(express.json({ limit: '50mb' }))
+  app.use(express.urlencoded({ limit: '50mb', extended: true }))
+
+  // Security middleware - Input sanitization for all requests (AFTER body parsing)
   app.use((req, res, next) => {
     // Sanitize query parameters (create new sanitized object)
     if (req.query) {
@@ -105,6 +109,7 @@ export function createApp() {
     
     next()
   })
+  
   app.use(cors({
     origin: (origin, callback) => {
       if (!origin) return callback(null, true)
@@ -154,20 +159,9 @@ export function createApp() {
     debug: false
   }))
 
-  // Body parsing middleware (conditional) - No size limits
-  app.use((req, res, next) => {
-    if (req.path === '/api/upload' && req.method === 'POST') {
-      return next()
-    }
-    express.json({ limit: 'Infinity' })(req, res, next)
-  })
-
-  app.use((req, res, next) => {
-    if (req.path === '/api/upload' && req.method === 'POST') {
-      return next()
-    }
-    express.urlencoded({ limit: 'Infinity', extended: true })(req, res, next)
-  })
+  // Body parsing middleware - Always parse JSON and URL-encoded
+  app.use(express.json({ limit: '50mb' }))
+  app.use(express.urlencoded({ limit: '50mb', extended: true }))
 
   // Serve uploaded files
   app.use('/uploads', express.static(UPLOADS_PATH, {

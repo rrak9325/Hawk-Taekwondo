@@ -7,7 +7,7 @@ import { v2 as cloudinary } from 'cloudinary'
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME || 'dem7arres',
   api_key: process.env.CLOUDINARY_API_KEY || '267337995938546',
-  api_secret: process.env.CLOUDINARY_API_SECRET || 'h5bR9OEh5ejZ8MvqCto9nD_01hw',
+  api_secret: process.env.CLOUDINARY_API_SECRET || 'h5bR0Eh5ejZ8MvqCtoND_01hw',
   secure: true
 })
 

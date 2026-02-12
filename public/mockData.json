@@ -1,460 +1,416 @@
-﻿{
-    "schoolInfo":  {
-                       "name":  "Hawk Taekwondo Training Centre",
-                       "tagline":  "Find your strength. Build your confidence.",
-                       "mission":  "We believe Taekwondo is for everyone. Our goal is to create a space where you can push your limits, learn discipline, and become the best version of yourself, all while being part of a great community.",
-                       "founded":  2010,
-                       "address":  "First Floor, Mangalya Complex, above Vadwala Auto, opp. Anjali BRTS, Pankaj Society, Bhatta, Vasna, Ahmedabad, Gujarat 380007",
-                       "phone":  "+91 8487829291",
-                       "email":  "httc.tkd29@gmail.com",
-                       "mapLink":  "https://www.google.com/maps/place/Hawk+Taekwondo+Training+Centre/@23.0039668,72.5541008,17z/data=!3m1!4b1!4m6!3m5!1s0x395e851bc7092e07:0x21ae1c75bac35a33!8m2!3d23.0039668!4d72.5541008!16s%2Fg%2F11d_tj5tvw?hl=en-GB\u0026entry=ttu\u0026g_ep=EgoyMDI2MDEyOC4wIKXMDSoKLDEwMDc5MjA3M0gBUAM%3D",
-                       "hours":  {
-                                     "0":  "Monday - Friday: 4:00 PM - 9:00 PM",
-                                     "1":  "Saturday: 8:00 AM - 2:00 PM",
-                                     "2":  "Sunday: Closed"
-                                 }
-                   },
-    "home":  {
-                 "hero":  {
-                              "titleMain":  "Master the Art of",
-                              "titleHighlight":  "Taekwondo",
-                              "subtitle":  "Find your strength. Build your confidence.",
-                              "videoUrl":  "",
-                              "backgroundImage":  "",
-                              "primaryButton":  {
-                                                    "label":  "Explore Programs",
-                                                    "link":  "/programs"
-                                                },
-                              "secondaryButton":  {
-                                                      "label":  "Start Free Trial",
-                                                      "link":  "/contact"
-                                                  }
-                          },
-                 "features":  {
-                                  "0":  {
-                                            "icon":  "Shield",
-                                            "title":  "Expert Instruction",
-                                            "description":  "Certified black belt instructors with real competition experience"
-                                        },
-                                  "1":  {
-                                            "icon":  "Target",
-                                            "title":  "Goal Focused",
-                                            "description":  "Structured belt and skill progression system"
-                                        },
-                                  "2":  {
-                                            "icon":  "Users",
-                                            "title":  "Strong Community",
-                                            "description":  "Supportive training environment for all ages"
-                                        },
-                                  "3":  {
-                                            "icon":  "Award",
-                                            "title":  "Proven Results",
-                                            "description":  "Track record of confident and disciplined students"
-                                        }
-                              }
-             },
-    "about":  {
-                  "hero":  {
-                               "titleMain":  "About",
-                               "titleHighlight":  "Hawk Taekwondo",
-                               "subtitle":  "We believe Taekwondo is for everyone. Our goal is to create a space where you can push your limits, learn discipline, and become the best version of yourself, all while being part of a great community.",
-                               "videoUrl":  "",
-                               "backgroundImage":  ""
-                           },
-                  "stats":  [
-                                {
-                                    "number":  "40+",
-                                    "label":  "Years Experience"
-                                },
-                                {
-                                    "number":  "500+",
-                                    "label":  "Active Students"
-                                },
-                                {
-                                    "number":  "50+",
-                                    "label":  "Black Belts"
-                                },
-                                {
-                                    "number":  "100%",
-                                    "label":  "Satisfaction"
-                                }
-                            ],
-                  "values":  [
-                                 {
-                                     "icon":  "Shield",
-                                     "title":  "Discipline",
-                                     "description":  "We instill self-discipline and respect through structured training"
-                                 },
-                                 {
-                                     "icon":  "Heart",
-                                     "title":  "Integrity",
-                                     "description":  "We uphold the highest standards of honesty and ethical conduct"
-                                 },
-                                 {
-                                     "icon":  "Target",
-                                     "title":  "Excellence",
-                                     "description":  "We strive for continuous improvement in all aspects of training"
-                                 },
-                                 {
-                                     "icon":  "Users",
-                                     "title":  "Community",
-                                     "description":  "We foster a supportive environment where everyone belongs"
-                                 }
-                             ],
-                  "cta":  {
-                              "title":  "Join Our Legacy",
-                              "text":  "Become part of a tradition of excellence. Start your martial arts journey with Hawk Taekwondo today.",
-                              "buttonLabel":  "Get Started Now",
-                              "buttonLink":  "/contact"
-                          }
-              },
-    "programs":  {
-                     "0":  {
-                               "id":  1770567240668,
-                               "name":  "Kickboxing",
-                               "description":  "Hybrid striking martial art and combat sport combining punches and kicks",
-                               "benefits":  {
-                                                "0":  "Improved cardiovascular endurance and stamina",
-                                                "1":  "Full-body strength and muscle toning",
-                                                "2":  "Enhanced coordination, agility, and power"
-                                            },
-                               "image":  ""
-                           },
-                     "1":  {
-                               "id":  1,
-                               "name":  "Taekwondo",
-                               "description":  "Traditional Korean martial art focusing on high kicks, jumping and spinning kicks, and fast kicking techniques.",
-                               "benefits":  {
-                                                "0":  "Improved flexibility and balance",
-                                                "1":  "Enhanced cardiovascular fitness",
-                                                "2":  "Mental discipline and focus",
-                                                "3":  "Self-defense skills",
-                                                "4":  "Stress relief and confidence building"
-                                            },
-                               "image":  ""
-                           },
-                     "2":  {
-                               "id":  2,
-                               "name":  "Self Defence",
-                               "description":  "Practical protection techniques designed for real-world situations and personal safety.",
-                               "benefits":  {
-                                                "0":  "Effective protection skills",
-                                                "1":  "Situational awareness",
-                                                "2":  "Confidence in dangerous situations",
-                                                "3":  "Quick reaction techniques",
-                                                "4":  "Legal self-defense knowledge"
-                                            },
-                               "image":  ""
-                           },
-                     "3":  {
-                               "id":  3,
-                               "name":  "MuayThai",
-                               "description":  "The art of eight limbs - using fists, elbows, knees, and shins in a powerful striking art.",
-                               "benefits":  {
-                                                "0":  "Explosive power development",
-                                                "1":  "Full-body conditioning",
-                                                "2":  "Mental toughness",
-                                                "3":  "Traditional Thai techniques",
-                                                "4":  "Competition preparation"
-                                            },
-                               "image":  ""
-                           }
-                 },
-    "programsPage":  {
-                         "hero":  {
-                                      "titleMain":  "Our",
-                                      "titleHighlight":  "Programs",
-                                      "subtitle":  "Discover the perfect program tailored to your age, skill level, and goals.",
-                                      "videoUrl":  "",
-                                      "backgroundImage":  ""
-                                  }
-                     },
-    "schedulePage":  {
-                         "hero":  {
-                                      "titleMain":  "Class",
-                                      "titleHighlight":  "Schedule",
-                                      "subtitle":  "Find the perfect class time that fits your week.",
-                                      "videoUrl":  "",
-                                      "backgroundImage":  ""
-                                  }
-                     },
-    "contactPage":  {
-                        "hero":  {
-                                     "titleMain":  "Get in",
-                                     "titleHighlight":  "Touch",
-                                     "subtitle":  "Ready to start your martial arts journey? Contact us today.",
-                                     "videoUrl":  "",
-                                     "backgroundImage":  "https://res.cloudinary.com/dem7arres/image/upload/v1770793523/hawk-taekwondo/images/tmp-4-71201770793525861_uiqjzg.gif"
-                                 }
-                    },
-    "facultyPage":  {
-                        "hero":  {
-                                     "titleMain":  "Meet Our",
-                                     "titleHighlight":  "Instructors",
-                                     "subtitle":  "Learn from certified masters with decades of experience",
-                                     "videoUrl":  "",
-                                     "backgroundImage":  ""
-                                 }
-                    },
-    "instructors":  {
-                        "0":  {
-                                  "id":  1770791917387,
-                                  "name":  "Jeffery Epstein",
-                                  "rank":  "????",
-                                  "specialization":  "CEO of the world",
-                                  "experience":  "67 years ig",
-                                  "bio":  "",
-                                  "image":  ""
-                              },
-                        "1":  {
-                                  "id":  2,
-                                  "name":  "Yajuvendrasinh RATHOD",
-                                  "rank":  "4th DAN Black Belt",
-                                  "specialization":  "Chief Instructor",
-                                  "experience":  "25 years",
-                                  "bio":  "Asian Taekwondo Union Licensed Coach with over two decades of teaching experience. Specializes in advanced techniques and competition training.",
-                                  "image":  ""
-                              },
-                        "2":  {
-                                  "id":  3,
-                                  "name":  "Rohan Sahani",
-                                  "rank":  "1st DAN Black Belt",
-                                  "specialization":  "Assistant Coach",
-                                  "experience":  "10 years",
-                                  "bio":  "Passionate instructor focused on building strong fundamentals and creating a positive learning environment for students of all ages.",
-                                  "image":  ""
-                              }
-                    },
-    "testimonials":  [
-                         {
-                             "id":  1770831078909,
-                             "name":  "New Student",
-                             "program":  "Adult Program",
-                             "rating":  5,
-                             "comment":  "",
-                             "image":  ""
-                         },
-                         {
-                             "id":  1,
-                             "name":  "Rahul Patel",
-                             "program":  "Taekwondo",
-                             "rating":  5,
-                             "comment":  "The instructors here are amazing! My confidence has grown tremendously since joining Hawk Taekwondo. The environment is welcoming and supportive.",
-                             "image":  "https://res.cloudinary.com/dem7arres/image/upload/v1770827902/hawk-taekwondo/images/tmp-1-38441770827904559_mb5jd7.jpg"
-                         },
-                         {
-                             "id":  2,
-                             "name":  "Priya Sharma",
-                             "program":  "Self Defence",
-                             "rating":  5,
-                             "comment":  "Best decision I ever made! The self-defence program taught me practical skills that I hope to never use, but I feel much safer knowing I can protect myself.",
-                             "image":  ""
-                         },
-                         {
-                             "id":  3,
-                             "name":  "Arjun Mehta",
-                             "program":  "Kickboxing",
-                             "rating":  4,
-                             "comment":  "Incredible workout and great community. The kickboxing program helped me get in the best shape of my life while learning valuable skills.",
-                             "image":  ""
-                         }
-                     ],
-    "classSchedule":  {
-                          "batches":  [
-                                          {
-                                              "name":  "Kids \u0026 Youth Batch",
-                                              "days":  [
-                                                           "Monday",
-                                                           "Wednesday",
-                                                           "Friday"
-                                                       ],
-                                              "time":  "7:30 PM - 8:30 PM",
-                                              "ageGroup":  "Ages 4-17",
-                                              "description":  "Perfect for young martial artists to build discipline and confidence"
-                                          },
-                                          {
-                                              "name":  "Adults Batch",
-                                              "days":  [
-                                                           "Tuesday",
-                                                           "Thursday",
-                                                           "Saturday"
-                                                       ],
-                                              "time":  "6:00 PM - 7:00 PM",
-                                              "ageGroup":  "Ages 18+",
-                                              "description":  "Comprehensive training for adult practitioners"
-                                          },
-                                          {
-                                              "name":  "Kids \u0026 Youth Batch",
-                                              "days":  [
-                                                           "Saturday",
-                                                           "Tuesday",
-                                                           "Thursday"
-                                                       ],
-                                              "time":  "5.00 to 6.00 PM",
-                                              "ageGroup":  "Ages 4-17",
-                                              "description":  "Perfect for young martial artists to build discipline and confidence"
-                                          }
-                                      ],
-                          "dailySchedule":  [
-                                                {
-                                                    "day":  "Monday",
-                                                    "classes":  [
-                                                                    {
-                                                                        "name":  "Kids \u0026 Youth Batch",
-                                                                        "time":  "7:30 PM - 8:30 PM",
-                                                                        "ageGroup":  "Ages 4-17",
-                                                                        "type":  "Youth"
-                                                                    }
-                                                                ]
-                                                },
-                                                {
-                                                    "day":  "Tuesday",
-                                                    "classes":  [
-                                                                    {
-                                                                        "name":  "Adults Batch",
-                                                                        "time":  "6:00 PM - 7:00 PM",
-                                                                        "ageGroup":  "Ages 18+",
-                                                                        "type":  "Adult"
-                                                                    },
-                                                                    {
-                                                                        "name":  "Kids \u0026 Youth Batch",
-                                                                        "time":  "5.00 to 6.00 PM",
-                                                                        "ageGroup":  "Ages 4-17",
-                                                                        "type":  "Youth"
-                                                                    }
-                                                                ]
-                                                },
-                                                {
-                                                    "day":  "Wednesday",
-                                                    "classes":  [
-                                                                    {
-                                                                        "name":  "Kids \u0026 Youth Batch",
-                                                                        "time":  "7:30 PM - 8:30 PM",
-                                                                        "ageGroup":  "Ages 4-17",
-                                                                        "type":  "Youth"
-                                                                    }
-                                                                ]
-                                                },
-                                                {
-                                                    "day":  "Thursday",
-                                                    "classes":  [
-                                                                    {
-                                                                        "name":  "Adults Batch",
-                                                                        "time":  "6:00 PM - 7:00 PM",
-                                                                        "ageGroup":  "Ages 18+",
-                                                                        "type":  "Adult"
-                                                                    },
-                                                                    {
-                                                                        "name":  "Kids \u0026 Youth Batch",
-                                                                        "time":  "5.00 to 6.00 PM",
-                                                                        "ageGroup":  "Ages 4-17",
-                                                                        "type":  "Youth"
-                                                                    }
-                                                                ]
-                                                },
-                                                {
-                                                    "day":  "Friday",
-                                                    "classes":  [
-                                                                    {
-                                                                        "name":  "Kids \u0026 Youth Batch",
-                                                                        "time":  "7:30 PM - 8:30 PM",
-                                                                        "ageGroup":  "Ages 4-17",
-                                                                        "type":  "Youth"
-                                                                    }
-                                                                ]
-                                                },
-                                                {
-                                                    "day":  "Saturday",
-                                                    "classes":  [
-                                                                    {
-                                                                        "name":  "Adults Batch",
-                                                                        "time":  "6:00 PM - 7:00 PM",
-                                                                        "ageGroup":  "Ages 18+",
-                                                                        "type":  "Adult"
-                                                                    },
-                                                                    {
-                                                                        "name":  "Kids \u0026 Youth Batch",
-                                                                        "time":  "5.00 to 6.00 PM",
-                                                                        "ageGroup":  "Ages 4-17",
-                                                                        "type":  "Youth"
-                                                                    }
-                                                                ]
-                                                },
-                                                {
-                                                    "day":  "Sunday",
-                                                    "classes":  [
-                                                                    null
-                                                                ]
-                                                }
-                                            ]
-                      },
-    "gallery":  {
-                    "featured":  [
-                                     {
-                                         "id":  1770887516823.295,
-                                         "image":  "https://res.cloudinary.com/dem7arres/image/upload/v1770887506/hawk-taekwondo/images/tmp-1-31801770887499192_wlpu0v.jpg",
-                                         "publicId":  "hawk-taekwondo/images/tmp-1-31801770887499192_wlpu0v",
-                                         "title":  ""
-                                     },
-                                     {
-                                         "id":  1770887527614.1538,
-                                         "image":  "https://res.cloudinary.com/dem7arres/image/upload/v1770887517/hawk-taekwondo/images/tmp-2-31801770887516836_o7pelt.jpg",
-                                         "publicId":  "hawk-taekwondo/images/tmp-2-31801770887516836_o7pelt",
-                                         "title":  ""
-                                     },
-                                     {
-                                         "id":  1770887544268.1296,
-                                         "image":  "https://res.cloudinary.com/dem7arres/image/upload/v1770887533/hawk-taekwondo/images/tmp-3-31801770887527641_fz8nhr.jpg",
-                                         "publicId":  "hawk-taekwondo/images/tmp-3-31801770887527641_fz8nhr",
-                                         "title":  ""
-                                     }
-                                 ]
-                },
-    "videos":  {
-                   "0":  {
-                             "id":  1,
-                             "title":  "Welcome to Hawk Taekwondo",
-                             "description":  "Discover our facility and meet our instructors",
-                             "thumbnail":  "/images/hero/image1.webp",
-                             "videoUrl":  "/boxing.mp4",
-                             "duration":  "2:30",
-                             "category":  "introduction"
-                         },
-                   "1":  {
-                             "id":  2,
-                             "title":  "Kids Program Highlights",
-                             "description":  "See our young students in action",
-                             "thumbnail":  "/images/instructors/a.webp",
-                             "videoUrl":  "/boxing.mp4",
-                             "duration":  "3:15",
-                             "category":  "programs"
-                         },
-                   "2":  {
-                             "id":  3,
-                             "title":  "Poomsae (Forms) Demonstration",
-                             "description":  "Master level forms performance",
-                             "thumbnail":  "/images/instructors/b.jpeg",
-                             "videoUrl":  "/boxing.mp4",
-                             "duration":  "4:00",
-                             "category":  "techniques"
-                         },
-                   "3":  {
-                             "id":  4,
-                             "title":  "Sparring Techniques",
-                             "description":  "Competition sparring training session",
-                             "thumbnail":  "/images/hero/image1.webp",
-                             "videoUrl":  "/boxing.mp4",
-                             "duration":  "5:20",
-                             "category":  "techniques"
-                         },
-                   "4":  {
-                             "id":  5,
-                             "title":  "Belt Testing Ceremony",
-                             "description":  "Students advancing to their next belt level",
-                             "thumbnail":  "/images/hero/image1.webp",
-                             "videoUrl":  "/boxing.mp4",
-                             "duration":  "6:45",
-                             "category":  "events"
-                         }
-               }
+{
+  "schoolInfo": {
+    "name": "Hawk Taekwondo Training Centre",
+    "tagline": "Find your strength. Build your confidence.",
+    "mission": "We believe Taekwondo is for everyone. Our goal is to create a space where you can push your limits, learn discipline, and become the best version of yourself, all while being part of a great community.",
+    "founded": 2010,
+    "address": "First Floor, Mangalya Complex, above Vadwala Auto, opp. Anjali BRTS, Pankaj Society, Bhatta, Vasna, Ahmedabad, Gujarat 380007",
+    "phone": "+91 8487829291",
+    "email": "httc.tkd29@gmail.com",
+    "mapLink": "https://www.google.com/maps/place/Hawk+Taekwondo+Training+Centre/@23.0039668,72.5541008,17z/data=!3m1!4b1!4m6!3m5!1s0x395e851bc7092e07:0x21ae1c75bac35a33!8m2!3d23.0039668!4d72.5541008!16s%2Fg%2F11d_tj5tvw?hl=en-GB&entry=ttu&g_ep=EgoyMDI2MDEyOC4wIKXMDSoKLDEwMDc5MjA3M0gBUAM%3D",
+    "hours": [
+      "Mon - Fri: 3:00 PM - 9:00 PM  Sat: 9:00 AM - 2:00 PM  Sun: Closed"
+    ]
+  },
+  "home": {
+    "hero": {
+      "primaryButton": {
+        "label": "Explore Programs",
+        "link": "/programs"
+      },
+      "secondaryButton": {
+        "label": "Start Free Trial",
+        "link": "/contact"
+      },
+      "titleMain": "Master the Art of",
+      "titleHighlight": "Taekwondo",
+      "subtitle": "Find your strength. Build your confidence.",
+      "videoUrl": "https://res.cloudinary.com/dem7arres/video/upload/v1770910919/hawk-taekwondo/videos/tmp-1-89761770910918869_ed5fdf.mp4",
+      "backgroundImage": ""
+    },
+    "features": [
+      {
+        "icon": "Shield",
+        "title": "Expert Instruction",
+        "description": "Certified black belt instructors with real competition experience"
+      },
+      {
+        "icon": "Target",
+        "title": "Goal Focused",
+        "description": "Structured belt and skill progression system"
+      },
+      {
+        "icon": "Users",
+        "title": "Strong Community",
+        "description": "Supportive training environment for all ages"
+      },
+      {
+        "icon": "Award",
+        "title": "Proven Results",
+        "description": "Track record of confident and disciplined students"
+      }
+    ]
+  },
+  "about": {
+    "cta": {
+      "title": "Join Our Legacy",
+      "text": "Become part of a tradition of excellence. Start your martial arts journey with Hawk Taekwondo today.",
+      "buttonLabel": "Get Started Now",
+      "buttonLink": "/contact"
+    },
+    "hero": {
+      "primaryButton": {
+        "label": "",
+        "link": ""
+      },
+      "secondaryButton": {
+        "label": "",
+        "link": ""
+      },
+      "titleMain": "About",
+      "titleHighlight": "Hawk Taekwondo",
+      "subtitle": "We believe Taekwondo is for everyone. Our goal is to create a space where you can push your limits, learn discipline, and become the best version of yourself, all while being part of a great community.",
+      "videoUrl": "",
+      "backgroundImage": ""
+    },
+    "stats": [
+      {
+        "number": "40+",
+        "label": "Years Experience"
+      },
+      {
+        "number": "500+",
+        "label": "Active Students"
+      },
+      {
+        "number": "500+",
+        "label": "Black Belts"
+      },
+      {
+        "number": "100%",
+        "label": "Satisfaction"
+      }
+    ],
+    "values": [
+      {
+        "icon": "Shield",
+        "title": "Discipline",
+        "description": "We instill self-discipline and respect through structured training"
+      },
+      {
+        "icon": "Heart",
+        "title": "Integrity",
+        "description": "We uphold the highest standards of honesty and ethical conduct"
+      },
+      {
+        "icon": "Target",
+        "title": "Excellence",
+        "description": "We strive for continuous improvement in all aspects of training"
+      },
+      {
+        "icon": "Users",
+        "title": "Community",
+        "description": "We foster a supportive environment where everyone belongs"
+      }
+    ]
+  },
+  "programsPage": {
+    "hero": {
+      "primaryButton": {
+        "label": "",
+        "link": ""
+      },
+      "secondaryButton": {
+        "label": "",
+        "link": ""
+      },
+      "titleMain": "Our",
+      "titleHighlight": "Programs",
+      "subtitle": "Discover the perfect program tailored to your age, skill level, and goals.",
+      "videoUrl": "",
+      "backgroundImage": ""
+    }
+  },
+  "schedulePage": {
+    "hero": {
+      "primaryButton": {
+        "label": "",
+        "link": ""
+      },
+      "secondaryButton": {
+        "label": "",
+        "link": ""
+      },
+      "titleMain": "Class",
+      "titleHighlight": "Schedule",
+      "subtitle": "Find the perfect class time that fits your week.",
+      "videoUrl": "",
+      "backgroundImage": ""
+    }
+  },
+  "contactPage": {
+    "hero": {
+      "primaryButton": {
+        "label": "",
+        "link": ""
+      },
+      "secondaryButton": {
+        "label": "",
+        "link": ""
+      },
+      "titleMain": "Get in",
+      "titleHighlight": "TOUCH",
+      "subtitle": "Ready to start your martial arts journey? Contact us today.",
+      "videoUrl": "",
+      "backgroundImage": ""
+    }
+  },
+  "facultyPage": {
+    "hero": {
+      "primaryButton": {
+        "label": "",
+        "link": ""
+      },
+      "secondaryButton": {
+        "label": "",
+        "link": ""
+      },
+      "titleMain": "Meet Our",
+      "titleHighlight": "Instructors",
+      "subtitle": "Learn from certified masters with decades of experience",
+      "videoUrl": "",
+      "backgroundImage": "https://res.cloudinary.com/dem7arres/image/upload/v1770911449/hawk-taekwondo/images/tmp-6-89761770911451922_zmmboz.jpg"
+    }
+  },
+  "programs": [
+    {
+      "id": 1770567240668,
+      "name": "Kickboxing",
+      "description": "Hybrid striking martial art and combat sport combining punches and kicks",
+      "benefits": [],
+      "image": ""
+    },
+    {
+      "id": 1,
+      "name": "Taekwondo",
+      "description": "Traditional Korean martial art focusing on high kicks, jumping and spinning kicks, and fast kicking techniques.",
+      "benefits": [],
+      "image": ""
+    },
+    {
+      "id": 2,
+      "name": "Self Defence",
+      "description": "Practical protection techniques designed for real-world situations and personal safety.",
+      "benefits": [],
+      "image": ""
+    },
+    {
+      "id": 3,
+      "name": "MuayThai",
+      "description": "The art of eight limbs - using fists, elbows, knees, and shins in a powerful striking art.",
+      "benefits": [],
+      "image": ""
+    }
+  ],
+  "instructors": [
+    {
+      "id": 2,
+      "name": "Yajuvendrasinh RATHOD",
+      "rank": "4th DAN Black Belt",
+      "specialization": "Chief Instructor",
+      "experience": "25 years",
+      "bio": "Asian Taekwondo Union Licensed Coach with over two decades of teaching experience. Specializes in advanced techniques and competition training.",
+      "image": ""
+    },
+    {
+      "id": 3,
+      "name": "Rohan Sahani",
+      "rank": "1st DAN Black Belt",
+      "specialization": "Assistant Coach",
+      "experience": "10 years",
+      "bio": "Passionate instructor focused on building strong fundamentals and creating a positive learning environment for students of all ages.",
+      "image": "https://res.cloudinary.com/dem7arres/image/upload/v1770911901/hawk-taekwondo/images/tmp-1-50761770911903864_jfv3ih.jpg"
+    }
+  ],
+  "testimonials": [
+    {
+      "id": 1770911498864,
+      "name": "New Student2",
+      "program": "Adult Program",
+      "rating": 5,
+      "comment": "",
+      "image": ""
+    },
+    {
+      "id": 1770911494339,
+      "name": "New Student1",
+      "program": "Adult Program",
+      "rating": 5,
+      "comment": "",
+      "image": ""
+    },
+    {
+      "id": 1770910856115,
+      "name": "New Student",
+      "program": "Adult Program",
+      "rating": 5,
+      "comment": "best donjo ever",
+      "image": ""
+    }
+  ],
+  "classSchedule": {
+    "batches": [
+      {
+        "name": "Kids & Youth Batch",
+        "days": [
+          "Wednesday"
+        ],
+        "time": "7:30 PM - 8:30 PM",
+        "ageGroup": "Ages 4-17",
+        "description": "Perfect for young martial artists to build discipline and confidence"
+      },
+      {
+        "name": "Adults Batch",
+        "days": [],
+        "time": "6:00 PM - 7:00 PM",
+        "ageGroup": "Ages 18+",
+        "description": "Comprehensive training for adult practitioners"
+      },
+      {
+        "name": "Kids & Youth Batch",
+        "days": [],
+        "time": "5.00 to 6.00 PM",
+        "ageGroup": "Ages 4-17",
+        "description": "Perfect for young martial artists to build discipline and confidence"
+      },
+      {
+        "name": "New Batch",
+        "days": [
+          "Monday"
+        ],
+        "time": "6:00 PM - 7:00 PM",
+        "ageGroup": "Ages 18+",
+        "description": "New class batch"
+      }
+    ],
+    "dailySchedule": [
+      {
+        "day": "Monday",
+        "classes": [
+          {
+            "name": "New Batch",
+            "time": "6:00 PM - 7:00 PM",
+            "ageGroup": "Ages 18+",
+            "type": "Adult"
+          }
+        ]
+      },
+      {
+        "day": "Tuesday",
+        "classes": []
+      },
+      {
+        "day": "Wednesday",
+        "classes": [
+          {
+            "name": "Kids & Youth Batch",
+            "time": "7:30 PM - 8:30 PM",
+            "ageGroup": "Ages 4-17",
+            "type": "Youth"
+          }
+        ]
+      },
+      {
+        "day": "Thursday",
+        "classes": []
+      },
+      {
+        "day": "Friday",
+        "classes": []
+      },
+      {
+        "day": "Saturday",
+        "classes": []
+      },
+      {
+        "day": "Sunday",
+        "classes": []
+      }
+    ]
+  },
+  "gallery": {
+    "featured": [
+      {
+        "id": 1770911222993.372,
+        "image": "https://res.cloudinary.com/dem7arres/image/upload/v1770911212/hawk-taekwondo/images/tmp-3-89761770911210373_hweax8.jpg",
+        "publicId": "hawk-taekwondo/images/tmp-3-89761770911210373_hweax8",
+        "title": ""
+      },
+      {
+        "id": 1770911228396.7373,
+        "image": "https://res.cloudinary.com/dem7arres/image/upload/v1770911218/hawk-taekwondo/images/tmp-4-89761770911223006_etqxya.jpg",
+        "publicId": "hawk-taekwondo/images/tmp-4-89761770911223006_etqxya",
+        "title": ""
+      },
+      {
+        "id": 1770911233953.4697,
+        "image": "https://res.cloudinary.com/dem7arres/image/upload/v1770911223/hawk-taekwondo/images/tmp-5-89761770911228412_n5maig.jpg",
+        "publicId": "hawk-taekwondo/images/tmp-5-89761770911228412_n5maig",
+        "title": ""
+      },
+      {
+        "id": 1770911156577.4944,
+        "image": "https://res.cloudinary.com/dem7arres/image/upload/v1770911156/hawk-taekwondo/images/tmp-2-89761770911159608_lkpwy9.jpg",
+        "publicId": "hawk-taekwondo/images/tmp-2-89761770911159608_lkpwy9",
+        "title": ""
+      }
+    ]
+  },
+  "videos": [
+    {
+      "id": 1,
+      "title": "Welcome to Hawk Taekwondo",
+      "description": "Discover our facility and meet our instructors",
+      "thumbnail": "/images/hero/image1.webp",
+      "videoUrl": "/boxing.mp4",
+      "duration": "2:30",
+      "category": "introduction"
+    },
+    {
+      "id": 2,
+      "title": "Kids Program Highlights",
+      "description": "See our young students in action",
+      "thumbnail": "/images/instructors/a.webp",
+      "videoUrl": "/boxing.mp4",
+      "duration": "3:15",
+      "category": "programs"
+    },
+    {
+      "id": 3,
+      "title": "Poomsae (Forms) Demonstration",
+      "description": "Master level forms performance",
+      "thumbnail": "/images/instructors/b.jpeg",
+      "videoUrl": "/boxing.mp4",
+      "duration": "4:00",
+      "category": "techniques"
+    },
+    {
+      "id": 4,
+      "title": "Sparring Techniques",
+      "description": "Competition sparring training session",
+      "thumbnail": "/images/hero/image1.webp",
+      "videoUrl": "/boxing.mp4",
+      "duration": "5:20",
+      "category": "techniques"
+    },
+    {
+      "id": 5,
+      "title": "Belt Testing Ceremony",
+      "description": "Students advancing to their next belt level",
+      "thumbnail": "/images/hero/image1.webp",
+      "videoUrl": "/boxing.mp4",
+      "duration": "6:45",
+      "category": "events"
+    }
+  ]
 }

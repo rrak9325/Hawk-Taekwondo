@@ -40,8 +40,12 @@ export default function Home() {
 
   const { schoolInfo, programs: programsData, home, gallery } = data
   const { hero, features } = home
-  const safeFeatures = features ? Object.values(features) : []
-  const safePrograms = programsData ? Object.values(programsData) : []
+  const safeFeatures = Array.isArray(features) 
+    ? features.filter(f => f && f.icon) 
+    : (features ? Object.values(features).filter(f => f && f.icon) : [])
+  const safePrograms = Array.isArray(programsData)
+    ? programsData.filter(p => p && p.name)
+    : (programsData ? Object.values(programsData).filter(p => p && p.name) : [])
 
   return (
     <motion.div
@@ -74,10 +78,10 @@ export default function Home() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
             {safeFeatures.map((f, i) => {
-              const Icon = Icons[f.icon] || Icons.Shield
+              const Icon = Icons[f?.icon] || Icons.Shield
               return (
                 <motion.div
-                  key={i}
+                  key={f?.title || i}
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, amount: 0.25 }}
@@ -87,8 +91,8 @@ export default function Home() {
                   <div className="w-14 h-14 lg:w-16 lg:h-16 bg-secondary/10 rounded-2xl flex items-center justify-center mx-auto mb-4 lg:mb-6 transform group-hover:rotate-12 transition-transform">
                     <Icon className="w-7 h-7 lg:w-8 lg:h-8 text-secondary" />
                   </div>
-                  <h3 className="text-lg lg:text-xl font-bold mb-2 lg:mb-3 text-primary">{f.title}</h3>
-                  <p className="text-gray-600 text-sm leading-relaxed">{f.description}</p>
+                  <h3 className="text-lg lg:text-xl font-bold mb-2 lg:mb-3 text-primary">{f?.title}</h3>
+                  <p className="text-gray-600 text-sm leading-relaxed">{f?.description}</p>
                 </motion.div>
               )
             })}
@@ -120,7 +124,7 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
           {safePrograms.slice(0, 3).map((p, i) => (
               <motion.div
-                key={p.id}
+                key={p?.id || `program-${i}`}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.25 }}

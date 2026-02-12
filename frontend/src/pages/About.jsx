@@ -36,16 +36,16 @@ export default function About() {
   if (!data) return null
 
   const { schoolInfo, instructors: instructorsData, about } = data
-  const instructors = Object.values(instructorsData || {})
+  const instructors = Object.values(instructorsData || {}).filter(inst => inst && inst.name)
 
   // Ensure Yajuvendrasinh Rathod appears first if present
   const sortedInstructors = [...instructors].sort((a, b) =>
-    a.name.includes('Yajuvendrasinh') ? -1 : b.name.includes('Yajuvendrasinh') ? 1 : 0
+    a.name?.includes('Yajuvendrasinh') ? -1 : b.name?.includes('Yajuvendrasinh') ? 1 : 0
   )
 
   const { values, stats, cta } = about
-  const safeStats = Array.isArray(stats) ? stats : Object.values(stats || {})
-  const safeValues = Array.isArray(values) ? values : Object.values(values || {})
+  const safeStats = (Array.isArray(stats) ? stats : Object.values(stats || {})).filter(s => s && s.number && s.label)
+  const safeValues = (Array.isArray(values) ? values : Object.values(values || {})).filter(v => v && v.icon && v.title)
 
   return (
     <motion.div
@@ -354,7 +354,7 @@ export default function About() {
                     />
                   ) : (
                     <span className="text-8xl font-black text-red-200">
-                      {inst.name.charAt(0)}
+                      {inst?.name?.charAt(0) || 'I'}
                     </span>
                   )}
                 </div>

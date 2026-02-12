@@ -6,8 +6,14 @@ export default function Testimonials({ testimonials = [] }) {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [direction, setDirection] = useState(0)
   
-  // Convert object to array if testimonials is an object
-  const testimonialsArray = Array.isArray(testimonials) ? testimonials : Object.values(testimonials)
+  // Convert object to array if testimonials is an object, filter out null/undefined
+  const testimonialsArray = (Array.isArray(testimonials) ? testimonials : Object.values(testimonials || {}))
+    .filter(t => t && t.name && t.name.trim() !== '')
+    .map(t => ({
+      ...t,
+      comment: t.comment || 'Great experience!', // Default comment if empty
+      rating: t.rating || 5 // Default to 5 stars if rating is 0 or missing
+    }))
   
   if (!testimonialsArray || testimonialsArray.length === 0) {
     return null
@@ -113,7 +119,7 @@ export default function Testimonials({ testimonials = [] }) {
                       ) : (
                         <div className="w-20 h-20 md:w-24 md:h-24 rounded-full bg-gradient-to-br from-red-500 to-red-600 flex items-center justify-center border-4 border-red-100 shadow-lg">
                           <span className="text-white font-bold text-3xl md:text-4xl">
-                            {currentTestimonial.name.charAt(0).toUpperCase()}
+                            {currentTestimonial?.name?.charAt(0)?.toUpperCase() || 'T'}
                           </span>
                         </div>
                       )}

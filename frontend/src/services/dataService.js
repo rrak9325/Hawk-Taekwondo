@@ -11,23 +11,44 @@ export class DataService {
 
   async getSchoolData(useCache = true) {
     const cacheKey = 'schoolData'
-    const cached = this.cache.get(cacheKey)
     
-    if (useCache && cached && Date.now() - cached.timestamp < this.cacheTimeout) {
-      return { success: true, data: cached.data }
-    }
-
+    // TEMPORARY: Use mockData.json while MongoDB connection is being fixed
     try {
-      // Try API first, then fallback to static file
-      let data
+      console.log('🌐 Fetching data from mockData.json...')
+      
+      // Try API first
       try {
-        data = await apiClient.get(`/api/data?t=${Date.now()}`)
+        const data = await apiClient.get(`/api/data?t=${Date.now()}`)
+        console.log('✅ Got data from API')
+        // Cache the data
+        this.cache.set(cacheKey, {
+          data,
+          timestamp: Date.now()
+        })
+        return { success: true, data }
       } catch (apiError) {
-        console.warn('API failed, trying static file:', apiError)
-        const response = await fetch(`/mockData.json?t=${Date.now()}`)
-        if (!response.ok) throw new Error('Static file also failed')
-        data = await response.json()
+        console.warn('⚠️ API failed, falling back to mockData.json:', apiError.message)
+        // Fallback to mockData.json
+        const mockResponse = await fetch('/mockData.json')
+        const data = await mockResponse.json()
+        
+        // Cache the data
+        this.cache.set(cacheKey, {
+          data,
+          timestamp: Date.now()
+        })
+        
+        return { success: true, data }
       }
+      
+      console.log('✅ Data received from API:', {
+        hasPrograms: !!data.programs,
+        programsCount: data.programs?.length || 0,
+        hasTestimonials: !!data.testimonials,
+        testimonialsCount: data.testimonials?.length || 0,
+        hasSchedule: !!data.classSchedule,
+        batchesCount: data.classSchedule?.batches?.length || 0
+      })
       
       // Cache the data
       this.cache.set(cacheKey, {
@@ -37,47 +58,43 @@ export class DataService {
       
       return { success: true, data }
     } catch (error) {
-      console.error('Failed to fetch school data:', error)
+      console.error('❌ Failed to fetch school data from API:', error)
       
-      // Return cached data if available, even if expired
+      // Return cached data if available as last resort
+      const cached = this.cache.get(cacheKey)
       if (cached) {
-        console.warn('Using expired cached data due to fetch failure')
+        console.warn('⚠️  Using cached data due to API failure')
         return { success: true, data: cached.data }
       }
       
       return { 
         success: false, 
-        error: error.message || 'Failed to fetch data' 
+        error: error.message || 'Failed to fetch data from API. Please check backend connection.' 
       }
     }
   }
 
   async updateSchoolData(data) {
     try {
-      console.log('🔄 Updating school data...')
+      console.log('🔄 Updating school data via API...')
       console.log('📊 Data size:', JSON.stringify(data).length, 'bytes')
       console.log('🔑 Has token:', !!apiClient.token)
+      console.log('📦 Data summary:', {
+        hasPrograms: !!data.programs,
+        programsCount: data.programs?.length || 0,
+        hasTestimonials: !!data.testimonials,
+        testimonialsCount: data.testimonials?.length || 0,
+        hasSchedule: !!data.classSchedule,
+        batchesCount: data.classSchedule?.batches?.length || 0
+      })
       
-      // Always try to use the backend API in development
-      // Only fall back to file download in production without API
-      const isProduction = import.meta.env.PROD
-      const hasApiUrl = import.meta.env.VITE_API_URL
-      
-      console.log('🏗️ Environment:', { isProduction, hasApiUrl })
-      
-      if (isProduction && !hasApiUrl) {
-        // Production mode without API - download file
-        console.log('📥 Using download mode (production without API)')
-        this.downloadDataFile(data)
-        this.clearCache()
-        return { success: true, mode: 'download' }
-      }
-      
-      // Development mode or production with API - use backend
-      console.log('🌐 Using API mode')
       const response = await apiClient.post('/api/data', data)
-      console.log('✅ API response received:', response)
+      console.log('✅ API update successful:', response)
+      
+      // Clear cache to force fresh fetch
       this.clearCache()
+      console.log('🗑️  Cache cleared')
+      
       return { success: true, mode: 'api', data: response }
     } catch (error) {
       console.error('❌ Failed to update school data:', error)

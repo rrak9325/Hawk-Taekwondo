@@ -1,0 +1,33 @@
+services:
+  - type: web
+    name: hawk-taekwondo-backend
+    env: node
+    plan: free
+    buildCommand: npm install && cd backend && npm install
+    startCommand: cd backend && npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: ADMIN_USERNAME
+        value: yaju9325
+      - key: ADMIN_PASSWORD_HASH
+        value: $2b$10$jd3ZvdHZdsXt3u7vZhCho.6.PxO3imxCgAKzOoxoUNB84kjKA9n9G
+      - key: FRONTEND_URL
+        value: https://hawktaekwondo.onrender.com  # Update after frontend deployment
+      - key: PORT
+        value: 10000
+      - key: CLOUDINARY_CLOUD_NAME
+        value: dem7arres
+      - key: CLOUDINARY_API_KEY
+        value: 267337995938546
+      - key: CLOUDINARY_API_SECRET
+        value: h5bR0Eh5ejZ8MvqCtoND_01hw
+
+  - type: web
+    name: hawk-taekwondo-frontend
+    env: static
+    buildCommand: npm install && cd frontend && npm run build
+    staticPublishPath: ./frontend/dist
+    envVars:
+      - key: NODE_ENV
+        value: production

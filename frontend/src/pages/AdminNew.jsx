@@ -100,12 +100,32 @@ export default function AdminNew() {
 
   const fetchData = useCallback(async () => {
     try {
+      console.log('🔄 FETCHING DATA FROM API...')
       const result = await dataService.getSchoolData(false)
+      console.log('📥 API RESULT:', result)
+      
       if (result.success) {
         let data = result.data
+        console.log('📊 RAW DATA RECEIVED:', {
+          hasSchoolInfo: !!data.schoolInfo,
+          hasPrograms: !!data.programs,
+          programsType: Array.isArray(data.programs) ? 'array' : typeof data.programs,
+          programsCount: Array.isArray(data.programs) ? data.programs.length : 'N/A',
+          hasInstructors: !!data.instructors,
+          instructorsType: Array.isArray(data.instructors) ? 'array' : typeof data.instructors,
+          instructorsCount: Array.isArray(data.instructors) ? data.instructors.length : 'N/A',
+          hasTestimonials: !!data.testimonials,
+          testimonialsCount: Array.isArray(data.testimonials) ? data.testimonials.length : 'N/A'
+        })
         
         // Normalize all object-based arrays to proper arrays
-        // 1. Schedule batches
+        // 1. School hours
+        if (data?.schoolInfo?.hours && !Array.isArray(data.schoolInfo.hours)) {
+          console.log('🔄 Converting school hours from object to array')
+          data.schoolInfo.hours = Object.values(data.schoolInfo.hours)
+        }
+        
+        // 2. Schedule batches
         if (data?.classSchedule?.batches && !Array.isArray(data.classSchedule.batches)) {
           console.log('🔄 Converting schedule batches from object to array')
           data.classSchedule.batches = Object.values(data.classSchedule.batches)
@@ -235,6 +255,16 @@ export default function AdminNew() {
       // Ensure data is in the correct format before saving
       const dataToSave = { ...data }
       
+      console.log('📤 PRE-SAVE DATA ANALYSIS:')
+      console.log('📊 All keys:', Object.keys(dataToSave))
+      console.log('📊 SchoolInfo keys:', dataToSave.schoolInfo ? Object.keys(dataToSave.schoolInfo) : 'No schoolInfo')
+      console.log('📊 Programs type:', Array.isArray(dataToSave.programs) ? 'array' : typeof dataToSave.programs)
+      console.log('📊 Programs count:', Array.isArray(dataToSave.programs) ? dataToSave.programs.length : 'N/A')
+      console.log('📊 Instructors type:', Array.isArray(dataToSave.instructors) ? 'array' : typeof dataToSave.instructors)
+      console.log('📊 Instructors count:', Array.isArray(dataToSave.instructors) ? dataToSave.instructors.length : 'N/A')
+      console.log('📊 Testimonials type:', Array.isArray(dataToSave.testimonials) ? 'array' : typeof dataToSave.testimonials)
+      console.log('📊 Testimonials count:', Array.isArray(dataToSave.testimonials) ? dataToSave.testimonials.length : 'N/A')
+      
       // Ensure schedule batches are in array format for consistency
       if (dataToSave.classSchedule?.batches && !Array.isArray(dataToSave.classSchedule.batches)) {
         console.log('🔄 Converting batches to array format for save')
@@ -253,6 +283,10 @@ export default function AdminNew() {
         } else {
           console.log('🌐 API mode success')
           addToast('success', 'Data saved successfully! Changes are now live.')
+          
+          // Refetch data to ensure admin shows latest from MongoDB
+          console.log('🔄 Refetching data from MongoDB...')
+          await fetchData()
         }
       } else {
         console.log('❌ Save failed:', result.error)
@@ -735,6 +769,50 @@ export default function AdminNew() {
                     darkMode={darkMode}
                   />
                 ))}
+                
+                {/* Hours Section */}
+                <div className="lg:col-span-2">
+                  <label className={`block text-sm font-medium mb-2 ${darkMode ? 'text-slate-300' : 'text-gray-700'}`}>
+                    Operating Hours
+                  </label>
+                  <div className="space-y-2">
+                    {(Array.isArray(data.schoolInfo?.hours) ? data.schoolInfo.hours : []).map((hour, index) => (
+                      <div key={index} className="flex gap-2">
+                        <input
+                          type="text"
+                          value={hour || ''}
+                          onChange={(e) => {
+                            const newHours = [...(Array.isArray(data.schoolInfo?.hours) ? data.schoolInfo.hours : [])]
+                            newHours[index] = e.target.value
+                            updateField('schoolInfo.hours', newHours)
+                          }}
+                          placeholder="e.g., Mon-Fri: 3:00 PM - 9:00 PM"
+                          className={`flex-1 px-3 py-2 rounded-lg border ${darkMode ? 'bg-slate-800 border-slate-700 text-white' : 'bg-white border-gray-300 text-gray-900'} focus:ring-2 focus:ring-purple-500 focus:border-transparent`}
+                        />
+                        <button
+                          onClick={() => {
+                            const newHours = [...(Array.isArray(data.schoolInfo?.hours) ? data.schoolInfo.hours : [])]
+                            newHours.splice(index, 1)
+                            updateField('schoolInfo.hours', newHours)
+                          }}
+                          className="px-3 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      </div>
+                    ))}
+                    <button
+                      onClick={() => {
+                        const newHours = [...(Array.isArray(data.schoolInfo?.hours) ? data.schoolInfo.hours : []), '']
+                        updateField('schoolInfo.hours', newHours)
+                      }}
+                      className="flex items-center gap-2 px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors text-sm font-medium"
+                    >
+                      <Plus size={16} />
+                      Add Hours
+                    </button>
+                  </div>
+                </div>
               </div>
             </AdminCard>
           )}

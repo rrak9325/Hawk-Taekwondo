@@ -155,8 +155,8 @@ const Footer = () => {
             </div>
             <div className="mt-6">
               <h4 className="font-medium text-sm mb-2">Operating Hours</h4>
-              {schoolInfo.hours && (Array.isArray(schoolInfo.hours) ? schoolInfo.hours : Object.values(schoolInfo.hours)).length > 0 ? (
-                (Array.isArray(schoolInfo.hours) ? schoolInfo.hours : Object.values(schoolInfo.hours)).map((hour, index) => (
+              {Array.isArray(schoolInfo.hours) && schoolInfo.hours.length > 0 ? (
+                schoolInfo.hours.map((hour, index) => (
                   <p key={index} className="text-gray-300 text-xs">{hour}</p>
                 ))
               ) : (

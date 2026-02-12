@@ -1,0 +1,36 @@
+{
+  "name": "hawk-taekwondo",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "concurrently --kill-others \"npm run start:backend\" \"npm run start:frontend\"",
+    "dev": "concurrently --kill-others \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev:backend": "cd backend && npm run dev",
+    "start:frontend": "cd frontend && npm run dev",
+    "start:backend": "cd backend && npm run start",
+    "build": "npm run build:frontend && npm run build:backend",
+    "build:frontend": "cd frontend && npm run build",
+    "build:backend": "echo 'Backend build complete (no build step needed for Node.js)'",
+    "build:full": "npm run install:all && npm run build",
+    "preview": "cd frontend && npm run preview",
+    "lint": "npm run lint:frontend && npm run lint:backend",
+    "lint:frontend": "cd frontend && npm run lint",
+    "lint:backend": "cd backend && npm run lint",
+    "install:all": "npm install && cd frontend && npm install && cd ../backend && npm install",
+    "clean": "cd frontend && rm -rf dist node_modules && cd ../backend && rm -rf node_modules && rm -rf node_modules",
+    "vercel-build": "cd frontend && npm run build"
+  },
+  "dependencies": {
+    "concurrently": "^9.2.1",
+    "framer-motion": "^12.33.0",
+    "node-fetch": "^3.3.2",
+    "react-swipeable": "^7.0.2"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.17.0",
+    "eslint": "^9.17.0",
+    "globals": "^15.14.0"
+  }
+}

@@ -7,6 +7,7 @@ export class DataService {
   constructor() {
     this.cache = new Map()
     this.cacheTimeout = 5 * 60 * 1000 // 5 minutes
+    this.maxCacheSize = 10 // Maximum number of cached items
   }
 
   async getSchoolData(useCache = true) {
@@ -29,8 +30,8 @@ export class DataService {
         data = await response.json()
       }
       
-      // Cache the data
-      this.cache.set(cacheKey, {
+      // Cache the data with size limit
+      this.setCacheItem(cacheKey, {
         data,
         timestamp: Date.now()
       })
@@ -50,6 +51,15 @@ export class DataService {
         error: error.message || 'Failed to fetch data' 
       }
     }
+  }
+  
+  setCacheItem(key, value) {
+    // Remove oldest item if cache is full
+    if (this.cache.size >= this.maxCacheSize) {
+      const firstKey = this.cache.keys().next().value
+      this.cache.delete(firstKey)
+    }
+    this.cache.set(key, value)
   }
 
   async updateSchoolData(data) {

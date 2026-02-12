@@ -47,6 +47,13 @@ export default function CapturedMomentsGallery({ gallery }) {
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [isOpen, closeLightbox, goToPrev, goToNext])
+  
+  // Cleanup overflow style on unmount
+  useEffect(() => {
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [])
 
   // Touch swipe support for mobile
   const [touchStart, setTouchStart] = useState(null)

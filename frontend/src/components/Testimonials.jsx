@@ -5,35 +5,53 @@ import { Star, ChevronLeft, ChevronRight } from 'lucide-react'
 export default function Testimonials({ testimonials = [] }) {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [direction, setDirection] = useState(0)
+  const [isPaused, setIsPaused] = useState(false)
   
   // Convert object to array if testimonials is an object
-  const testimonialsArray = Array.isArray(testimonials) ? testimonials : Object.values(testimonials)
+  const testimonialsArray = Array.isArray(testimonials) ? testimonials : Object.values(testimonials || {})
   
   if (!testimonialsArray || testimonialsArray.length === 0) {
     return null
   }
 
-  // Auto-advance slider every 6.5 seconds
+  // Auto-advance slider every 6.5 seconds (with proper cleanup)
   useEffect(() => {
+    if (isPaused || testimonialsArray.length <= 1) {
+      return
+    }
+    
     const timer = setInterval(() => {
       setDirection(1)
       setCurrentIndex((prev) => (prev + 1) % testimonialsArray.length)
     }, 6500)
     
-    return () => clearInterval(timer)
-  }, [testimonialsArray.length])
+    // Cleanup function to prevent memory leaks
+    return () => {
+      clearInterval(timer)
+    }
+  }, [testimonialsArray.length, isPaused])
+  
+  // Pause auto-advance on user interaction
+  const handleUserInteraction = () => {
+    setIsPaused(true)
+    // Resume after 10 seconds of no interaction
+    setTimeout(() => setIsPaused(false), 10000)
+  }
 
   const handleNext = () => {
+    handleUserInteraction()
     setDirection(1)
     setCurrentIndex((prev) => (prev + 1) % testimonialsArray.length)
   }
 
   const handlePrev = () => {
+    handleUserInteraction()
     setDirection(-1)
     setCurrentIndex((prev) => (prev - 1 + testimonialsArray.length) % testimonialsArray.length)
   }
 
   const handleDotClick = (index) => {
+    handleUserInteraction()
     setDirection(index > currentIndex ? 1 : -1)
     setCurrentIndex(index)
   }

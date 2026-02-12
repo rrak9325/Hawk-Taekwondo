@@ -14,7 +14,7 @@ const server = app.listen(PORT, '0.0.0.0', () => {
   console.error('Server error:', err)
 })
 
-// Set very high timeouts for large file uploads
-server.timeout = 0 // No timeout
-server.keepAliveTimeout = 0 // No timeout
-server.headersTimeout = 0 // No timeout
+// Set reasonable timeouts for file uploads (5 minutes)
+server.timeout = 5 * 60 * 1000 // 5 minutes
+server.keepAliveTimeout = 65 * 1000 // 65 seconds (slightly more than default)
+server.headersTimeout = 66 * 1000 // 66 seconds (slightly more than keepAliveTimeout)

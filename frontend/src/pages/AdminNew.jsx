@@ -160,11 +160,11 @@ export default function AdminNew() {
     } finally {
       setLoading(false)
     }
-  }, [addToast])
+  }, []) // Remove addToast from dependencies to prevent recreation
 
   useEffect(() => {
     fetchData()
-  }, [fetchData])
+  }, []) // Only run once on mount
 
   // Helper function to update daily schedule based on batches
   const updateDailySchedule = useCallback((batches) => {

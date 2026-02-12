@@ -291,7 +291,7 @@ function MobileDayCard({ dayData }) {
       <div className="p-6 space-y-4 min-h-[300px]">
         {classes.length > 0 ? (
           classes.map((cls, i) => (
-            <MobileClassCard key={i} cls={cls} />
+            <MobileClassCard key={`${cls.time}-${cls.program}-${i}`} cls={cls} />
           ))
         ) : (
           <div className="h-full flex flex-col items-center justify-center text-gray-400 py-12">
@@ -363,7 +363,7 @@ function DesktopDayCard({ dayData }) {
       <div className="p-3 space-y-2 min-h-[400px]">
         {classes.length > 0 ? (
           classes.map((cls, i) => (
-            <DesktopClassCard key={i} cls={cls} />
+            <DesktopClassCard key={`${cls.time}-${cls.program}-${i}`} cls={cls} />
           ))
         ) : (
           <div className="h-full flex flex-col items-center justify-center text-gray-400 py-8">

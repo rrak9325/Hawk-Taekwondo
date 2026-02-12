@@ -118,7 +118,8 @@ export default function CapturedMomentsGallery({ gallery }) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 bg-black flex items-center justify-center"
+            className="fixed inset-0 z-[9999] bg-black flex items-center justify-center overflow-hidden"
+            style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0 }}
             onClick={closeLightbox}
             onTouchStart={onTouchStart}
             onTouchMove={onTouchMove}
@@ -167,13 +168,13 @@ export default function CapturedMomentsGallery({ gallery }) {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.25 }}
-              className="relative max-w-[90vw] max-h-[85vh] flex items-center justify-center px-4 z-10"
+              className="relative w-full h-full flex items-center justify-center p-4 z-10"
               onClick={(e) => e.stopPropagation()}
             >
               <img
                 src={images[currentIndex].image}
                 alt={images[currentIndex].title || `Image ${currentIndex + 1}`}
-                className="max-w-full max-h-full object-contain rounded-lg shadow-2xl"
+                className="max-w-[90vw] max-h-[85vh] w-auto h-auto object-contain rounded-lg shadow-2xl"
               />
             </motion.div>
 

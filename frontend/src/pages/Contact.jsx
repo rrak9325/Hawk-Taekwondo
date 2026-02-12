@@ -148,9 +148,14 @@ Message: ${formData.message}`
                   <h3 className="font-semibold text-primary mb-1">
                     Operating Hours
                   </h3>
-                  {schoolInfo.hours.map((h, i) => (
-                    <p key={i} className="text-gray-600">{h}</p>
-                  ))}
+                  {Array.isArray(schoolInfo.hours) 
+                    ? schoolInfo.hours.map((h, i) => (
+                        <p key={i} className="text-gray-600">{h}</p>
+                      ))
+                    : Object.values(schoolInfo.hours).map((h, i) => (
+                        <p key={i} className="text-gray-600">{h}</p>
+                      ))
+                  }
                 </div>
               </div>
 

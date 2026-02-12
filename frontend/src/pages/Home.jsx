@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import * as Icons from 'lucide-react'
 import Hero from '../components/Hero'
 import CapturedMomentsGallery from '../components/CapturedMomentsGallery'
+import Testimonials from '../components/Testimonials'
 import { useSchoolData } from '../hooks/useSchoolData.js'
 import { PageLoadingFallback } from '../components/LoadingFallback'
 
@@ -39,6 +40,7 @@ export default function Home() {
 
   const { schoolInfo, programs: programsData, home, gallery } = data
   const { hero, features } = home
+  const safeFeatures = features ? Object.values(features) : []
   const safePrograms = programsData ? Object.values(programsData) : []
 
   return (
@@ -71,7 +73,7 @@ export default function Home() {
           </motion.div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
-            {features.map((f, i) => {
+            {safeFeatures.map((f, i) => {
               const Icon = Icons[f.icon] || Icons.Shield
               return (
                 <motion.div
@@ -148,7 +150,7 @@ export default function Home() {
                 </p>
 
                 <ul className="space-y-2 mb-6">
-                  {p.benefits.slice(0, 3).map((b, idx) => (
+                  {(Array.isArray(p.benefits) ? p.benefits : Object.values(p.benefits)).slice(0, 3).map((b, idx) => (
                     <li key={idx} className="flex gap-2 text-sm">
                       <Icons.CheckCircle className="w-4 h-4 text-success mt-0.5 flex-shrink-0" />
                       <span>{b}</span>
@@ -164,6 +166,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Testimonials Section */}
+      <Testimonials testimonials={data.testimonials || []} />
 
       {/* Call to Action Section */}
       <section className="py-12 lg:py-16 xl:py-20 bg-gradient-to-br from-primary to-primary-light text-white text-center">

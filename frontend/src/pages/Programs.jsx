@@ -107,7 +107,7 @@ export default function Programs() {
                     </p>
                     
                     <div className="space-y-2 mb-6">
-                      {program.benefits.slice(0, 3).map((benefit, idx) => (
+                      {(Array.isArray(program.benefits) ? program.benefits : Object.values(program.benefits)).slice(0, 3).map((benefit, idx) => (
                         <div key={idx} className="flex items-start gap-2">
                           <Check className="w-4 h-4 text-secondary mt-0.5 flex-shrink-0" />
                           <span className="text-xs text-gray-600">{benefit}</span>

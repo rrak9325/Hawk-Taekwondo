@@ -44,6 +44,8 @@ export default function About() {
   )
 
   const { values, stats, cta } = about
+  const safeStats = Array.isArray(stats) ? stats : Object.values(stats || {})
+  const safeValues = Array.isArray(values) ? values : Object.values(values || {})
 
   return (
     <motion.div
@@ -280,7 +282,7 @@ export default function About() {
               transition={{ duration: 0.7, delay: 0.3 }}
               className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-10"
             >
-              {stats.map((s, i) => (
+              {safeStats.map((s, i) => (
                 <div
                   key={i}
                   className="bg-white shadow-lg rounded-2xl p-8 md:p-10 text-center border-t-4 border-red-600"
@@ -303,7 +305,7 @@ export default function About() {
             Our Core Values
           </h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10">
-            {values.map((v, i) => {
+            {safeValues.map((v, i) => {
               const Icon = Icons[v.icon] || Icons.Shield
               return (
                 <motion.div

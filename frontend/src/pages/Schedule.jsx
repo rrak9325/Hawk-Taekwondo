@@ -75,8 +75,22 @@ export default function Schedule() {
     const classSchedule = data.classSchedule
     
     return DAYS.map(day => {
-      const dayData = classSchedule?.dailySchedule?.find(d => d.day === day) || { classes: [] }
-      const filtered = dayData.classes.filter(cls => {
+      // Handle both array and object formats for dailySchedule
+      let dayData = { classes: [] }
+      
+      if (Array.isArray(classSchedule?.dailySchedule)) {
+        // If dailySchedule is an array, use find
+        dayData = classSchedule.dailySchedule.find(d => d.day === day) || { classes: [] }
+      } else if (classSchedule?.dailySchedule) {
+        // If dailySchedule is an object with numeric keys, iterate through values
+        const dailyScheduleValues = Object.values(classSchedule.dailySchedule)
+        const foundDay = dailyScheduleValues.find(d => d.day === day)
+        dayData = foundDay || { classes: [] }
+      }
+      
+      // Ensure classes is always an array before filtering
+      const classesArray = Array.isArray(dayData.classes) ? dayData.classes : Object.values(dayData.classes || {})
+      const filtered = classesArray.filter(cls => {
         if (filter === 'all') return true
         if (filter === 'kids') return cls.type?.toLowerCase().includes('youth') || cls.type?.toLowerCase().includes('kids')
         if (filter === 'adults') return cls.type?.toLowerCase().includes('adult')

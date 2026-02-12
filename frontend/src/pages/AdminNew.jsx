@@ -104,16 +104,44 @@ export default function AdminNew() {
       if (result.success) {
         let data = result.data
         
-        // Normalize schedule batches from object to array if needed
+        // Normalize all object-based arrays to proper arrays
+        // 1. Schedule batches
         if (data?.classSchedule?.batches && !Array.isArray(data.classSchedule.batches)) {
           console.log('🔄 Converting schedule batches from object to array')
-          data = {
-            ...data,
-            classSchedule: {
-              ...data.classSchedule,
-              batches: Object.values(data.classSchedule.batches)
-            }
-          }
+          data.classSchedule.batches = Object.values(data.classSchedule.batches)
+          
+          // Also normalize days within each batch
+          data.classSchedule.batches = data.classSchedule.batches.map(batch => ({
+            ...batch,
+            days: Array.isArray(batch.days) ? batch.days : Object.values(batch.days || {})
+          }))
+        }
+        
+        // 2. Daily schedule
+        if (data?.classSchedule?.dailySchedule && !Array.isArray(data.classSchedule.dailySchedule)) {
+          console.log('🔄 Converting daily schedule from object to array')
+          data.classSchedule.dailySchedule = Object.values(data.classSchedule.dailySchedule).map(day => ({
+            ...day,
+            classes: Array.isArray(day.classes) ? day.classes : Object.values(day.classes || {})
+          }))
+        }
+        
+        // 3. Testimonials
+        if (data?.testimonials && !Array.isArray(data.testimonials)) {
+          console.log('🔄 Converting testimonials from object to array')
+          data.testimonials = Object.values(data.testimonials)
+        }
+        
+        // 4. About stats
+        if (data?.about?.stats && !Array.isArray(data.about.stats)) {
+          console.log('🔄 Converting about stats from object to array')
+          data.about.stats = Object.values(data.about.stats)
+        }
+        
+        // 5. About values
+        if (data?.about?.values && !Array.isArray(data.about.values)) {
+          console.log('🔄 Converting about values from object to array')
+          data.about.values = Object.values(data.about.values)
         }
         
         setData(data)
@@ -803,7 +831,7 @@ export default function AdminNew() {
               {/* Stats */}
               <AdminCard title="Statistics" darkMode={darkMode}>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                  {(data.about?.stats || []).map((stat, index) => (
+                  {(Array.isArray(data.about?.stats) ? data.about.stats : Object.values(data.about?.stats || {})).map((stat, index) => (
                     <div key={index} className={`p-4 rounded-xl border ${darkMode ? 'bg-slate-800 border-slate-700' : 'bg-white border-gray-200'}`}>
                       <AdminInput
                         label="Number"
@@ -827,7 +855,7 @@ export default function AdminNew() {
               {/* Core Values */}
               <AdminCard title="Core Values" darkMode={darkMode}>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {(data.about?.values || []).map((value, index) => (
+                  {(Array.isArray(data.about?.values) ? data.about.values : Object.values(data.about?.values || {})).map((value, index) => (
                     <div key={index} className={`p-6 rounded-xl border ${darkMode ? 'bg-slate-800 border-slate-700' : 'bg-white border-gray-200'}`}>
                       <AdminInput
                         label="Icon Name"
@@ -1101,17 +1129,25 @@ export default function AdminNew() {
                     comment: '',
                     image: ''
                   }
-                  setData(prev => ({
-                    ...prev,
-                    testimonials: [newTestimonial, ...(prev.testimonials || [])]
-                  }))
+                  setData(prev => {
+                    // Ensure testimonials is always an array
+                    const currentTestimonials = Array.isArray(prev.testimonials) 
+                      ? prev.testimonials 
+                      : Object.values(prev.testimonials || {})
+                    
+                    return {
+                      ...prev,
+                      testimonials: [newTestimonial, ...currentTestimonials]
+                    }
+                  })
+                  addToast('success', 'New testimonial added!')
                 }}
                 className="bg-gradient-to-r from-yellow-500 to-orange-500 text-white px-5 py-3 rounded-xl font-medium shadow-lg hover:shadow-orange-500/30 transition-all"
               >
                 <Plus size={18} className="inline mr-2" /> Add Testimonial
               </button>
 
-              {(Array.isArray(data.testimonials) ? data.testimonials : []).map((testimonial, index) => (
+              {(Array.isArray(data.testimonials) ? data.testimonials : Object.values(data.testimonials || {})).map((testimonial, index) => (
                 <AdminCard
                   key={testimonial.id}
                   title={testimonial.name || 'Anonymous'}
@@ -1119,10 +1155,14 @@ export default function AdminNew() {
                   onDelete={() => {
                     if (!confirm('Delete this testimonial?')) return
                     setData(prev => {
-                      const newList = [...prev.testimonials]
+                      const currentTestimonials = Array.isArray(prev.testimonials) 
+                        ? prev.testimonials 
+                        : Object.values(prev.testimonials || {})
+                      const newList = [...currentTestimonials]
                       newList.splice(index, 1)
                       return { ...prev, testimonials: newList }
                     })
+                    addToast('success', 'Testimonial deleted!')
                   }}
                 >
                   <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

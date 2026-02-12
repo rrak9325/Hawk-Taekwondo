@@ -8,11 +8,11 @@
     "phone": "+91 8487829291",
     "email": "httc.tkd29@gmail.com",
     "mapLink": "https://www.google.com/maps/place/Hawk+Taekwondo+Training+Centre/@23.0039668,72.5541008,17z/data=!3m1!4b1!4m6!3m5!1s0x395e851bc7092e07:0x21ae1c75bac35a33!8m2!3d23.0039668!4d72.5541008!16s%2Fg%2F11d_tj5tvw?hl=en-GB&entry=ttu&g_ep=EgoyMDI2MDEyOC4wIKXMDSoKLDEwMDc5MjA3M0gBUAM%3D",
-    "hours": [
-      "Monday - Friday: 4:00 PM - 9:00 PM",
-      "Saturday: 8:00 AM - 2:00 PM",
-      "Sunday: Closed"
-    ]
+    "hours": {
+      "0": "Monday - Friday: 4:00 PM - 9:00 PM",
+      "1": "Saturday: 8:00 AM - 2:00 PM",
+      "2": "Sunday: Closed"
+    }
   },
   "home": {
     "hero": {
@@ -30,28 +30,28 @@
         "link": "/contact"
       }
     },
-    "features": [
-      {
+    "features": {
+      "0": {
         "icon": "Shield",
         "title": "Expert Instruction",
         "description": "Certified black belt instructors with real competition experience"
       },
-      {
+      "1": {
         "icon": "Target",
         "title": "Goal Focused",
         "description": "Structured belt and skill progression system"
       },
-      {
+      "2": {
         "icon": "Users",
         "title": "Strong Community",
         "description": "Supportive training environment for all ages"
       },
-      {
+      "3": {
         "icon": "Award",
         "title": "Proven Results",
         "description": "Track record of confident and disciplined students"
       }
-    ]
+    }
   },
   "about": {
     "hero": {
@@ -61,46 +61,46 @@
       "videoUrl": "",
       "backgroundImage": "https://res.cloudinary.com/dem7arres/image/upload/v1770794357/hawk-taekwondo/images/tmp-3-93361770794359024_iqwaid.jpg"
     },
-    "stats": [
-      {
+    "stats": {
+      "0": {
         "number": "40+",
         "label": "Years Experience"
       },
-      {
+      "1": {
         "number": "500+",
         "label": "Active Students"
       },
-      {
+      "2": {
         "number": "50+",
         "label": "Black Belts"
       },
-      {
+      "3": {
         "number": "100%",
         "label": "Satisfaction"
       }
-    ],
-    "values": [
-      {
+    },
+    "values": {
+      "0": {
         "icon": "Shield",
         "title": "Discipline",
         "description": "We instill self-discipline and respect through structured training"
       },
-      {
+      "1": {
         "icon": "Heart",
         "title": "Integrity",
         "description": "We uphold the highest standards of honesty and ethical conduct"
       },
-      {
+      "2": {
         "icon": "Target",
         "title": "Excellence",
         "description": "We strive for continuous improvement in all aspects of training"
       },
-      {
+      "3": {
         "icon": "Users",
         "title": "Community",
         "description": "We foster a supportive environment where everyone belongs"
       }
-    ],
+    },
     "cta": {
       "title": "Join Our Legacy",
       "text": "Become part of a tradition of excellence. Start your martial arts journey with Hawk Taekwondo today.",
@@ -113,50 +113,50 @@
       "id": 1770567240668,
       "name": "Kickboxing",
       "description": "Hybrid striking martial art and combat sport combining punches and kicks",
-      "benefits": [
-        "Improved cardiovascular endurance and stamina",
-        "Full-body strength and muscle toning",
-        "Enhanced coordination, agility, and power"
-      ],
+      "benefits": {
+        "0": "Improved cardiovascular endurance and stamina",
+        "1": "Full-body strength and muscle toning",
+        "2": "Enhanced coordination, agility, and power"
+      },
       "image": ""
     },
     "1": {
       "id": 1,
       "name": "Taekwondo",
       "description": "Traditional Korean martial art focusing on high kicks, jumping and spinning kicks, and fast kicking techniques.",
-      "benefits": [
-        "Improved flexibility and balance",
-        "Enhanced cardiovascular fitness",
-        "Mental discipline and focus",
-        "Self-defense skills",
-        "Stress relief and confidence building"
-      ],
+      "benefits": {
+        "0": "Improved flexibility and balance",
+        "1": "Enhanced cardiovascular fitness",
+        "2": "Mental discipline and focus",
+        "3": "Self-defense skills",
+        "4": "Stress relief and confidence building"
+      },
       "image": ""
     },
     "2": {
       "id": 2,
       "name": "Self Defence",
       "description": "Practical protection techniques designed for real-world situations and personal safety.",
-      "benefits": [
-        "Effective protection skills",
-        "Situational awareness",
-        "Confidence in dangerous situations",
-        "Quick reaction techniques",
-        "Legal self-defense knowledge"
-      ],
+      "benefits": {
+        "0": "Effective protection skills",
+        "1": "Situational awareness",
+        "2": "Confidence in dangerous situations",
+        "3": "Quick reaction techniques",
+        "4": "Legal self-defense knowledge"
+      },
       "image": ""
     },
     "3": {
       "id": 3,
       "name": "MuayThai",
       "description": "The art of eight limbs - using fists, elbows, knees, and shins in a powerful striking art.",
-      "benefits": [
-        "Explosive power development",
-        "Full-body conditioning",
-        "Mental toughness",
-        "Traditional Thai techniques",
-        "Competition preparation"
-      ],
+      "benefits": {
+        "0": "Explosive power development",
+        "1": "Full-body conditioning",
+        "2": "Mental toughness",
+        "3": "Traditional Thai techniques",
+        "4": "Competition preparation"
+      },
       "image": ""
     }
   },
@@ -225,139 +225,172 @@
       "image": ""
     }
   },
-  "testimonials": [],
+  "testimonials": {
+    "0": {
+      "id": 1770831078909,
+      "name": "New Student",
+      "program": "Adult Program",
+      "rating": 5,
+      "comment": "",
+      "image": ""
+    },
+    "1": {
+      "id": 1,
+      "name": "Rahul Patel",
+      "program": "Taekwondo",
+      "rating": 5,
+      "comment": "The instructors here are amazing! My confidence has grown tremendously since joining Hawk Taekwondo. The environment is welcoming and supportive.",
+      "image": "https://res.cloudinary.com/dem7arres/image/upload/v1770827902/hawk-taekwondo/images/tmp-1-38441770827904559_mb5jd7.jpg"
+    },
+    "2": {
+      "id": 2,
+      "name": "Priya Sharma",
+      "program": "Self Defence",
+      "rating": 5,
+      "comment": "Best decision I ever made! The self-defence program taught me practical skills that I hope to never use, but I feel much safer knowing I can protect myself.",
+      "image": ""
+    },
+    "3": {
+      "id": 3,
+      "name": "Arjun Mehta",
+      "program": "Kickboxing",
+      "rating": 4,
+      "comment": "Incredible workout and great community. The kickboxing program helped me get in the best shape of my life while learning valuable skills.",
+      "image": ""
+    }
+  },
   "classSchedule": {
-    "batches": [
-      {
+    "batches": {
+      "0": {
         "name": "Kids & Youth Batch",
-        "days": [
-          "Monday",
-          "Wednesday",
-          "Friday"
-        ],
+        "days": {
+          "0": "Monday",
+          "1": "Wednesday",
+          "2": "Friday"
+        },
         "time": "7:30 PM - 8:30 PM",
         "ageGroup": "Ages 4-17",
         "description": "Perfect for young martial artists to build discipline and confidence"
       },
-      {
+      "1": {
         "name": "Adults Batch",
-        "days": [
-          "Tuesday",
-          "Thursday",
-          "Saturday"
-        ],
+        "days": {
+          "0": "Tuesday",
+          "1": "Thursday",
+          "2": "Saturday"
+        },
         "time": "6:00 PM - 7:00 PM",
         "ageGroup": "Ages 18+",
         "description": "Comprehensive training for adult practitioners"
       },
-      {
+      "2": {
         "name": "Kids & Youth Batch",
-        "days": [
-          "Saturday",
-          "Tuesday",
-          "Thursday"
-        ],
+        "days": {
+          "0": "Saturday",
+          "1": "Tuesday",
+          "2": "Thursday"
+        },
         "time": "5.00 to 6.00 PM",
         "ageGroup": "Ages 4-17",
         "description": "Perfect for young martial artists to build discipline and confidence"
       }
-    ],
-    "dailySchedule": [
-      {
+    },
+    "dailySchedule": {
+      "0": {
         "day": "Monday",
-        "classes": [
-          {
+        "classes": {
+          "0": {
             "name": "Kids & Youth Batch",
             "time": "7:30 PM - 8:30 PM",
             "ageGroup": "Ages 4-17",
             "type": "Youth"
           }
-        ]
+        }
       },
-      {
+      "1": {
         "day": "Tuesday",
-        "classes": [
-          {
+        "classes": {
+          "0": {
             "name": "Adults Batch",
             "time": "6:00 PM - 7:00 PM",
             "ageGroup": "Ages 18+",
             "type": "Adult"
           },
-          {
+          "1": {
             "name": "Kids & Youth Batch",
             "time": "5.00 to 6.00 PM",
             "ageGroup": "Ages 4-17",
             "type": "Youth"
           }
-        ]
+        }
       },
-      {
+      "2": {
         "day": "Wednesday",
-        "classes": [
-          {
+        "classes": {
+          "0": {
             "name": "Kids & Youth Batch",
             "time": "7:30 PM - 8:30 PM",
             "ageGroup": "Ages 4-17",
             "type": "Youth"
           }
-        ]
+        }
       },
-      {
+      "3": {
         "day": "Thursday",
-        "classes": [
-          {
+        "classes": {
+          "0": {
             "name": "Adults Batch",
             "time": "6:00 PM - 7:00 PM",
             "ageGroup": "Ages 18+",
             "type": "Adult"
           },
-          {
+          "1": {
             "name": "Kids & Youth Batch",
             "time": "5.00 to 6.00 PM",
             "ageGroup": "Ages 4-17",
             "type": "Youth"
           }
-        ]
+        }
       },
-      {
+      "4": {
         "day": "Friday",
-        "classes": [
-          {
+        "classes": {
+          "0": {
             "name": "Kids & Youth Batch",
             "time": "7:30 PM - 8:30 PM",
             "ageGroup": "Ages 4-17",
             "type": "Youth"
           }
-        ]
+        }
       },
-      {
+      "5": {
         "day": "Saturday",
-        "classes": [
-          {
+        "classes": {
+          "0": {
             "name": "Adults Batch",
             "time": "6:00 PM - 7:00 PM",
             "ageGroup": "Ages 18+",
             "type": "Adult"
           },
-          {
+          "1": {
             "name": "Kids & Youth Batch",
             "time": "5.00 to 6.00 PM",
             "ageGroup": "Ages 4-17",
             "type": "Youth"
           }
-        ]
+        }
       },
-      {
+      "6": {
         "day": "Sunday",
-        "classes": []
+        "classes": {}
       }
-    ]
+    }
   },
   "gallery": {
-    "featured": []
+    "featured": {}
   },
-  "videos": [
-    {
+  "videos": {
+    "0": {
       "id": 1,
       "title": "Welcome to Hawk Taekwondo",
       "description": "Discover our facility and meet our instructors",
@@ -366,7 +399,7 @@
       "duration": "2:30",
       "category": "introduction"
     },
-    {
+    "1": {
       "id": 2,
       "title": "Kids Program Highlights",
       "description": "See our young students in action",
@@ -375,7 +408,7 @@
       "duration": "3:15",
       "category": "programs"
     },
-    {
+    "2": {
       "id": 3,
       "title": "Poomsae (Forms) Demonstration",
       "description": "Master level forms performance",
@@ -384,7 +417,7 @@
       "duration": "4:00",
       "category": "techniques"
     },
-    {
+    "3": {
       "id": 4,
       "title": "Sparring Techniques",
       "description": "Competition sparring training session",
@@ -393,7 +426,7 @@
       "duration": "5:20",
       "category": "techniques"
     },
-    {
+    "4": {
       "id": 5,
       "title": "Belt Testing Ceremony",
       "description": "Students advancing to their next belt level",
@@ -402,5 +435,5 @@
       "duration": "6:45",
       "category": "events"
     }
-  ]
+  }
 }

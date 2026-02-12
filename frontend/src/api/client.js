@@ -1,8 +1,9 @@
 // API Client Configuration
 // Centralized HTTP client with interceptors
 
+// Handle both Vite environment variables and Render auto-detected URLs
 const API_BASE_URL = import.meta.env.PROD 
-  ? (import.meta.env.VITE_API_URL || 'http://localhost:3001')
+  ? (import.meta.env.VITE_API_URL || window.location.origin.replace('hawk-taekwondo-frontend', 'hawk-taekwondo-backend'))
   : '' // Empty for development to use Vite proxy
 
 class ApiClient {

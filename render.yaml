@@ -31,3 +31,4 @@ services:
     envVars:
       - key: NODE_ENV
         value: production
+      # VITE_API_URL will be set automatically by Render or derived from window.location

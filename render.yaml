@@ -3,8 +3,8 @@ services:
     name: hawk-taekwondo-backend
     env: node
     plan: free
-    buildCommand: npm install && cd backend && npm install
-    startCommand: cd backend && npm start
+    buildCommand: npm ci && cd backend && npm ci
+    startCommand: node backend/server.js
     envVars:
       - key: NODE_ENV
         value: production
@@ -26,7 +26,7 @@ services:
   - type: web
     name: hawk-taekwondo-frontend
     env: static
-    buildCommand: npm install && cd frontend && npm run build
+    buildCommand: npm ci && cd frontend && npm ci && npm run build
     staticPublishPath: ./frontend/dist
     envVars:
       - key: NODE_ENV

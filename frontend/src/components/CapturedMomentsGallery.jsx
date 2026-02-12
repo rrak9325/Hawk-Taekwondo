@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, ChevronLeft, ChevronRight, ZoomIn } from 'lucide-react'
+import './CapturedMomentsGallery.css'
 
 export default function CapturedMomentsGallery({ gallery }) {
   const [isOpen, setIsOpen] = useState(false)
@@ -118,8 +119,7 @@ export default function CapturedMomentsGallery({ gallery }) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[9999] bg-black flex items-center justify-center overflow-hidden"
-            style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0 }}
+            className="lightbox-overlay"
             onClick={closeLightbox}
             onTouchStart={onTouchStart}
             onTouchMove={onTouchMove}
@@ -127,7 +127,7 @@ export default function CapturedMomentsGallery({ gallery }) {
           >
             {/* Close button */}
             <button
-              className="absolute top-4 md:top-6 right-4 md:right-6 z-30 p-3 bg-black/70 rounded-full text-white hover:bg-black/90 transition shadow-2xl"
+              className="lightbox-close-btn"
               onClick={closeLightbox}
               aria-label="Close"
             >
@@ -138,7 +138,7 @@ export default function CapturedMomentsGallery({ gallery }) {
             {images.length > 1 && (
               <>
                 <button
-                  className="absolute left-4 md:left-6 top-1/2 -translate-y-1/2 z-20 p-3 md:p-4 bg-black/70 rounded-full text-white hover:bg-black/90 transition shadow-2xl"
+                  className="lightbox-nav-btn prev"
                   onClick={(e) => {
                     e.stopPropagation()
                     goToPrev()
@@ -149,7 +149,7 @@ export default function CapturedMomentsGallery({ gallery }) {
                 </button>
 
                 <button
-                  className="absolute right-4 md:right-6 top-1/2 -translate-y-1/2 z-20 p-3 md:p-4 bg-black/70 rounded-full text-white hover:bg-black/90 transition shadow-2xl"
+                  className="lightbox-nav-btn next"
                   onClick={(e) => {
                     e.stopPropagation()
                     goToNext()
@@ -168,18 +168,18 @@ export default function CapturedMomentsGallery({ gallery }) {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.25 }}
-              className="relative w-full h-full flex items-center justify-center p-4 z-10"
+              className="lightbox-image-container"
               onClick={(e) => e.stopPropagation()}
             >
               <img
                 src={images[currentIndex].image}
                 alt={images[currentIndex].title || `Image ${currentIndex + 1}`}
-                className="max-w-[90vw] max-h-[85vh] w-auto h-auto object-contain rounded-lg shadow-2xl"
+                className="lightbox-image"
               />
             </motion.div>
 
             {/* Counter */}
-            <div className="absolute bottom-6 md:bottom-8 left-1/2 -translate-x-1/2 z-30 bg-black/80 px-5 py-2 rounded-full text-white text-sm font-medium shadow-xl">
+            <div className="lightbox-counter">
               {currentIndex + 1} / {images.length}
             </div>
           </motion.div>

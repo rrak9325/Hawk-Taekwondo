@@ -98,9 +98,6 @@ export default function Home() {
 
       {/*  */}
 
-      {/* Revolutionary Gallery Section */}
-      <CapturedMomentsGallery gallery={gallery} />
-
       {/* Programs Preview Section */}
 
 
@@ -166,6 +163,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Gallery Section - Captured Moments */}
+      <CapturedMomentsGallery gallery={gallery} />
 
       {/* Testimonials Section */}
       <Testimonials testimonials={data.testimonials || []} />

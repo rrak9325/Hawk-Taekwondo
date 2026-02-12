@@ -6,7 +6,10 @@ export default function CapturedMomentsGallery({ gallery }) {
   const [isOpen, setIsOpen] = useState(false)
   const [currentIndex, setCurrentIndex] = useState(0)
 
-  const images = gallery?.featured || []
+  // Handle both array and object formats for gallery.featured
+  const rawImages = gallery?.featured || []
+  const images = Array.isArray(rawImages) ? rawImages : Object.values(rawImages)
+  
   if (!images.length) return null
 
   // Open lightbox at specific index
@@ -116,7 +119,7 @@ export default function CapturedMomentsGallery({ gallery }) {
           >
             {/* Close button */}
             <button
-              className="absolute top-6 right-6 z-10 p-3 bg-black/60 rounded-full text-white hover:bg-black/80 transition"
+              className="absolute top-4 md:top-6 right-4 md:right-6 z-30 p-3 bg-black/70 rounded-full text-white hover:bg-black/90 transition shadow-2xl"
               onClick={closeLightbox}
               aria-label="Close"
             >
@@ -127,7 +130,7 @@ export default function CapturedMomentsGallery({ gallery }) {
             {images.length > 1 && (
               <>
                 <button
-                  className="absolute left-6 top-1/2 -translate-y-1/2 p-4 bg-black/50 rounded-full text-white hover:bg-black/70 transition"
+                  className="absolute left-4 md:left-6 top-1/2 -translate-y-1/2 z-20 p-3 md:p-4 bg-black/70 rounded-full text-white hover:bg-black/90 transition shadow-2xl"
                   onClick={(e) => {
                     e.stopPropagation()
                     goToPrev()
@@ -138,7 +141,7 @@ export default function CapturedMomentsGallery({ gallery }) {
                 </button>
 
                 <button
-                  className="absolute right-6 top-1/2 -translate-y-1/2 p-4 bg-black/50 rounded-full text-white hover:bg-black/70 transition"
+                  className="absolute right-4 md:right-6 top-1/2 -translate-y-1/2 z-20 p-3 md:p-4 bg-black/70 rounded-full text-white hover:bg-black/90 transition shadow-2xl"
                   onClick={(e) => {
                     e.stopPropagation()
                     goToNext()
@@ -157,18 +160,18 @@ export default function CapturedMomentsGallery({ gallery }) {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.25 }}
-              className="relative max-w-[95vw] max-h-[95vh] flex items-center justify-center px-4"
+              className="relative max-w-[90vw] max-h-[85vh] flex items-center justify-center px-4 z-10"
               onClick={(e) => e.stopPropagation()}
             >
               <img
                 src={images[currentIndex].image}
                 alt={images[currentIndex].title || `Image ${currentIndex + 1}`}
-                className="max-w-full max-h-full object-contain rounded-lg"
+                className="max-w-full max-h-full object-contain rounded-lg shadow-2xl"
               />
             </motion.div>
 
             {/* Counter */}
-            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 bg-black/70 px-5 py-2 rounded-full text-white text-sm font-medium">
+            <div className="absolute bottom-6 md:bottom-8 left-1/2 -translate-x-1/2 z-30 bg-black/80 px-5 py-2 rounded-full text-white text-sm font-medium shadow-xl">
               {currentIndex + 1} / {images.length}
             </div>
           </motion.div>

@@ -144,6 +144,12 @@ export default function AdminNew() {
           data.about.values = Object.values(data.about.values)
         }
         
+        // 6. Gallery featured
+        if (data?.gallery?.featured && !Array.isArray(data.gallery.featured)) {
+          console.log('🔄 Converting gallery featured from object to array')
+          data.gallery.featured = Object.values(data.gallery.featured)
+        }
+        
         setData(data)
         console.log('✅ Data loaded and normalized')
       } else {
@@ -1490,7 +1496,13 @@ export default function AdminNew() {
                             ...data,
                             gallery: {
                               ...data.gallery,
-                              featured: [...uploaded, ...(data.gallery?.featured || [])]
+                              featured: [
+                                ...uploaded, 
+                                ...(Array.isArray(data.gallery?.featured) 
+                                  ? data.gallery.featured 
+                                  : Object.values(data.gallery?.featured || {})
+                                )
+                              ]
                             }
                           }
                           
@@ -1554,7 +1566,13 @@ export default function AdminNew() {
                           ...data,
                           gallery: {
                             ...data.gallery,
-                            featured: [...uploaded, ...(data.gallery?.featured || [])]
+                            featured: [
+                              ...uploaded, 
+                              ...(Array.isArray(data.gallery?.featured) 
+                                ? data.gallery.featured 
+                                : Object.values(data.gallery?.featured || {})
+                              )
+                            ]
                           }
                         }
                         
@@ -1606,7 +1624,7 @@ export default function AdminNew() {
               </div>
 
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-                {(Array.isArray(data.gallery?.featured) ? data.gallery.featured : []).map((media, index) => (
+                {(Array.isArray(data.gallery?.featured) ? data.gallery.featured : Object.values(data.gallery?.featured || {})).map((media, index) => (
                   <div
                     key={media.id}
                     className={`aspect-square rounded-2xl overflow-hidden relative group ${darkMode ? 'bg-slate-800' : 'bg-slate-200'}`}
@@ -1634,11 +1652,15 @@ export default function AdminNew() {
                           }
                           
                           // Remove from gallery
+                          const currentFeatured = Array.isArray(data.gallery?.featured) 
+                            ? data.gallery.featured 
+                            : Object.values(data.gallery?.featured || {})
+                          
                           const newGalleryData = {
                             ...data,
                             gallery: {
                               ...data.gallery,
-                              featured: data.gallery.featured.filter((_, i) => i !== index)
+                              featured: currentFeatured.filter((_, i) => i !== index)
                             }
                           }
                           

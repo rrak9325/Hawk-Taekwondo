@@ -14,6 +14,7 @@ The application was experiencing `(prev.testimonials || []) is not iterable` err
 3. **Schedule Daily Schedule**: Nested objects instead of arrays
 4. **About Stats**: Object format instead of array
 5. **About Values**: Object format instead of array
+6. **Gallery Featured**: Empty object `{}` instead of empty array `[]` - caused upload errors
 
 ## Fixes Implemented
 
@@ -24,6 +25,7 @@ The application was experiencing `(prev.testimonials || []) is not iterable` err
 - `classSchedule.dailySchedule`: Now proper array with `classes` as arrays
 - `about.stats`: Now proper array
 - `about.values`: Now proper array
+- `gallery.featured`: Now proper empty array `[]` instead of empty object `{}`
 
 ### 2. Admin Panel Robustness (`AdminNew.jsx`)
 ✅ Enhanced `fetchData()` to normalize data on load:
@@ -34,6 +36,7 @@ The application was experiencing `(prev.testimonials || []) is not iterable` err
 - Daily schedule normalization (including nested classes arrays)
 - About stats normalization
 - About values normalization
+- Gallery featured normalization
 ```
 
 ✅ Fixed testimonials CRUD operations:
@@ -79,6 +82,9 @@ The application was experiencing `(prev.testimonials || []) is not iterable` err
 - [ ] Edit testimonial fields updates properly
 - [ ] Delete testimonial removes item and maintains array structure
 - [ ] Save changes persists testimonials as array in JSON
+- [ ] **Gallery upload works without iteration errors**
+- [ ] **Multiple images/videos can be uploaded to gallery**
+- [ ] **Gallery images can be deleted**
 - [ ] Home page displays testimonials slider
 - [ ] Slider auto-advances every 6-7 seconds
 - [ ] Manual navigation (arrows and dots) works

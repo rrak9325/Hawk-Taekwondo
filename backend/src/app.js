@@ -225,7 +225,7 @@ export function createApp() {
     }))
     
     // Catch-all route - only for non-asset requests
-    app.get('*', (req, res) => {
+    app.get('/*', (req, res) => {
       // Don't serve index.html for asset requests
       if (req.path.startsWith('/assets/') || req.path.match(/\.(js|css|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot)$/)) {
         return res.status(404).send('Asset not found')

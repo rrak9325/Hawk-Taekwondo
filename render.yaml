@@ -4,7 +4,8 @@ services:
     name: hawk-taekwondo
     env: node
     plan: free
-    buildCommand: npm ci --prefer-offline --no-audit && cd frontend && npm ci --prefer-offline --no-audit && npm run build
+    rootDir: frontend
+    buildCommand: npm ci --prefer-offline --no-audit && npm run build
     startCommand: npm run preview -- --host 0.0.0.0 --port $PORT
     envVars:
       - key: NODE_ENV
@@ -21,7 +22,8 @@ services:
     name: hawk-taekwondo-backend
     env: node
     plan: free
-    buildCommand: npm ci --prefer-offline --no-audit && cd backend && npm ci --omit=dev --prefer-offline --no-audit
+    rootDir: backend
+    buildCommand: npm ci --omit=dev --prefer-offline --no-audit
     startCommand: node server.js
     envVars:
       - key: NODE_ENV

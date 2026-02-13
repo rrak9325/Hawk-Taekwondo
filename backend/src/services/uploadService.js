@@ -7,6 +7,7 @@ import fs from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import { v4 as uuidv4 } from 'uuid'
+import cloudinary from '../config/cloudinary.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -14,12 +15,9 @@ const __dirname = path.dirname(__filename)
 export class UploadService {
   async processUpload(file) {
     try {
-      console.log('🚀 Starting upload process...')
-      
-      // Validate file (now accepts everything)
+      // Validate file
       const validation = fileValidator.validate(file)
       if (!validation.isValid) {
-        console.log('❌ Validation failed:', validation.error)
         return {
           success: false,
           status: 400,
@@ -27,31 +25,23 @@ export class UploadService {
         }
       }
 
-      const { name: originalName, size: originalSize, mimetype } = file
+      const { name: originalName, mimetype } = file
       const ext = originalName.toLowerCase().split('.').pop()
 
-      console.log(`📁 Processing file: ${originalName} (${originalSize} bytes, ${mimetype})`)
-      console.log(`🔍 Extension: ${ext}`)
-      console.log(`🎬 Is video: ${fileValidator.isVideo(ext, mimetype)}`)
-      console.log(`🖼️ Is image: ${fileValidator.isImage(ext, mimetype)}`)
-
-      // Handle video files (or any file that looks like video)
+      // Handle video files
       if (fileValidator.isVideo(ext, mimetype)) {
-        console.log('➡️ Processing as video')
         return await this.processVideo(file)
       }
 
-      // Handle image files (or any file that looks like image)
+      // Handle image files
       if (fileValidator.isImage(ext, mimetype)) {
-        console.log('➡️ Processing as image')
         return await this.processImage(file)
       }
 
       // Handle any other file type as generic file
-      console.log('➡️ Processing as generic file')
       return await this.processGenericFile(file)
     } catch (error) {
-      console.error('💥 Upload service error:', error)
+      console.error('Upload service error:', error)
       return {
         success: false,
         status: 500,
@@ -62,44 +52,75 @@ export class UploadService {
 
   async processVideo(file) {
     try {
-      // Generate unique filename
-      const extension = path.extname(file.name);
-      const uniqueFilename = `${uuidv4()}${extension}`;
-      
-      // Define upload directory
-      const uploadDir = path.join(__dirname, '../../../public/uploads/videos');
-      
-      // Create directory if it doesn't exist
-      if (!fs.existsSync(uploadDir)) {
-        fs.mkdirSync(uploadDir, { recursive: true });
-      }
-      
-      // Move uploaded file to public directory
-      const destinationPath = path.join(uploadDir, uniqueFilename);
-      if (!file.path) {
+      const filePath = file.path || file.tempFilePath;
+      if (!filePath) {
         throw new Error('Uploaded file path is undefined');
       }
-      fs.copyFileSync(file.path, destinationPath);
       
-      // Return public URL
-      const result = {
-        url: `/uploads/videos/${uniqueFilename}`,
-        publicId: uniqueFilename,
-        filename: uniqueFilename,
-        format: extension.substring(1),
-        originalSize: file.size
-      };
-      
-      return {
-        success: true,
-        data: {
-          url: result.url,
-          publicId: result.publicId,
-          type: 'video',
-          originalSize: file.size,
-          filename: result.filename,
-          format: result.format
+      // Try Cloudinary upload first
+      try {
+        const result = await cloudinary.uploader.upload(filePath, {
+          folder: 'hawk-taekwondo/videos',
+          public_id: uuidv4(),
+          resource_type: 'video',
+          chunk_size: 6000000, // 6MB chunks
+        });
+        
+        // Cleanup local temp file
+        if (fs.existsSync(filePath)) {
+          fs.unlinkSync(filePath);
         }
+        
+        return {
+          success: true,
+          data: {
+            url: result.secure_url,
+            publicId: result.public_id,
+            type: 'video',
+            originalSize: file.size,
+            filename: result.original_filename,
+            format: result.format
+          }
+        };
+      } catch (cloudinaryError) {
+        console.log('☁️ Cloudinary video upload failed, falling back to local storage:', cloudinaryError.message)
+        
+        // Fallback to local storage
+        const extension = path.extname(file.name);
+        const uniqueFilename = `${uuidv4()}${extension}`;
+        
+        // Define upload directory
+        const uploadDir = path.join(__dirname, '../../../public/uploads/videos');
+        
+        // Create directory if it doesn't exist
+        if (!fs.existsSync(uploadDir)) {
+          fs.mkdirSync(uploadDir, { recursive: true });
+        }
+        
+        // Move uploaded file to public directory
+        const destinationPath = path.join(uploadDir, uniqueFilename);
+        fs.copyFileSync(filePath, destinationPath);
+      
+        // Return public URL
+        const result = {
+          url: `/uploads/videos/${uniqueFilename}`,
+          publicId: uniqueFilename,
+          filename: uniqueFilename,
+          format: extension.substring(1),
+          originalSize: file.size
+        };
+        
+        return {
+          success: true,
+          data: {
+            url: result.url,
+            publicId: result.publicId,
+            type: 'video',
+            originalSize: file.size,
+            filename: result.filename,
+            format: result.format
+          }
+        };
       }
     } catch (error) {
       console.error('Video processing error:', error)
@@ -113,64 +134,104 @@ export class UploadService {
 
   async processImage(file) {
     try {
-      console.log('🖼️ Processing image locally:', file.name)
-      
-      // Generate unique filename
-      const extension = path.extname(file.name);
-      const uniqueFilename = `${uuidv4()}${extension}`;
-      
-      // Define upload directory
-      const uploadDir = path.join(__dirname, '../../../public/uploads/images');
-      
-      // Create directory if it doesn't exist
-      if (!fs.existsSync(uploadDir)) {
-        fs.mkdirSync(uploadDir, { recursive: true });
-      }
-      
-      // Move uploaded file to public directory
-      const destinationPath = path.join(uploadDir, uniqueFilename);
-      if (!file.path) {
+      const filePath = file.path || file.tempFilePath;
+      if (!filePath) {
         throw new Error('Uploaded file path is undefined');
       }
-      fs.copyFileSync(file.path, destinationPath);
       
-      // Get image dimensions if possible
-      let width = null, height = null;
+      // Try Cloudinary upload first
       try {
-        if (file.path) {  // Make sure file.path exists before using it
+        const result = await cloudinary.uploader.upload(filePath, {
+          folder: 'hawk-taekwondo/images',
+          public_id: uuidv4(),
+          resource_type: 'image',
+          transformation: [
+            { width: 1920, height: 1080, crop: 'limit' }
+          ]
+        });
+        
+        // Get image dimensions
+        let width = null, height = null;
+        try {
           const sharp = await import('sharp');
-          const metadata = await sharp.default(file.path).metadata();
+          const metadata = await sharp.default(filePath).metadata();
           width = metadata.width;
           height = metadata.height;
-        } else {
-          console.log('File path not available for dimension extraction');
+        } catch (err) {
+          // Silently fail dimension detection
         }
-      } catch (err) {
-        console.log('Could not get image dimensions:', err.message);
-      }
+        
+        // Cleanup local temp file
+        if (fs.existsSync(filePath)) {
+          fs.unlinkSync(filePath);
+        }
+        
+        return {
+          success: true,
+          data: {
+            url: result.secure_url,
+            publicId: result.public_id,
+            type: 'image',
+            originalSize: file.size,
+            filename: result.original_filename,
+            format: result.format,
+            width: width,
+            height: height
+          }
+        };
+      } catch (cloudinaryError) {
+        console.error('Cloudinary upload failed, using local storage:', cloudinaryError.message)
+        
+        // Fallback to local storage
+        const extension = path.extname(file.name);
+        const uniqueFilename = `${uuidv4()}${extension}`;
+        
+        // Define upload directory
+        const uploadDir = path.join(__dirname, '../../../public/uploads/images');
+        
+        // Create directory if it doesn't exist
+        if (!fs.existsSync(uploadDir)) {
+          fs.mkdirSync(uploadDir, { recursive: true });
+        }
+        
+        // Move uploaded file to public directory
+        const destinationPath = path.join(uploadDir, uniqueFilename);
+        fs.copyFileSync(filePath, destinationPath);
       
-      const result = {
-        url: `/uploads/images/${uniqueFilename}`,
-        publicId: uniqueFilename,
-        filename: uniqueFilename,
-        format: extension.substring(1),
-        originalSize: file.size,
-        width,
-        height
-      };
-      
-      return {
-        success: true,
-        data: {
-          url: result.url,
-          publicId: result.publicId,
-          type: 'image',
+        // Get image dimensions if possible
+        let width = null, height = null;
+        try {
+          const sharp = await import('sharp');
+          const metadata = await sharp.default(filePath).metadata();
+          width = metadata.width;
+          height = metadata.height;
+        } catch (err) {
+          console.log('Could not get image dimensions:', err.message);
+        }
+        
+        const result = {
+          url: `/uploads/images/${uniqueFilename}`,
+          publicId: uniqueFilename,
+          filename: uniqueFilename,
+          format: extension.substring(1),
           originalSize: file.size,
-          filename: result.filename,
-          format: result.format,
-          width: result.width,
-          height: result.height
-        }
+          width,
+          height
+        };
+        
+        return {
+          success: true,
+          data: {
+            url: result.url,
+            publicId: result.publicId,
+            type: 'image',
+            originalSize: file.size,
+            filename: result.filename,
+            format: result.format,
+            width: result.width,
+            height: result.height
+          }
+        };
       }
     } catch (error) {
       console.error('💥 Image upload error:', error)
@@ -200,10 +261,11 @@ export class UploadService {
       
       // Move uploaded file to public directory
       const destinationPath = path.join(uploadDir, uniqueFilename);
-      if (!file.path) {
+      const filePath = file.path || file.tempFilePath;
+      if (!filePath) {
         throw new Error('Uploaded file path is undefined');
       }
-      fs.copyFileSync(file.path, destinationPath);
+      fs.copyFileSync(filePath, destinationPath);
       
       const result = {
         url: `/uploads/files/${uniqueFilename}`,

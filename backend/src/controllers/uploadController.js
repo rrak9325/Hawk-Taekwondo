@@ -19,12 +19,9 @@ export class UploadController {
         return res.status(400).json({ error: validation.error })
       }
 
-      console.log(`📤 Uploading: ${file.name} (${(file.size / 1024 / 1024).toFixed(2)}MB)`)
-
       const result = await uploadService.processUpload(file)
       
       if (result.success) {
-        console.log(`✅ Upload complete: ${file.name}`)
         res.json(result.data)
       } else {
         res.status(result.status || 500).json({ error: result.error })
@@ -46,11 +43,9 @@ export class UploadController {
         return res.status(400).json({ error: 'File identifier required (url, publicId, or filePath)' })
       }
 
-      console.log('🗑️ Delete request for:', identifier)
       const result = await uploadService.deleteFile(identifier)
       
       if (result.success) {
-        console.log('✅ File deleted successfully')
         res.json(result.data)
       } else {
         res.status(result.status || 500).json({ error: result.error })

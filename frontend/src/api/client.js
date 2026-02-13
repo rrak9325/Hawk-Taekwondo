@@ -4,10 +4,10 @@
 // Handle API URL detection for different environments
 const API_BASE_URL = import.meta.env.PROD 
   ? (import.meta.env.VITE_API_URL || 
-     // Try to construct backend URL from current domain
-     (window.location.hostname.includes('render.app') 
-       ? window.location.origin.replace(window.location.hostname.split('.')[0], 'hawk-taekwondo-backend')
-       : window.location.origin.replace('hawk-taekwondo-frontend', 'hawk-taekwondo-backend')))
+     // Try multiple strategies to find backend URL
+     (window.location.hostname.includes('onrender.com') 
+       ? window.location.origin.replace('hawktaekwondo', 'hawk-taekwondo-backend')
+       : window.location.origin.replace('hawktaekwondo-frontend', 'hawk-taekwondo-backend')))
   : '' // Empty for development to use Vite proxy
 
 class ApiClient {
@@ -19,10 +19,6 @@ class ApiClient {
   async request(endpoint, options = {}) {
     const url = `${this.baseURL}${endpoint}`
     
-    // Debug logging in production
-    if (import.meta.env.PROD) {
-      console.log('🚀 API Request:', url)
-    }
     const config = {
       headers: {
         'Content-Type': 'application/json',
@@ -52,7 +48,6 @@ class ApiClient {
       
       if (!response.ok) {
         const errorText = await response.text()
-        console.error('API Error Response:', errorText)
         throw new Error(`HTTP ${response.status}: ${errorText}`)
       }
 

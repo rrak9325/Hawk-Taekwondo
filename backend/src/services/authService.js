@@ -4,14 +4,10 @@
 import bcrypt from 'bcryptjs'
 import crypto from 'crypto'
 
-// Static credentials for the admin panel
-console.log('ADMIN_USERNAME from env:', process.env.ADMIN_USERNAME)
-console.log('ADMIN_PASSWORD_HASH from env:', process.env.ADMIN_PASSWORD_HASH)
-
 function getAdminCredentials() {
   return {
-    username: process.env.ADMIN_USERNAME || 'yaju1234BRO',
-    passwordHash: process.env.ADMIN_PASSWORD_HASH || '$2a$10$8K1TKnwN.N24q5Bp5p8JHeUeZ.bfRFD2.yzY5KkEv.YjZWV3e.C4a' // Default: 'password123'
+    username: process.env.ADMIN_USERNAME || 'admin',
+    passwordHash: process.env.ADMIN_PASSWORD_HASH || '$2a$10$8K1TKnwN.N24q5Bp5p8JHeUeZ.bfRFD2.yzY5KkEv.YjZWV3e.C4a'
   }
 }
 
@@ -32,7 +28,6 @@ export class AuthService {
     const rateLimitResult = this.checkRateLimit(attemptKey)
     
     if (!rateLimitResult.allowed) {
-      console.log(`🚫 Login blocked - Too many attempts from IP: ${clientIP}, User: ${username}`)
       return {
         success: false,
         status: 429,
@@ -51,8 +46,6 @@ export class AuthService {
 
     // Validate credentials against static credentials
     const ADMIN_CREDENTIALS = getAdminCredentials()
-    console.log(`Checking credentials - Username: ${username}, Expected: ${ADMIN_CREDENTIALS.username}`)
-    console.log(`Password hash check:`, await bcrypt.compare(password, ADMIN_CREDENTIALS.passwordHash))
     const isValid = username === ADMIN_CREDENTIALS.username && 
                    await bcrypt.compare(password, ADMIN_CREDENTIALS.passwordHash)
     
@@ -64,7 +57,6 @@ export class AuthService {
       const token = crypto.randomBytes(32).toString('hex')
       this.activeSessions.add(token)
       
-      console.log(`✅ Login successful - User: ${username}, IP: ${clientIP}`)
       return {
         success: true,
         token
@@ -72,9 +64,7 @@ export class AuthService {
     } else {
       // Record failed attempt
       this.recordFailedAttempt(attemptKey)
-      const attempts = this.loginAttempts.get(attemptKey)
       
-      console.log(`❌ Login failed - User: ${username}, IP: ${clientIP}, Attempts: ${attempts.count}/${this.MAX_LOGIN_ATTEMPTS}`)
       return {
         success: false,
         status: 401,
@@ -86,7 +76,6 @@ export class AuthService {
   async logout(token) {
     if (token) {
       this.activeSessions.delete(token)
-      console.log('👋 User logged out')
     }
   }
 

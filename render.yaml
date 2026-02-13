@@ -9,19 +9,19 @@ services:
       - key: NODE_ENV
         value: production
       - key: ADMIN_USERNAME
-        value: yaju9325
+        sync: false  # Set in Render dashboard
       - key: ADMIN_PASSWORD_HASH
-        value: $2b$10$jd3ZvdHZdsXt3u7vZhCho.6.PxO3imxCgAKzOoxoUNB84kjKA9n9G
+        sync: false  # Set in Render dashboard
       - key: FRONTEND_URL
-        value: https://hawktaekwondo.onrender.com  # Update after frontend deployment
+        value: https://hawktaekwondo.onrender.com
       - key: PORT
         value: 10000
       - key: CLOUDINARY_CLOUD_NAME
-        value: dem7arres
+        sync: false  # Set in Render dashboard
       - key: CLOUDINARY_API_KEY
-        value: 267337995938546
+        sync: false  # Set in Render dashboard
       - key: CLOUDINARY_API_SECRET
-        value: h5bR0Eh5ejZ8MvqCtoND_01hw
+        sync: false  # Set in Render dashboard
 
   - type: web
     name: hawk-taekwondo-frontend

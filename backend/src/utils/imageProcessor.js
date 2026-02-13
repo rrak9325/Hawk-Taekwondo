@@ -57,11 +57,9 @@ export class ImageProcessor {
 
     // Read file buffer
     let fileBuffer
-    if (file.tempFilePath) {
-      fileBuffer = fs.readFileSync(file.tempFilePath)
-    } else if (file.path) {
-      // express-fileupload uses file.path for temporary file location
-      fileBuffer = fs.readFileSync(file.path)
+    const filePath = file.path || file.tempFilePath;
+    if (filePath) {
+      fileBuffer = fs.readFileSync(filePath)
     } else {
       fileBuffer = file.data
     }
@@ -76,11 +74,9 @@ export class ImageProcessor {
     const results = await this.processWithConfig(fileBuffer, config, file.name)
 
     // Cleanup temp file
-    if (file.tempFilePath && fs.existsSync(file.tempFilePath)) {
-      fs.unlinkSync(file.tempFilePath)
-    } else if (file.path && fs.existsSync(file.path)) {
-      // Also cleanup express-fileupload temp file
-      fs.unlinkSync(file.path)
+    const cleanupPath = file.path || file.tempFilePath;
+    if (cleanupPath && fs.existsSync(cleanupPath)) {
+      fs.unlinkSync(cleanupPath)
     }
 
     return results

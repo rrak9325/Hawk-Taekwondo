@@ -160,10 +160,6 @@ export function createApp() {
     debug: false
   }))
 
-  // Body parsing middleware - Always parse JSON and URL-encoded
-  app.use(express.json({ limit: '50mb' }))
-  app.use(express.urlencoded({ limit: '50mb', extended: true }))
-
   // Serve uploaded files
   app.use('/uploads', express.static(UPLOADS_PATH, {
     maxAge: '30d',
@@ -174,8 +170,13 @@ export function createApp() {
       res.setHeader('Cache-Control', 'public, max-age=2592000, immutable')
       res.setHeader('Expires', new Date(Date.now() + 2592000000).toUTCString())
       
+      // Set proper MIME types to prevent Brave browser issues
       if (filePath.endsWith('.webp')) {
         res.setHeader('Content-Type', 'image/webp')
+      } else if (filePath.endsWith('.js')) {
+        res.setHeader('Content-Type', 'application/javascript')
+      } else if (filePath.endsWith('.mjs')) {
+        res.setHeader('Content-Type', 'application/javascript')
       }
       
       res.setHeader('Vary', 'Accept-Encoding')

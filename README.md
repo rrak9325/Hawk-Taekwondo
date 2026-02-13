@@ -28,23 +28,30 @@ A modern, responsive website for Hawk Taekwondo Training Centre built with React
    npm install
    ```
 
-3. Create `.env` file (copy from `.env.example`):
+3. Create `backend/.env` file (see SECURITY.md for details):
    ```bash
-   cp .env.example .env
+   cp backend/.env.example backend/.env
    ```
 
-4. Update `.env` with your credentials:
+4. Update `backend/.env` with your credentials:
    ```
-   ADMIN_USER=your_username
-   ADMIN_PASS_HASH=your_bcrypt_hashed_password
+   ADMIN_USERNAME=your_username
+   ADMIN_PASSWORD_HASH=your_bcrypt_hashed_password
    FRONTEND_URL=http://localhost:5173
    PORT=3001
+   CLOUDINARY_CLOUD_NAME=your_cloud_name
+   CLOUDINARY_API_KEY=your_api_key
+   CLOUDINARY_API_SECRET=your_api_secret
    ```
 
 5. Start development server:
    ```bash
    npm start
    ```
+
+## Security
+
+⚠️ **IMPORTANT**: Never commit `.env` files or expose API keys. See [SECURITY.md](./SECURITY.md) for detailed security guidelines.
 
 ## Building for Production
 
@@ -61,10 +68,16 @@ npm run build
 
 ## Environment Variables
 
-- `ADMIN_USER`: Admin username
-- `ADMIN_PASS_HASH`: Bcrypt hashed admin password
+See [SECURITY.md](./SECURITY.md) for complete security guidelines.
+
+Required environment variables (set in Render dashboard):
+- `ADMIN_USERNAME`: Admin username
+- `ADMIN_PASSWORD_HASH`: Bcrypt hashed admin password
 - `FRONTEND_URL`: Frontend URL (for CORS)
 - `PORT`: Server port (optional, defaults to 3001)
+- `CLOUDINARY_CLOUD_NAME`: Cloudinary cloud name
+- `CLOUDINARY_API_KEY`: Cloudinary API key
+- `CLOUDINARY_API_SECRET`: Cloudinary API secret
 
 ## Admin Panel
 

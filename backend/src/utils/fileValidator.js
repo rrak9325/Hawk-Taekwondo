@@ -18,7 +18,6 @@ export class FileValidator {
     }
 
     // Accept all file types and sizes
-    console.log(`✅ Accepting file: ${file.name} (${file.size} bytes)`)
     return { isValid: true }
   }
 

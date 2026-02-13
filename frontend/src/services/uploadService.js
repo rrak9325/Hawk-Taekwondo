@@ -9,12 +9,9 @@ export class UploadService {
       const formData = new FormData()
       formData.append('file', file)
 
-      console.log(`📤 Uploading: ${file.name} (${(file.size / 1024 / 1024).toFixed(2)}MB)`)
-
       // Use upload method which doesn't set Content-Type header
       const response = await apiClient.upload('/api/upload', formData)
       
-      console.log(`✅ Upload complete: ${file.name}`)
       return { 
         success: true, 
         data: response 
@@ -30,8 +27,6 @@ export class UploadService {
 
   async deleteFile(urlOrPublicId) {
     try {
-      console.log('🗑️ Deleting file:', urlOrPublicId)
-      
       // Send the URL or publicId to backend
       const response = await apiClient.request('/api/file', {
         method: 'DELETE',
@@ -42,7 +37,6 @@ export class UploadService {
         })
       })
       
-      console.log('✅ File deleted')
       return { success: true, data: response }
     } catch (error) {
       console.error('File deletion failed:', error)

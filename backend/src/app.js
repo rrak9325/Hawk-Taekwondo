@@ -224,12 +224,23 @@ export function createApp() {
           } else if (filePath.endsWith('.map')) {
             res.setHeader('Content-Type', 'application/json; charset=utf-8')
           }
+          
+          // Don't cache index.html - always fetch fresh
+          if (filePath.endsWith('index.html')) {
+            res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate')
+            res.setHeader('Pragma', 'no-cache')
+            res.setHeader('Expires', '0')
+          }
+          
           res.setHeader('X-Content-Type-Options', 'nosniff')
         }
       }))
     
-      // SPA fallback LAST - only for routes without file extensions
+      // SPA fallback LAST - serve index.html with no-cache headers
       app.use((req, res) => {
+        res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate')
+        res.setHeader('Pragma', 'no-cache')
+        res.setHeader('Expires', '0')
         res.sendFile(path.join(DIST_PATH, 'index.html'))
       })
     } else {

@@ -193,11 +193,11 @@ export function createApp() {
       maxAge: '1h',
       setHeaders: (res, filePath) => {
         // Force correct MIME types for JavaScript modules (Brave browser fix)
-        if (filePath.endsWith('.js')) {
+        if (filePath.endsWith('.js') || /\/assets\/.*\.js$/.test(filePath)) {
           res.setHeader('Content-Type', 'application/javascript; charset=utf-8')
         } else if (filePath.endsWith('.mjs')) {
           res.setHeader('Content-Type', 'application/javascript; charset=utf-8')
-        } else if (filePath.endsWith('.css')) {
+        } else if (filePath.endsWith('.css') || /\/assets\/.*\.css$/.test(filePath)) {
           res.setHeader('Content-Type', 'text/css; charset=utf-8')
         } else if (filePath.endsWith('.json')) {
           res.setHeader('Content-Type', 'application/json; charset=utf-8')

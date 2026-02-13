@@ -1,9 +1,9 @@
 services:
   - type: web
-    name: hawk-taekwondo-backend
+    name: hawk-taekwondo
     env: node
     plan: free
-    buildCommand: cd backend && npm ci
+    buildCommand: npm ci --omit=dev && cd frontend && npm ci --omit=dev && npm run build && cd ../backend && npm ci --omit=dev
     startCommand: node backend/server.js
     envVars:
       - key: NODE_ENV
@@ -22,12 +22,3 @@ services:
         sync: false  # Set in Render dashboard
       - key: CLOUDINARY_API_SECRET
         sync: false  # Set in Render dashboard
-
-  - type: web
-    name: hawk-taekwondo-frontend
-    env: static
-    buildCommand: cd frontend && npm ci && npm run build
-    staticPublishPath: ./frontend/dist
-    envVars:
-      - key: NODE_ENV
-        value: production

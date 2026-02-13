@@ -20,13 +20,15 @@
     "build:frontend": "cd frontend && npm run build",
     "build:backend": "echo 'Backend build complete (no build step needed for Node.js)'",
     "build:full": "npm run install:all && npm run build",
+    "build:render": "cd frontend && npm ci && npm run build",
     "preview": "cd frontend && npm run preview",
     "lint": "npm run lint:frontend && npm run lint:backend",
     "lint:frontend": "cd frontend && npm run lint",
     "lint:backend": "cd backend && npm run lint",
     "install:all": "npm install && cd frontend && npm install && cd ../backend && npm install",
     "clean": "cd frontend && rm -rf dist node_modules && cd ../backend && rm -rf node_modules && rm -rf node_modules",
-    "vercel-build": "cd frontend && npm run build"
+    "vercel-build": "cd frontend && npm run build",
+    "deploy:upload-data": "node upload-initial-data.js"
   },
   "dependencies": {
     "concurrently": "^9.2.1",

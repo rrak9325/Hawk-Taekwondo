@@ -14,8 +14,7 @@ export default function MediaUpload({
   const [uploadProgress, setUploadProgress] = useState(0)
   const [compressionStats, setCompressionStats] = useState(null)
 
-  // Debug logging
-  console.log(`MediaUpload - ${label}:`, { value, isVideo, hasValue: !!value })
+  // Debug logging - removed for production
 
   const handleUpload = async (e) => {
     const file = e.target.files[0]

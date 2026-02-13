@@ -227,12 +227,19 @@ export function createApp() {
       }
     }))
     
-    // Catch-all route - only for non-asset requests
-    app.get('/*', (req, res) => {
+    // Catch-all route - only for non-asset requests (Express 5 compatible)
+    app.use((req, res, next) => {
+      // Skip API and uploads routes
+      if (req.path.startsWith('/api') || req.path.startsWith('/uploads') || req.path.startsWith('/health')) {
+        return next()
+      }
+      
       // Don't serve index.html for asset requests
-      if (req.path.startsWith('/assets/') || req.path.match(/\.(js|css|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot)$/)) {
+      if (req.path.startsWith('/assets/') || req.path.match(/\.(js|css|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot|map)$/)) {
         return res.status(404).send('Asset not found')
       }
+      
+      // Serve index.html for all other routes (SPA)
       res.sendFile(path.join(DIST_PATH, 'index.html'))
     })
   } else {

@@ -3,7 +3,7 @@ services:
     name: hawk-taekwondo
     env: node
     plan: free
-    buildCommand: npm ci && cd frontend && npm ci && npm run build && cd ../backend && npm ci --omit=dev
+    buildCommand: npm ci --prefer-offline --no-audit && cd frontend && npm ci --prefer-offline --no-audit && npm run build && cd ../backend && npm ci --omit=dev --prefer-offline --no-audit
     startCommand: node backend/server.js
     envVars:
       - key: NODE_ENV

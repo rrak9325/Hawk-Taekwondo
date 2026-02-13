@@ -5,6 +5,19 @@ export default defineConfig({
   plugins: [react()],
 
   build: {
+    // Optimize build performance
+    target: 'es2015',
+    outDir: 'dist',
+    assetsDir: 'assets',
+    emptyOutDir: true,
+    sourcemap: false,
+    minify: 'terser',
+    terserOptions: {
+      compress: {
+        drop_console: true,
+        drop_debugger: true
+      }
+    },
     rollupOptions: {
       output: {
         manualChunks: undefined,

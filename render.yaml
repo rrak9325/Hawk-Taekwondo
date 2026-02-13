@@ -5,10 +5,10 @@ services:
     env: node
     plan: free
     buildCommand: |
-      echo "=== Building Frontend ===" &&
+      echo "=== Installing Frontend Dependencies ===" &&
       cd frontend &&
-      npm install &&
-      npm run build &&
+      npm ci --prefer-offline --no-audit &&
+      npx vite build &&
       echo "=== Frontend build complete ===" &&
       ls -la dist &&
       cd ../backend &&

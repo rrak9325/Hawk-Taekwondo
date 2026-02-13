@@ -1,7 +1,10 @@
 // Upload Model
 // Handles file storage operations - CLOUDINARY ONLY (production-ready)
 
-import cloudinary from '../config/cloudinary.js'
+import cloudinary, { isConfigured } from '../config/cloudinary.js'
+
+// Ensure Cloudinary is configured
+isConfigured()
 import fs from 'fs'
 
 export class UploadModel {

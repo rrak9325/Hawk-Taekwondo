@@ -3,11 +3,7 @@
 
 // Handle API URL detection for different environments
 const API_BASE_URL = import.meta.env.PROD 
-  ? (import.meta.env.VITE_API_URL || 
-     // Try multiple strategies to find backend URL
-     (window.location.hostname.includes('onrender.com') 
-       ? 'https://hawk-taekwondo-backend.onrender.com'
-       : window.location.origin.replace('hawktaekwondo-frontend', 'hawk-taekwondo-backend')))
+  ? (import.meta.env.VITE_API_URL || window.location.origin) // Same origin in production
   : '' // Empty for development to use Vite proxy
 
 class ApiClient {

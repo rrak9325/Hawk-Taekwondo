@@ -49,7 +49,8 @@ export function createApp() {
         fontSrc: ["'self'", "data:"],
         connectSrc: [
           "'self'", 
-          "https://hawktaekwondo.onrender.com", 
+          "https://hawktaekwondo.onrender.com",
+          "https://hawk-taekwondo-backend.onrender.com",
           "http://localhost:3001",
           "https://res.cloudinary.com",
           "https://*.cloudinary.com",

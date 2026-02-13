@@ -6,7 +6,7 @@ const API_BASE_URL = import.meta.env.PROD
   ? (import.meta.env.VITE_API_URL || 
      // Try multiple strategies to find backend URL
      (window.location.hostname.includes('onrender.com') 
-       ? window.location.origin.replace('hawktaekwondo', 'hawk-taekwondo-backend')
+       ? 'https://hawk-taekwondo-backend.onrender.com'
        : window.location.origin.replace('hawktaekwondo-frontend', 'hawk-taekwondo-backend')))
   : '' // Empty for development to use Vite proxy
 

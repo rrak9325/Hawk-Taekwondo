@@ -1,10 +1,28 @@
 services:
+  # Frontend Service
   - type: web
     name: hawk-taekwondo
     env: node
     plan: free
-    buildCommand: npm ci --prefer-offline --no-audit && cd frontend && npm ci --prefer-offline --no-audit && npm run build && cd ../backend && npm ci --omit=dev --prefer-offline --no-audit
-    startCommand: node backend/server.js
+    buildCommand: npm ci --prefer-offline --no-audit && cd frontend && npm ci --prefer-offline --no-audit && npm run build
+    startCommand: npm run preview -- --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: VITE_API_URL
+        value: https://hawk-taekwondo-backend.onrender.com
+      - key: VITE_FRONTEND_URL
+        value: https://hawktaekwondo.onrender.com
+  
+  # Backend Service
+  - type: web
+    name: hawk-taekwondo-backend
+    env: node
+    plan: free
+    buildCommand: npm ci --prefer-offline --no-audit && cd backend && npm ci --omit=dev --prefer-offline --no-audit
+    startCommand: node server.js
     envVars:
       - key: NODE_ENV
         value: production
@@ -14,6 +32,8 @@ services:
         sync: false  # Set in Render dashboard
       - key: FRONTEND_URL
         value: https://hawktaekwondo.onrender.com
+      - key: BACKEND_URL
+        value: https://hawk-taekwondo-backend.onrender.com
       - key: PORT
         value: 10000
       - key: CLOUDINARY_CLOUD_NAME

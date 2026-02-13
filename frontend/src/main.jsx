@@ -19,6 +19,21 @@ if (import.meta.env.PROD && 'serviceWorker' in navigator) {
     navigator.serviceWorker.register('/sw.js')
       .then((registration) => {
         console.log('SW registered: ', registration)
+        
+        // Force update check on every page load
+        registration.update()
+        
+        // Listen for updates
+        registration.addEventListener('updatefound', () => {
+          const newWorker = registration.installing
+          newWorker.addEventListener('statechange', () => {
+            if (newWorker.state === 'activated' && navigator.serviceWorker.controller) {
+              // New service worker activated - reload to use it
+              console.log('New service worker activated, reloading...')
+              window.location.reload()
+            }
+          })
+        })
       })
       .catch((registrationError) => {
         console.log('SW registration failed: ', registrationError)

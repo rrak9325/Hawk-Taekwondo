@@ -227,19 +227,14 @@ export function createApp() {
       }
     }))
     
-    // Catch-all route - only for non-asset requests (Express 5 compatible)
-    app.use((req, res, next) => {
-      // Skip API and uploads routes
-      if (req.path.startsWith('/api') || req.path.startsWith('/uploads') || req.path.startsWith('/health')) {
+    // SPA fallback - serve index.html for non-file routes
+    app.get('*', (req, res, next) => {
+      // If the request is for a file extension, let it 404 naturally
+      if (req.path.match(/\.[a-z0-9]+$/i)) {
         return next()
       }
       
-      // Don't serve index.html for asset requests
-      if (req.path.startsWith('/assets/') || req.path.match(/\.(js|css|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot|map)$/)) {
-        return res.status(404).send('Asset not found')
-      }
-      
-      // Serve index.html for all other routes (SPA)
+      // Otherwise serve index.html (for SPA routes like /about, /contact, etc)
       res.sendFile(path.join(DIST_PATH, 'index.html'))
     })
   } else {

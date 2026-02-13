@@ -7,7 +7,7 @@ services:
     buildCommand: |
       echo "=== Installing Frontend Dependencies ===" &&
       cd frontend &&
-      npm ci --prefer-offline --no-audit --omit=dev &&
+      npm ci --prefer-offline --no-audit &&
       npx vite build &&
       echo "=== Frontend build complete ===" &&
       ls -la dist &&

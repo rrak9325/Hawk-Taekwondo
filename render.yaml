@@ -7,7 +7,7 @@ services:
     buildCommand: |
       echo "=== Building Frontend ===" &&
       cd frontend &&
-      npm ci --prefer-offline --no-audit &&
+      npm install &&
       npm run build &&
       echo "=== Frontend build complete ===" &&
       ls -la dist &&

@@ -5,10 +5,38 @@ import dotenv from 'dotenv'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
-// Load environment variables - .env is in the same directory as server.js
-const envPath = path.join(__dirname, '.env')
-console.log('Loading .env from:', envPath)
-const result = dotenv.config({ path: envPath })
+// Load environment variables - try multiple locations for Render compatibility
+const possibleEnvPaths = [
+  path.join(__dirname, '.env'),           // Local development
+  path.join(__dirname, '../.env'),        // Render backend directory
+  path.join(__dirname, '../../.env'),     // Render root directory
+  path.join(__dirname, '../../../.env')   // Alternative structure
+]
+
+let envLoaded = false
+let usedPath = null
+
+for (const envPath of possibleEnvPaths) {
+  try {
+    const result = dotenv.config({ path: envPath })
+    if (!result.error) {
+      envLoaded = true
+      usedPath = envPath
+      console.log('✅ .env loaded from:', envPath)
+      break
+    }
+  } catch (error) {
+    // Continue to next path
+  }
+}
+
+if (!envLoaded) {
+  console.log('❌ .env file not found in any expected location')
+  console.log('Searched paths:', possibleEnvPaths)
+  console.log('⚠️  Using environment variables from Render dashboard')
+} else {
+  console.log('CLOUDINARY_CLOUD_NAME:', process.env.CLOUDINARY_CLOUD_NAME ? 'Set' : 'Not set')
+}
 
 if (result.error) {
   console.error('Error loading .env:', result.error)

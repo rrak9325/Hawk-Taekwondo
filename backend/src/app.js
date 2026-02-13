@@ -188,40 +188,26 @@ export function createApp() {
   app.use(routes)
 
   // Serve frontend in production
-  // Try multiple paths to find dist folder
-  const possiblePaths = [
-    path.join(__dirname, '../../frontend/dist'),  // Local development
-    path.join(__dirname, '../frontend/dist'),     // Render deployment
-    path.join(__dirname, '../../../frontend/dist') // Alternative structure
-  ]
-  
-  const DIST_PATH = possiblePaths.find(p => fs.existsSync(p)) || possiblePaths[0]
-  
-  console.log('DIST_PATH:', DIST_PATH)
-  console.log('DIST_PATH exists:', fs.existsSync(DIST_PATH))
-  
   if (process.env.NODE_ENV === 'production') {
-    if (!fs.existsSync(DIST_PATH)) {
-      console.error('❌ Frontend dist folder not found!')
-      console.error('Searched paths:', possiblePaths)
-      // Fallback route for when dist folder is missing
-      app.get(/^(?!\/api|\/uploads).*/, (req, res) => {
-        res.status(503).send(`
-          <html>
-            <head><title>Deployment Issue</title></head>
-            <body>
-              <h1>Frontend build not found</h1>
-              <p>The frontend dist folder is missing. Please check the build process.</p>
-              <p>Searched paths: ${possiblePaths.join(', ')}</p>
-            </body>
-          </html>
-        `)
-      })
-      return
-    }
+    // Try multiple paths to find dist folder
+    const possiblePaths = [
+      path.join(__dirname, '../../frontend/dist'),  // Local development
+      path.join(__dirname, '../frontend/dist'),     // Render deployment
+      path.join(__dirname, '../../../frontend/dist'), // Alternative structure
+      '/opt/render/project/src/frontend/dist'       // Render absolute path
+    ]
     
-    app.use(express.static(DIST_PATH, { 
-      maxAge: '1h',
+    const DIST_PATH = possiblePaths.find(p => fs.existsSync(p))
+    
+    console.log('🔍 Searching for dist folder...')
+    console.log('Possible paths:', possiblePaths)
+    console.log('Found path:', DIST_PATH)
+    
+    if (DIST_PATH) {
+      console.log('✅ Serving static files from:', DIST_PATH)
+          
+      app.use(express.static(DIST_PATH, { 
+        maxAge: '1h',
       setHeaders: (res, filePath) => {
         // Force correct MIME types for JavaScript modules (Brave browser fix)
         if (filePath.endsWith('.js') || /\/assets\/.*\.js$/.test(filePath)) {
@@ -239,6 +225,21 @@ export function createApp() {
     app.get(/^(?!\/api|\/uploads).*/, (req, res) => {
       res.sendFile(path.join(DIST_PATH, 'index.html'))
     })
+  } else if (process.env.NODE_ENV === 'production') {
+    // No dist folder found - show error page
+    console.error('❌ Frontend dist folder not found in production!')
+    app.get(/^(?!\/api|\/uploads).*/, (req, res) => {
+      res.status(503).send(`
+        <html>
+          <head><title>Deployment Issue</title></head>
+          <body>
+            <h1>Frontend build not found</h1>
+            <p>The frontend needs to be built. Please check your deployment configuration.</p>
+          </body>
+        </html>
+      `)
+    })
+  }
   }
 
   // Error handling

@@ -227,8 +227,8 @@ export function createApp() {
       }
     }))
     
-    // SPA fallback - serve index.html for non-file routes
-    app.get('*', (req, res, next) => {
+    // SPA fallback - serve index.html for non-file routes (Express 5 compatible)
+    app.use((req, res, next) => {
       // If the request is for a file extension, let it 404 naturally
       if (req.path.match(/\.[a-z0-9]+$/i)) {
         return next()

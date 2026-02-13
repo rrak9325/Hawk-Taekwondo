@@ -27,7 +27,7 @@ export default defineConfig({
   server: {
     host: true,
     headers: {
-      'Content-Security-Policy': "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://res.cloudinary.com https://*.cloudinary.com; media-src 'self' blob: https://res.cloudinary.com https://*.cloudinary.com; font-src 'self' data:; connect-src 'self' https://hawktaekwondo.onrender.com https://hawk-taekwondo-backend.onrender.com http://localhost:3001 https://res.cloudinary.com https://*.cloudinary.com https://api.cloudinary.com; frame-src 'self' https://www.google.com https://maps.google.com; object-src 'none'; base-uri 'self'; form-action 'self';",
+      'Content-Security-Policy': "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://res.cloudinary.com https://*.cloudinary.com; media-src 'self' blob: https://res.cloudinary.com https://*.cloudinary.com; font-src 'self' data:; connect-src 'self' https://hawktaekwondo.onrender.com https://hawk-taekwondo-backend.onrender.com http://localhost:3001 https://res.cloudinary.com https://*.cloudinary.com https://api.cloudinary.com https://*.onrender.com; frame-src 'self' https://www.google.com https://maps.google.com; object-src 'none'; base-uri 'self'; form-action 'self';",
       // Force correct MIME types for JavaScript modules
       'X-Content-Type-Options': 'nosniff'
     },

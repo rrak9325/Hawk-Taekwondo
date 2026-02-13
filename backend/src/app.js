@@ -54,7 +54,8 @@ export function createApp() {
           "http://localhost:3001",
           "https://res.cloudinary.com",
           "https://*.cloudinary.com",
-          "https://api.cloudinary.com"
+          "https://api.cloudinary.com",
+          "https://*.onrender.com"
         ],
         frameSrc: ["'self'", "https://www.google.com", "https://maps.google.com"],
         objectSrc: ["'none'"],
@@ -219,6 +220,8 @@ export function createApp() {
           res.setHeader('Content-Type', 'text/css; charset=utf-8')
         } else if (filePath.endsWith('.json')) {
           res.setHeader('Content-Type', 'application/json; charset=utf-8')
+        } else if (filePath.endsWith('.map')) {
+          res.setHeader('Content-Type', 'application/json; charset=utf-8')
         }
         res.setHeader('X-Content-Type-Options', 'nosniff')
       }
@@ -232,7 +235,7 @@ export function createApp() {
       }
       res.sendFile(path.join(DIST_PATH, 'index.html'))
     })
-  } else if (process.env.NODE_ENV === 'production') {
+  } else {
     // No dist folder found - show error page
     console.error('❌ Frontend dist folder not found in production!')
     app.get(/^(?!\/api|\/uploads).*/, (req, res) => {

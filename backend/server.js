@@ -38,13 +38,6 @@ if (!envLoaded) {
   console.log('CLOUDINARY_CLOUD_NAME:', process.env.CLOUDINARY_CLOUD_NAME ? 'Set' : 'Not set')
 }
 
-if (result.error) {
-  console.error('Error loading .env:', result.error)
-} else {
-  console.log('✅ .env loaded successfully')
-  console.log('CLOUDINARY_CLOUD_NAME:', process.env.CLOUDINARY_CLOUD_NAME ? 'Set' : 'Not set')
-}
-
 import createApp from './src/app.js'
 
 // Start server

@@ -208,50 +208,45 @@ export function createApp() {
     if (DIST_PATH) {
       console.log('✅ Serving static files from:', DIST_PATH)
           
+      // Serve static files FIRST
       app.use(express.static(DIST_PATH, { 
         maxAge: '1h',
-      setHeaders: (res, filePath) => {
-        // Force correct MIME types for JavaScript modules (Brave browser fix)
-        if (filePath.endsWith('.js') || /\/assets\/.*\.js$/.test(filePath)) {
-          res.setHeader('Content-Type', 'application/javascript; charset=utf-8')
-        } else if (filePath.endsWith('.mjs')) {
-          res.setHeader('Content-Type', 'application/javascript; charset=utf-8')
-        } else if (filePath.endsWith('.css') || /\/assets\/.*\.css$/.test(filePath)) {
-          res.setHeader('Content-Type', 'text/css; charset=utf-8')
-        } else if (filePath.endsWith('.json')) {
-          res.setHeader('Content-Type', 'application/json; charset=utf-8')
-        } else if (filePath.endsWith('.map')) {
-          res.setHeader('Content-Type', 'application/json; charset=utf-8')
+        setHeaders: (res, filePath) => {
+          // Force correct MIME types
+          if (filePath.endsWith('.js') || /\/assets\/.*\.js$/.test(filePath)) {
+            res.setHeader('Content-Type', 'application/javascript; charset=utf-8')
+          } else if (filePath.endsWith('.mjs')) {
+            res.setHeader('Content-Type', 'application/javascript; charset=utf-8')
+          } else if (filePath.endsWith('.css') || /\/assets\/.*\.css$/.test(filePath)) {
+            res.setHeader('Content-Type', 'text/css; charset=utf-8')
+          } else if (filePath.endsWith('.json')) {
+            res.setHeader('Content-Type', 'application/json; charset=utf-8')
+          } else if (filePath.endsWith('.map')) {
+            res.setHeader('Content-Type', 'application/json; charset=utf-8')
+          }
+          res.setHeader('X-Content-Type-Options', 'nosniff')
         }
-        res.setHeader('X-Content-Type-Options', 'nosniff')
-      }
-    }))
+      }))
     
-    // SPA fallback - serve index.html for non-file routes (Express 5 compatible)
-    app.use((req, res, next) => {
-      // If the request is for a file extension, let it 404 naturally
-      if (req.path.match(/\.[a-z0-9]+$/i)) {
-        return next()
-      }
-      
-      // Otherwise serve index.html (for SPA routes like /about, /contact, etc)
-      res.sendFile(path.join(DIST_PATH, 'index.html'))
-    })
-  } else {
-    // No dist folder found - show error page
-    console.error('❌ Frontend dist folder not found in production!')
-    app.get(/^(?!\/api|\/uploads).*/, (req, res) => {
-      res.status(503).send(`
-        <html>
-          <head><title>Deployment Issue</title></head>
-          <body>
-            <h1>Frontend build not found</h1>
-            <p>The frontend needs to be built. Please check your deployment configuration.</p>
-          </body>
-        </html>
-      `)
-    })
-  }
+      // SPA fallback LAST - only for routes without file extensions
+      app.use((req, res) => {
+        res.sendFile(path.join(DIST_PATH, 'index.html'))
+      })
+    } else {
+      // No dist folder found - show error page
+      console.error('❌ Frontend dist folder not found in production!')
+      app.use((req, res) => {
+        res.status(503).send(`
+          <html>
+            <head><title>Deployment Issue</title></head>
+            <body>
+              <h1>Frontend build not found</h1>
+              <p>The frontend needs to be built. Please check your deployment configuration.</p>
+            </body>
+          </html>
+        `)
+      })
+    }
   }
 
   // Error handling

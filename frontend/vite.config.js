@@ -7,37 +7,42 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
-        manualChunks: undefined
+        manualChunks: undefined,
+        // Ensure proper file extensions for modules
+        entryFileNames: 'assets/[name]-[hash].js',
+        chunkFileNames: 'assets/[name]-[hash].js',
+        assetFileNames: 'assets/[name]-[hash].[ext]'
       }
     }
   },
 
   server: {
-    host: true,                     // allows access from network (0.0.0.0)
+    host: true,
     headers: {
-      'Content-Security-Policy': "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://res.cloudinary.com https://*.cloudinary.com; media-src 'self' blob: https://res.cloudinary.com https://*.cloudinary.com; font-src 'self' data:; connect-src 'self' https://hawktaekwondo.onrender.com http://localhost:3001 https://res.cloudinary.com https://*.cloudinary.com https://api.cloudinary.com; frame-src 'self' https://www.google.com https://maps.google.com; object-src 'none'; base-uri 'self'; form-action 'self';"
+      'Content-Security-Policy': "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://res.cloudinary.com https://*.cloudinary.com; media-src 'self' blob: https://res.cloudinary.com https://*.cloudinary.com; font-src 'self' data:; connect-src 'self' https://hawktaekwondo.onrender.com http://localhost:3001 https://res.cloudinary.com https://*.cloudinary.com https://api.cloudinary.com; frame-src 'self' https://www.google.com https://maps.google.com; object-src 'none'; base-uri 'self'; form-action 'self';",
+      // Force correct MIME types for JavaScript modules
+      'X-Content-Type-Options': 'nosniff'
     },
 
-    // Allow ngrok domain + localhost
     allowedHosts: [
       'localhost',
-      '.ngrok-free.dev',           // allows all ngrok-free subdomains
-      'sturdiest-frontally-brooke.ngrok-free.dev'  // or just your specific one
+      '.ngrok-free.dev',
+      'sturdiest-frontally-brooke.ngrok-free.dev'
     ],
 
     proxy: {
       '/api': {
         target: 'http://localhost:3001',
         changeOrigin: true,
-        timeout: 0, // No timeout
-        proxyTimeout: 0, // No timeout
+        timeout: 0,
+        proxyTimeout: 0,
         secure: false
       },
       '/uploads': {
         target: 'http://localhost:3001',
         changeOrigin: true,
-        timeout: 0, // No timeout
-        proxyTimeout: 0, // No timeout
+        timeout: 0,
+        proxyTimeout: 0,
         secure: false
       }
     }

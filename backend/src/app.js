@@ -189,7 +189,22 @@ export function createApp() {
   // Serve frontend in production
   const DIST_PATH = path.join(__dirname, '../../frontend/dist')
   if (process.env.NODE_ENV === 'production') {
-    app.use(express.static(DIST_PATH, { maxAge: '1h' }))
+    app.use(express.static(DIST_PATH, { 
+      maxAge: '1h',
+      setHeaders: (res, filePath) => {
+        // Force correct MIME types for JavaScript modules (Brave browser fix)
+        if (filePath.endsWith('.js')) {
+          res.setHeader('Content-Type', 'application/javascript; charset=utf-8')
+        } else if (filePath.endsWith('.mjs')) {
+          res.setHeader('Content-Type', 'application/javascript; charset=utf-8')
+        } else if (filePath.endsWith('.css')) {
+          res.setHeader('Content-Type', 'text/css; charset=utf-8')
+        } else if (filePath.endsWith('.json')) {
+          res.setHeader('Content-Type', 'application/json; charset=utf-8')
+        }
+        res.setHeader('X-Content-Type-Options', 'nosniff')
+      }
+    }))
     app.get(/^(?!\/api|\/uploads).*/, (req, res) => {
       res.sendFile(path.join(DIST_PATH, 'index.html'))
     })

@@ -7,13 +7,13 @@ services:
     buildCommand: |
       echo "=== Installing Frontend Dependencies ===" &&
       cd frontend &&
-      npm ci --prefer-offline --no-audit &&
-      npx vite build &&
+      npm ci --include=dev &&
+      npm run build &&
       echo "=== Frontend build complete ===" &&
       ls -la dist &&
       cd ../backend &&
       echo "=== Installing Backend Dependencies ===" &&
-      npm ci --prefer-offline --no-audit --omit=dev &&
+      npm ci --omit=dev &&
       echo "=== Build complete ==="
     startCommand: cd backend && NODE_ENV=production node server.js
     healthCheckPath: /health

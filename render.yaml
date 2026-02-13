@@ -1,46 +1,36 @@
 services:
-  # Frontend Service
+  # Single service - Backend serves frontend
   - type: web
     name: hawk-taekwondo
     env: node
     plan: free
-    rootDir: frontend
-    buildCommand: npm ci --prefer-offline --no-audit && npm run build
-    startCommand: npm run preview -- --host 0.0.0.0 --port $PORT
+    buildCommand: |
+      echo "=== Building Frontend ===" &&
+      cd frontend &&
+      npm ci --prefer-offline --no-audit &&
+      npm run build &&
+      echo "=== Frontend build complete ===" &&
+      ls -la dist &&
+      cd ../backend &&
+      echo "=== Installing Backend Dependencies ===" &&
+      npm ci --prefer-offline --no-audit &&
+      echo "=== Build complete ==="
+    startCommand: cd backend && NODE_ENV=production node server.js
+    healthCheckPath: /health
     envVars:
       - key: NODE_ENV
         value: production
       - key: PORT
         value: 10000
-      - key: VITE_API_URL
-        value: https://hawk-taekwondo-backend.onrender.com
-      - key: VITE_FRONTEND_URL
-        value: https://hawktaekwondo.onrender.com
-  
-  # Backend Service
-  - type: web
-    name: hawk-taekwondo-backend
-    env: node
-    plan: free
-    rootDir: backend
-    buildCommand: npm ci --omit=dev --prefer-offline --no-audit
-    startCommand: node server.js
-    envVars:
-      - key: NODE_ENV
-        value: production
       - key: ADMIN_USERNAME
-        sync: false  # Set in Render dashboard
+        sync: false
       - key: ADMIN_PASSWORD_HASH
-        sync: false  # Set in Render dashboard
+        sync: false
       - key: FRONTEND_URL
         value: https://hawktaekwondo.onrender.com
-      - key: BACKEND_URL
-        value: https://hawk-taekwondo-backend.onrender.com
-      - key: PORT
-        value: 10000
       - key: CLOUDINARY_CLOUD_NAME
-        sync: false  # Set in Render dashboard
+        sync: false
       - key: CLOUDINARY_API_KEY
-        sync: false  # Set in Render dashboard
+        sync: false
       - key: CLOUDINARY_API_SECRET
-        sync: false  # Set in Render dashboard
+        sync: false

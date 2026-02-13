@@ -60,6 +60,7 @@ export function createApp() {
         formAction: ["'self'"],
       },
     },
+
   }))
 
   // General API rate limiting

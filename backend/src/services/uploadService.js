@@ -76,6 +76,9 @@ export class UploadService {
       
       // Move uploaded file to public directory
       const destinationPath = path.join(uploadDir, uniqueFilename);
+      if (!file.path) {
+        throw new Error('Uploaded file path is undefined');
+      }
       fs.copyFileSync(file.path, destinationPath);
       
       // Return public URL
@@ -126,15 +129,22 @@ export class UploadService {
       
       // Move uploaded file to public directory
       const destinationPath = path.join(uploadDir, uniqueFilename);
+      if (!file.path) {
+        throw new Error('Uploaded file path is undefined');
+      }
       fs.copyFileSync(file.path, destinationPath);
       
       // Get image dimensions if possible
       let width = null, height = null;
       try {
-        const sharp = await import('sharp');
-        const metadata = await sharp.default(file.path).metadata();
-        width = metadata.width;
-        height = metadata.height;
+        if (file.path) {  // Make sure file.path exists before using it
+          const sharp = await import('sharp');
+          const metadata = await sharp.default(file.path).metadata();
+          width = metadata.width;
+          height = metadata.height;
+        } else {
+          console.log('File path not available for dimension extraction');
+        }
       } catch (err) {
         console.log('Could not get image dimensions:', err.message);
       }
@@ -190,6 +200,9 @@ export class UploadService {
       
       // Move uploaded file to public directory
       const destinationPath = path.join(uploadDir, uniqueFilename);
+      if (!file.path) {
+        throw new Error('Uploaded file path is undefined');
+      }
       fs.copyFileSync(file.path, destinationPath);
       
       const result = {

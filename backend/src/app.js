@@ -22,6 +22,9 @@ const __dirname = path.dirname(__filename)
 export function createApp() {
   const app = express()
 
+  // Trust proxy - Required for Render and other reverse proxies
+  app.set('trust proxy', 1)
+
   // Ensure required directories exist
   ensureDirectories()
 

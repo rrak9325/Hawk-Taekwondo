@@ -4,6 +4,11 @@
 import bcrypt from 'bcryptjs'
 import crypto from 'crypto'
 
+// Security constants
+const MAX_LOGIN_ATTEMPTS = 3
+const LOCKOUT_DURATION_MS = 30 * 60 * 1000 // 30 minutes
+const SESSION_TOKEN_BYTES = 32
+
 function getAdminCredentials() {
   return {
     username: process.env.ADMIN_USERNAME || 'admin',
@@ -15,9 +20,9 @@ export class AuthService {
   constructor() {
     this.loginAttempts = new Map()
     this.activeSessions = new Set()
-    this.MAX_LOGIN_ATTEMPTS = 3 // Reduced from 5 to 3
-    this.LOCKOUT_TIME = 30 * 60 * 1000 // Increased to 30 minutes
-    this.PROGRESSIVE_DELAY = true // Add progressive delays
+    this.MAX_LOGIN_ATTEMPTS = MAX_LOGIN_ATTEMPTS
+    this.LOCKOUT_TIME = LOCKOUT_DURATION_MS
+    this.PROGRESSIVE_DELAY = true
   }
 
   async login(credentials, clientIP) {
@@ -39,8 +44,8 @@ export class AuthService {
     if (this.PROGRESSIVE_DELAY) {
       const attempts = this.loginAttempts.get(attemptKey)
       if (attempts && attempts.count > 0) {
-        const delay = Math.min(attempts.count * 1000, 5000) // Max 5 second delay
-        await new Promise(resolve => setTimeout(resolve, delay))
+        const delayMs = Math.min(attempts.count * 1000, 5000) // Max 5 second delay
+        await new Promise(resolve => setTimeout(resolve, delayMs))
       }
     }
 
@@ -54,12 +59,12 @@ export class AuthService {
       this.loginAttempts.delete(attemptKey)
       
       // Generate session token
-      const token = crypto.randomBytes(32).toString('hex')
-      this.activeSessions.add(token)
+      const sessionToken = crypto.randomBytes(SESSION_TOKEN_BYTES).toString('hex')
+      this.activeSessions.add(sessionToken)
       
       return {
         success: true,
-        token
+        token: sessionToken
       }
     } else {
       // Record failed attempt
@@ -73,14 +78,14 @@ export class AuthService {
     }
   }
 
-  async logout(token) {
-    if (token) {
-      this.activeSessions.delete(token)
+  async logout(sessionToken) {
+    if (sessionToken) {
+      this.activeSessions.delete(sessionToken)
     }
   }
 
-  isValidSession(token) {
-    return this.activeSessions.has(token)
+  isValidSession(sessionToken) {
+    return this.activeSessions.has(sessionToken)
   }
 
   checkRateLimit(attemptKey) {

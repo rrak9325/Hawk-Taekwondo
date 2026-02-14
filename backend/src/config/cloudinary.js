@@ -23,15 +23,8 @@ const isConfigured = () => {
 // Only log after a short delay to ensure .env is loaded
 setTimeout(() => {
   configureCloudinary()
-  if (isConfigured()) {
-    console.log('✅ Cloudinary configured successfully')
-    console.log(`📦 Cloud Name: ${cloudinary.config().cloud_name}`)
-  } else {
-    console.error('❌ Cloudinary configuration missing!')
-    console.error('💡 Make sure backend/.env file exists with:')
-    console.error('   CLOUDINARY_CLOUD_NAME=your_cloud_name')
-    console.error('   CLOUDINARY_API_KEY=your_api_key')
-    console.error('   CLOUDINARY_API_SECRET=your_api_secret')
+  if (!isConfigured()) {
+    console.error('Cloudinary configuration missing - check environment variables')
   }
 }, 100)
 

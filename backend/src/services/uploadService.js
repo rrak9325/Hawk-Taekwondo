@@ -83,7 +83,7 @@ export class UploadService {
           }
         };
       } catch (cloudinaryError) {
-        console.log('☁️ Cloudinary video upload failed, falling back to local storage:', cloudinaryError.message)
+        console.warn('Cloudinary video upload failed, using local storage:', cloudinaryError.message)
         
         // Fallback to local storage
         const extension = path.extname(file.name);
@@ -206,7 +206,7 @@ export class UploadService {
           width = metadata.width;
           height = metadata.height;
         } catch (err) {
-          console.log('Could not get image dimensions:', err.message);
+          // Silently fail dimension detection
         }
         
         const result = {
@@ -245,8 +245,6 @@ export class UploadService {
 
   async processGenericFile(file) {
     try {
-      console.log(`📄 Processing generic file: ${file.name}`)
-      
       // Generate unique filename
       const extension = path.extname(file.name);
       const uniqueFilename = `${uuidv4()}${extension}`;

@@ -22,20 +22,11 @@ for (const envPath of possibleEnvPaths) {
     if (!result.error) {
       envLoaded = true
       usedPath = envPath
-      console.log('✅ .env loaded from:', envPath)
       break
     }
   } catch (error) {
     // Continue to next path
   }
-}
-
-if (!envLoaded) {
-  console.log('❌ .env file not found in any expected location')
-  console.log('Searched paths:', possibleEnvPaths)
-  console.log('⚠️  Using environment variables from Render dashboard')
-} else {
-  console.log('CLOUDINARY_CLOUD_NAME:', process.env.CLOUDINARY_CLOUD_NAME ? 'Set' : 'Not set')
 }
 
 import createApp from './src/app.js'
@@ -48,21 +39,17 @@ async function startServer() {
     const PORT = process.env.PORT || 3001
 
     const server = app.listen(PORT, '0.0.0.0', () => {
-      console.log('='.repeat(60))
-      console.log('SERVER STARTED')
-      console.log('='.repeat(60))
-      console.log(`Backend API: http://localhost:${PORT}`)
-      console.log(`Environment: ${process.env.NODE_ENV || 'development'}`)
-      console.log('='.repeat(60))
+      console.log(`Server running on port ${PORT}`)
     }).on('error', (err) => {
       console.error('Server error:', err)
       process.exit(1)
     })
 
-    // Set very high timeouts for large file uploads
-    server.timeout = 0
-    server.keepAliveTimeout = 0
-    server.headersTimeout = 0
+    // Set reasonable timeouts for large file uploads (5 minutes)
+    const FIVE_MINUTES = 5 * 60 * 1000
+    server.timeout = FIVE_MINUTES
+    server.keepAliveTimeout = FIVE_MINUTES
+    server.headersTimeout = FIVE_MINUTES + 1000
     
     // Graceful shutdown
     process.on('SIGTERM', () => {

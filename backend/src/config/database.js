@@ -22,8 +22,8 @@ export function ensureDirectories() {
   }
 }
 
-// JSON file operations with Cloudinary backup for production
-export class JSONDatabase {
+// Hybrid database with local JSON and Cloudinary backup
+export class HybridDatabase {
   constructor(filePath) {
     this.filePath = filePath
     this.useCloudinary = process.env.NODE_ENV === 'production'
@@ -93,4 +93,4 @@ export class JSONDatabase {
   }
 }
 
-export const db = new JSONDatabase(DATA_PATH)
+export const db = new HybridDatabase(DATA_PATH)

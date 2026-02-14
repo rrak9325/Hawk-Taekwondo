@@ -200,12 +200,7 @@ export function createApp() {
     
     const DIST_PATH = possiblePaths.find(p => fs.existsSync(p))
     
-    console.log('🔍 Searching for dist folder...')
-    console.log('Possible paths:', possiblePaths)
-    console.log('Found path:', DIST_PATH)
-    
     if (DIST_PATH) {
-      console.log('✅ Serving static files from:', DIST_PATH)
           
       // Serve static files FIRST
       app.use(express.static(DIST_PATH, { 

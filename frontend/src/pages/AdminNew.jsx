@@ -7,12 +7,8 @@ import AdminInput from '../components/admin/AdminInput'
 import MediaUpload from '../components/admin/MediaUpload'
 import Toast from '../components/admin/Toast'
 
-// Disable console.log in production
-const isDev = import.meta.env.DEV
-const log = isDev ? console.log.bind(console) : () => {}
-
 // Helper to immutably update nested state (faster than deep clone every time)
-const updateNested = (obj, path, value) => {
+const setNestedProperty = (obj, path, value) => {
   const keys = path.split('.')
   const newObj = { ...obj }
 
@@ -192,7 +188,7 @@ export default function AdminNew() {
     setData(prev => {
       if (!prev) return prev
       
-      let updated = updateNested(prev, path, value)
+      let updated = setNestedProperty(prev, path, value)
       
       // If updating schedule batches, ensure we convert to array format and update daily schedule
       if (path.startsWith('classSchedule.batches')) {
@@ -211,9 +207,6 @@ export default function AdminNew() {
           ...updated.classSchedule,
           dailySchedule: dailySchedule
         }
-        console.log('📅 Auto-updated daily schedule after field change')
-        console.log('🔄 Current batches:', batches)
-        console.log('📅 Generated daily schedule:', dailySchedule)
       }
       
       return updated
@@ -221,65 +214,37 @@ export default function AdminNew() {
   }, [updateDailySchedule])
 
   const handleSave = async () => {
-    console.log('🔄 Save button clicked!')
-    console.log('📊 Data exists:', !!data)
-    console.log('💾 Current saving state:', saving)
-    
     if (!data) {
-      console.log('❌ No data to save')
       addToast('error', 'No data to save')
       return
     }
     
     setSaving(true)
-    console.log('🚀 Starting save process...')
     
     try {
       // Ensure data is in the correct format before saving
       const dataToSave = { ...data }
       
-      console.log('📤 PRE-SAVE DATA ANALYSIS:')
-      console.log('📊 All keys:', Object.keys(dataToSave))
-      console.log('📊 SchoolInfo keys:', dataToSave.schoolInfo ? Object.keys(dataToSave.schoolInfo) : 'No schoolInfo')
-      console.log('📊 Programs type:', Array.isArray(dataToSave.programs) ? 'array' : typeof dataToSave.programs)
-      console.log('📊 Programs count:', Array.isArray(dataToSave.programs) ? dataToSave.programs.length : 'N/A')
-      console.log('📊 Instructors type:', Array.isArray(dataToSave.instructors) ? 'array' : typeof dataToSave.instructors)
-      console.log('📊 Instructors count:', Array.isArray(dataToSave.instructors) ? dataToSave.instructors.length : 'N/A')
-      console.log('📊 Testimonials type:', Array.isArray(dataToSave.testimonials) ? 'array' : typeof dataToSave.testimonials)
-      console.log('📊 Testimonials count:', Array.isArray(dataToSave.testimonials) ? dataToSave.testimonials.length : 'N/A')
-      
       // Ensure schedule batches are in array format for consistency
       if (dataToSave.classSchedule?.batches && !Array.isArray(dataToSave.classSchedule.batches)) {
-        console.log('🔄 Converting batches to array format for save')
         dataToSave.classSchedule.batches = Object.values(dataToSave.classSchedule.batches)
       }
       
-      console.log('📤 Saving data with schedule batches:', dataToSave.classSchedule?.batches?.length || 0)
-      
       const result = await dataService.updateSchoolData(dataToSave)
-      console.log('📥 Save result:', result)
       
       if (result.success) {
         if (result.mode === 'download') {
-          console.log('📥 Download mode success')
           addToast('success', 'Downloaded mockData.json. Replace public/mockData.json and redeploy.')
         } else {
-          console.log('🌐 API mode success')
           addToast('success', 'Data saved successfully! Changes are now live.')
-          
-          // Refetch data to ensure admin shows latest from MongoDB
-          console.log('🔄 Refetching data from MongoDB...')
           await fetchData()
         }
       } else {
-        console.log('❌ Save failed:', result.error)
         throw new Error(result.error)
       }
     } catch (error) {
-      console.error('💥 Save error:', error)
       addToast('error', `Save failed: ${error.message}`)
     } finally {
-      console.log('🏁 Save process complete')
       setSaving(false)
     }
   }
@@ -295,7 +260,7 @@ export default function AdminNew() {
         try {
           await uploadService.deleteFile(currentValue)
         } catch (err) {
-          console.warn('Failed to delete old file:', err)
+          // Silently handle deletion failure
         }
       }
       
@@ -305,13 +270,13 @@ export default function AdminNew() {
       // Auto-save after upload
       setTimeout(async () => {
         try {
-          const updatedData = updateNested(data, path, e.result.url)
+          const updatedData = setNestedProperty(data, path, e.result.url)
           const result = await dataService.updateSchoolData(updatedData)
           if (result.success) {
-            console.log('✅ Auto-saved after upload')
+            // Auto-save successful
           }
         } catch (err) {
-          console.warn('Auto-save failed:', err)
+          // Silently handle auto-save failure
         }
       }, 500)
       
@@ -342,7 +307,7 @@ export default function AdminNew() {
         try {
           await uploadService.deleteFile(currentValue)
         } catch (err) {
-          console.warn('Failed to delete old file:', err)
+          // Silently handle deletion failure
         }
       }
       
@@ -355,14 +320,12 @@ export default function AdminNew() {
         // Auto-save after upload
         setTimeout(async () => {
           try {
-            const updatedData = updateNested(data, path, newUrl)
+            const updatedData = setNestedProperty(data, path, newUrl)
             const saveResult = await dataService.updateSchoolData(updatedData)
             if (saveResult.success) {
-              console.log('✅ Auto-saved after upload')
               addToast('success', '💾 Saved automatically!')
             }
           } catch (err) {
-            console.warn('Auto-save failed:', err)
             addToast('warning', 'Upload successful but auto-save failed. Click Save Changes.')
           }
         }, 500)
@@ -383,7 +346,6 @@ export default function AdminNew() {
         await uploadService.deleteFile(currentValue)
         addToast('success', 'File deleted from Cloudinary')
       } catch (err) {
-        console.warn('Failed to delete from Cloudinary:', err)
         addToast('warning', 'File removed from site (Cloudinary deletion failed)')
       }
     }
@@ -393,14 +355,12 @@ export default function AdminNew() {
     // Auto-save after delete
     setTimeout(async () => {
       try {
-        const updatedData = updateNested(data, path, '')
+        const updatedData = setNestedProperty(data, path, '')
         const result = await dataService.updateSchoolData(updatedData)
         if (result.success) {
-          console.log('✅ Auto-saved after delete')
           addToast('success', '💾 Saved automatically!')
         }
       } catch (err) {
-        console.warn('Auto-save failed:', err)
         addToast('warning', 'Delete successful but auto-save failed. Click Save Changes.')
       }
     }, 500)
@@ -1328,8 +1288,6 @@ export default function AdminNew() {
                                     dailySchedule: dailySchedule
                                   }
                                 }
-                                console.log('✅ New batch added:', updated.classSchedule.batches)
-                                console.log('📅 Daily schedule updated:', updated.classSchedule.dailySchedule)
                                 return updated
                               })
                               addToast('success', 'New batch added!')
@@ -1356,7 +1314,6 @@ export default function AdminNew() {
                               <button
                                 onClick={() => {
                                   if (!confirm('Delete this batch?')) return
-                                  console.log('🗑️ Deleting batch:', index)
                                   setData(prev => {
                                     const currentBatches = Array.isArray(prev.classSchedule?.batches) 
                                       ? prev.classSchedule.batches 
@@ -1373,8 +1330,6 @@ export default function AdminNew() {
                                         dailySchedule: dailySchedule
                                       }
                                     }
-                                    console.log('✅ Batch deleted, remaining:', updated.classSchedule.batches)
-                                    console.log('📅 Daily schedule updated:', updated.classSchedule.dailySchedule)
                                     return updated
                                   })
                                   addToast('success', 'Batch deleted!')
@@ -1565,7 +1520,6 @@ export default function AdminNew() {
                                 addToast('success', '💾 Gallery saved automatically!')
                               }
                             } catch (err) {
-                              console.warn('Gallery auto-save failed:', err)
                               addToast('warning', 'Upload successful but auto-save failed. Click Save Changes.')
                             }
                           }, 500)
@@ -1622,7 +1576,6 @@ export default function AdminNew() {
                                 await uploadService.deleteFile(media.image)
                                 addToast('success', 'Deleted from Cloudinary')
                               } catch (err) {
-                                console.warn('Failed to delete from Cloudinary:', err)
                                 addToast('warning', 'Removed from gallery (Cloudinary deletion failed)')
                               }
                             }
@@ -1645,11 +1598,9 @@ export default function AdminNew() {
                               try {
                                 const result = await dataService.updateSchoolData(newGalleryData)
                                 if (result.success) {
-                                  console.log('✅ Gallery auto-saved after delete')
                                   addToast('success', '💾 Gallery saved automatically!')
                                 }
                               } catch (err) {
-                                console.warn('Gallery auto-save failed:', err)
                                 addToast('warning', 'Delete successful but auto-save failed. Click Save Changes.')
                               }
                             }, 500)

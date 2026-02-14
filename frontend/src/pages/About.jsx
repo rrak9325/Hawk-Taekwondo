@@ -129,7 +129,7 @@ export default function About() {
         @keyframes fadeInUp {
           from {
             opacity: 0;
-            transform: translateY(30px);
+            transform: translateY(15px);
           }
           to {
             opacity: 1;
@@ -140,7 +140,7 @@ export default function About() {
         @keyframes fadeInLeft {
           from {
             opacity: 0;
-            transform: translateX(-30px);
+            transform: translateX(-15px);
           }
           to {
             opacity: 1;
@@ -151,7 +151,7 @@ export default function About() {
         @keyframes fadeInRight {
           from {
             opacity: 0;
-            transform: translateX(30px);
+            transform: translateX(15px);
           }
           to {
             opacity: 1;
@@ -162,7 +162,7 @@ export default function About() {
         @keyframes scaleIn {
           from {
             opacity: 0;
-            transform: scale(0.95);
+            transform: scale(0.98);
           }
           to {
             opacity: 1;
@@ -171,19 +171,19 @@ export default function About() {
         }
         
         .animate-in {
-          animation: fadeInUp 0.6s ease-out forwards;
+          animation: fadeInUp 0.5s ease-out forwards;
         }
         
         .animate-in-left {
-          animation: fadeInLeft 0.6s ease-out forwards;
+          animation: fadeInLeft 0.5s ease-out forwards;
         }
         
         .animate-in-right {
-          animation: fadeInRight 0.6s ease-out forwards;
+          animation: fadeInRight 0.5s ease-out forwards;
         }
         
         .animate-scale {
-          animation: scaleIn 0.5s ease-out forwards;
+          animation: scaleIn 0.4s ease-out forwards;
         }
       `}</style>
     </div>

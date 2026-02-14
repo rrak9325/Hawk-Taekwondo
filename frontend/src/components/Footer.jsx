@@ -130,10 +130,15 @@ const Footer = () => {
               <a
                 href="instagram://user?username=hawktaekwondo"
                 onClick={(e) => {
-                  // Fallback to web if app not installed
-                  setTimeout(() => {
-                    window.location.href = "https://www.instagram.com/hawktaekwondo/";
-                  }, 500);
+                  // Check if on desktop/browser (not mobile app)
+                  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+                  
+                  if (!isMobile) {
+                    
+                    e.preventDefault();
+                    window.open('https://www.instagram.com/hawktaekwondo/', '_blank');
+                  }
+                  // Mobile: let the instagram:// protocol handle it
                 }}
                 target="_blank"
                 rel="noopener noreferrer"

@@ -71,16 +71,17 @@ export default function Programs() {
       className="bg-white"
       initial={{ opacity: 0 }}
       animate={{ opacity: ready ? 1 : 0 }}
-      transition={{ duration: 0.5 }}
+      transition={{ duration: 0.3 }}
     >
       <Hero {...programsPage.hero} />
 
       <section className="py-16 md:py-24">
         <div className="container mx-auto px-4">
           <motion.div
-            initial={{ opacity: 0, y: 25 }}
+            initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
+            transition={{ duration: 0.4 }}
             className="text-center mb-16"
           >
             <h2 className="font-heading text-3xl md:text-4xl font-bold text-primary mb-4">
@@ -97,18 +98,18 @@ export default function Programs() {
               return (
                 <motion.div
                   key={program.id}
-                  initial={{ opacity: 0, y: 30 }}
+                  initial={{ opacity: 0, y: 10 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ delay: i * 0.1 }}
-                  className="group relative overflow-hidden rounded-3xl bg-gradient-to-br from-white to-gray-50 border border-gray-200 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2"
+                  transition={{ delay: i * 0.05, duration: 0.4 }}
+                  className="group relative overflow-hidden rounded-3xl bg-gradient-to-br from-white to-gray-50 border border-gray-200 shadow-lg hover:shadow-xl transition-shadow duration-300"
                 >
                   {program.image ? (
                     <div className="h-48 overflow-hidden">
                       <img 
                         src={program.image} 
                         alt={program.name}
-                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                         loading="lazy"
                         decoding="async"
                         width="400"
@@ -144,7 +145,7 @@ export default function Programs() {
                     
                     <a 
                       href="/contact" 
-                      className="block w-full bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-white text-center py-3 rounded-xl font-semibold transition-all duration-300 transform hover:scale-[1.02] shadow-lg"
+                      className="block w-full bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-white text-center py-3 rounded-xl font-semibold transition-all duration-300 shadow-lg"
                     >
                       Enroll Now
                     </a>
@@ -159,9 +160,10 @@ export default function Programs() {
       <section className="py-16 md:py-24 bg-gray-50">
         <div className="container mx-auto px-4">
           <motion.div
-            initial={{ opacity: 0, y: 25 }}
+            initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
+            transition={{ duration: 0.4 }}
             className="max-w-4xl mx-auto text-center"
           >
             <h2 className="font-heading text-3xl md:text-4xl font-bold text-primary mb-6">

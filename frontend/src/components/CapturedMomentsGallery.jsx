@@ -1,5 +1,4 @@
 import { useState, useEffect, useCallback } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
 import { X, ChevronLeft, ChevronRight, ZoomIn } from 'lucide-react'
 
 export default function CapturedMomentsGallery({ gallery }) {
@@ -16,7 +15,6 @@ export default function CapturedMomentsGallery({ gallery }) {
   const openLightbox = useCallback((index) => {
     setCurrentIndex(index)
     setIsOpen(true)
-    // Prevent body scroll
     document.body.style.overflow = 'hidden'
   }, [])
 
@@ -91,14 +89,14 @@ export default function CapturedMomentsGallery({ gallery }) {
                 <img
                   src={item.image}
                   alt={item.title || `Moment ${index + 1}`}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                   loading={index < 4 ? 'eager' : 'lazy'}
                   decoding="async"
                   width="400"
                   height="400"
                 />
-                {/* Overlay on hover */}
-                <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                {/* Overlay on hover - desktop only */}
+                <div className="hidden md:flex absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity items-center justify-center">
                   <ZoomIn className="w-10 h-10 text-white opacity-80" />
                 </div>
               </div>
@@ -108,78 +106,76 @@ export default function CapturedMomentsGallery({ gallery }) {
       </section>
 
       {/* Full-screen Lightbox */}
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 bg-black flex items-center justify-center"
+      {isOpen && (
+        <div
+          className="fixed inset-0 z-50 bg-black flex items-center justify-center"
+          style={{ animation: 'fadeIn 0.2s' }}
+          onClick={closeLightbox}
+          onTouchStart={onTouchStart}
+          onTouchMove={onTouchMove}
+          onTouchEnd={onTouchEnd}
+        >
+          {/* Close button */}
+          <button
+            className="absolute top-4 md:top-6 right-4 md:right-6 z-30 p-3 bg-black/70 rounded-full text-white hover:bg-black/90 transition shadow-2xl"
             onClick={closeLightbox}
-            onTouchStart={onTouchStart}
-            onTouchMove={onTouchMove}
-            onTouchEnd={onTouchEnd}
+            aria-label="Close"
           >
-            {/* Close button */}
-            <button
-              className="absolute top-4 md:top-6 right-4 md:right-6 z-30 p-3 bg-black/70 rounded-full text-white hover:bg-black/90 transition shadow-2xl"
-              onClick={closeLightbox}
-              aria-label="Close"
-            >
-              <X size={28} />
-            </button>
+            <X size={28} />
+          </button>
 
-            {/* Navigation arrows */}
-            {images.length > 1 && (
-              <>
-                <button
-                  className="absolute left-4 md:left-6 top-1/2 -translate-y-1/2 z-20 p-3 md:p-4 bg-black/70 rounded-full text-white hover:bg-black/90 transition shadow-2xl"
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    goToPrev()
-                  }}
-                  aria-label="Previous"
-                >
-                  <ChevronLeft size={32} />
-                </button>
+          {/* Navigation arrows */}
+          {images.length > 1 && (
+            <>
+              <button
+                className="absolute left-4 md:left-6 top-1/2 -translate-y-1/2 z-20 p-3 md:p-4 bg-black/70 rounded-full text-white hover:bg-black/90 transition shadow-2xl"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  goToPrev()
+                }}
+                aria-label="Previous"
+              >
+                <ChevronLeft size={32} />
+              </button>
 
-                <button
-                  className="absolute right-4 md:right-6 top-1/2 -translate-y-1/2 z-20 p-3 md:p-4 bg-black/70 rounded-full text-white hover:bg-black/90 transition shadow-2xl"
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    goToNext()
-                  }}
-                  aria-label="Next"
-                >
-                  <ChevronRight size={32} />
-                </button>
-              </>
-            )}
+              <button
+                className="absolute right-4 md:right-6 top-1/2 -translate-y-1/2 z-20 p-3 md:p-4 bg-black/70 rounded-full text-white hover:bg-black/90 transition shadow-2xl"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  goToNext()
+                }}
+                aria-label="Next"
+              >
+                <ChevronRight size={32} />
+              </button>
+            </>
+          )}
 
-            {/* Current image */}
-            <motion.div
-              key={currentIndex}
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              transition={{ duration: 0.25 }}
-              className="relative max-w-[90vw] max-h-[85vh] flex items-center justify-center px-4 z-10"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <img
-                src={images[currentIndex].image}
-                alt={images[currentIndex].title || `Image ${currentIndex + 1}`}
-                className="max-w-full max-h-full object-contain rounded-lg shadow-2xl"
-              />
-            </motion.div>
+          {/* Current image */}
+          <div
+            className="relative max-w-[90vw] max-h-[85vh] flex items-center justify-center px-4 z-10"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <img
+              src={images[currentIndex].image}
+              alt={images[currentIndex].title || `Image ${currentIndex + 1}`}
+              className="max-w-full max-h-full object-contain rounded-lg shadow-2xl"
+            />
+          </div>
 
-            {/* Counter */}
-            <div className="absolute bottom-6 md:bottom-8 left-1/2 -translate-x-1/2 z-30 bg-black/80 px-5 py-2 rounded-full text-white text-sm font-medium shadow-xl">
-              {currentIndex + 1} / {images.length}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          {/* Counter */}
+          <div className="absolute bottom-6 md:bottom-8 left-1/2 -translate-x-1/2 z-30 bg-black/80 px-5 py-2 rounded-full text-white text-sm font-medium shadow-xl">
+            {currentIndex + 1} / {images.length}
+          </div>
+        </div>
+      )}
+      
+      <style>{`
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+      `}</style>
     </>
   )
 }

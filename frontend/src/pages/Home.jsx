@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { Shield, CheckCircle, Award, Users, Target, Heart, TrendingUp, Star } from 'lucide-react'
 import Hero from '../components/Hero'
@@ -14,7 +13,7 @@ export default function Home() {
 
   useEffect(() => {
     if (data) {
-      setTimeout(() => setReady(true), 150)
+      setTimeout(() => setReady(true), 100)
     }
   }, [data])
 
@@ -48,12 +47,7 @@ export default function Home() {
     : (programsData ? Object.values(programsData).filter(p => p && p.name) : [])
 
   return (
-    <motion.div
-      className="bg-white"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: ready ? 1 : 0 }}
-      transition={{ duration: 0.3 }}
-    >
+    <div className="bg-white" style={{ opacity: ready ? 1 : 0, transition: 'opacity 0.3s' }}>
       <Hero
         {...hero}
         height="h-[92vh]"
@@ -62,74 +56,52 @@ export default function Home() {
 
       <section className="py-16 lg:py-20 bg-white">
         <div className="container mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center max-w-3xl mx-auto mb-12 lg:mb-16"
-          >
+          <div className="text-center max-w-3xl mx-auto mb-12 lg:mb-16">
             <h2 className="font-heading text-2xl md:text-3xl lg:text-5xl font-bold text-primary mb-4">
               Why Choose <span className="text-secondary">Hawk Taekwondo?</span>
             </h2>
             <p className="text-gray-600 text-base lg:text-lg">
               We provide a safe, supportive, and professional environment where students of all ages can excel in martial arts and character development.
             </p>
-          </motion.div>
+          </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
             {safeFeatures.map((f, i) => {
               const iconMap = { Shield, Award, Users, Target, Heart, TrendingUp, Star }
               const Icon = iconMap[f?.icon] || Shield
               return (
-                <motion.div
+                <div
                   key={f?.title || i}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.25 }}
-                  transition={{ duration: 0.4, delay: i * 0.08 }}
-                  className="card text-center hover:shadow-2xl transition-all duration-300 border-b-4 border-transparent hover:border-secondary p-6"
+                  className="card text-center hover:shadow-2xl transition-shadow duration-300 border-b-4 border-transparent hover:border-secondary p-6"
                 >
-                  <div className="w-14 h-14 lg:w-16 lg:h-16 bg-secondary/10 rounded-2xl flex items-center justify-center mx-auto mb-4 lg:mb-6 transform group-hover:rotate-12 transition-transform">
+                  <div className="w-14 h-14 lg:w-16 lg:h-16 bg-secondary/10 rounded-2xl flex items-center justify-center mx-auto mb-4 lg:mb-6">
                     <Icon className="w-7 h-7 lg:w-8 lg:h-8 text-secondary" />
                   </div>
                   <h3 className="text-lg lg:text-xl font-bold mb-2 lg:mb-3 text-primary">{f?.title}</h3>
                   <p className="text-gray-600 text-sm leading-relaxed">{f?.description}</p>
-                </motion.div>
+                </div>
               )
             })}
           </div>
         </div>
       </section>
 
-      {/*  */}
-
       {/* Programs Preview Section */}
-
-
       <section className="py-12 lg:py-16 xl:py-24">
         <div className="container mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-12 lg:mb-16"
-          >
+          <div className="text-center mb-12 lg:mb-16">
             <h2 className="font-heading text-2xl md:text-3xl lg:text-5xl font-bold text-primary mb-4">
               Our <span className="text-secondary">Programs</span>
             </h2>
             <p className="text-gray-600 text-base lg:text-lg">
               Discover the perfect program for your martial arts journey.
             </p>
-          </motion.div>
+          </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
           {safePrograms.slice(0, 3).map((p, i) => (
-              <motion.div
+              <div
                 key={p?.id || `program-${i}`}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.25 }}
-                transition={{ duration: 0.6, delay: i * 0.1 }}
                 className="card"
               >
                 {p.image && (
@@ -166,7 +138,7 @@ export default function Home() {
                 <Link to="/programs" className="btn-outline w-full text-center">
                   Learn More
                 </Link>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>
@@ -180,13 +152,7 @@ export default function Home() {
 
       {/* Call to Action Section */}
       <section className="py-12 lg:py-16 xl:py-20 bg-gradient-to-br from-primary to-primary-light text-white text-center">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="container mx-auto px-4"
-        >
+        <div className="container mx-auto px-4">
           <h2 className="font-heading text-2xl md:text-3xl lg:text-4xl font-bold mb-4 lg:mb-6">
             Ready to Start Your Journey?
           </h2>
@@ -199,10 +165,8 @@ export default function Home() {
               Book A Free Trial
             </Link>
           </div>
-        </motion.div>
+        </div>
       </section>
-
-
-    </motion.div>
+    </div>
   )
 }

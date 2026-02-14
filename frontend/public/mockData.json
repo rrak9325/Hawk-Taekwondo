@@ -126,10 +126,8 @@
       "description": "Traditional Korean martial art focusing on high kicks, jumping and spinning kicks, and fast kicking techniques.",
       "benefits": [
         "Improved flexibility and balance",
-        "Enhanced cardiovascular fitness",
-        "Mental discipline and focus",
-        "Self-defense skills",
-        "Stress relief and confidence building"
+        "Enhanced cardiovascular fitness and mental discipline",
+        "Self-defense skills and confidence building"
       ],
       "image": ""
     },
@@ -138,11 +136,9 @@
       "name": "Self Defence",
       "description": "Practical protection techniques designed for real-world situations and personal safety.",
       "benefits": [
-        "Effective protection skills",
-        "Situational awareness",
+        "Effective protection skills and situational awareness",
         "Confidence in dangerous situations",
-        "Quick reaction techniques",
-        "Legal self-defense knowledge"
+        "Quick reaction techniques and legal knowledge"
       ],
       "image": ""
     },
@@ -151,11 +147,9 @@
       "name": "MuayThai",
       "description": "The art of eight limbs - using fists, elbows, knees, and shins in a powerful striking art.",
       "benefits": [
-        "Explosive power development",
-        "Full-body conditioning",
-        "Mental toughness",
-        "Traditional Thai techniques",
-        "Competition preparation"
+        "Explosive power development and conditioning",
+        "Mental toughness and traditional Thai techniques",
+        "Competition preparation and striking mastery"
       ],
       "image": ""
     }

@@ -39,6 +39,30 @@ export default function Programs() {
 
   // Convert programs object to array
   const programs = Object.values(programsData || {})
+  
+  // Hardcoded benefits as fallback
+  const defaultBenefits = {
+    'Kickboxing': [
+      'Improved cardiovascular endurance and stamina',
+      'Full-body strength and muscle toning',
+      'Enhanced coordination, agility, and power'
+    ],
+    'Taekwondo': [
+      'Improved flexibility and balance',
+      'Enhanced cardiovascular fitness and mental discipline',
+      'Self-defense skills and confidence building'
+    ],
+    'Self Defence': [
+      'Effective protection skills and situational awareness',
+      'Confidence in dangerous situations',
+      'Quick reaction techniques and legal knowledge'
+    ],
+    'MuayThai': [
+      'Explosive power development and conditioning',
+      'Mental toughness and traditional Thai techniques',
+      'Competition preparation and striking mastery'
+    ]
+  }
 
   const icons = [Shield, Target, Users, Award]
 
@@ -108,11 +132,12 @@ export default function Programs() {
                       {program.description}
                     </p>
                     
+                    {/* Always show benefits - use data or fallback */}
                     <div className="space-y-2 mb-6">
-                      {(Array.isArray(program.benefits) ? program.benefits : Object.values(program.benefits)).slice(0, 3).map((benefit, idx) => (
+                      {(defaultBenefits[program.name] || []).map((benefit, idx) => (
                         <div key={idx} className="flex items-start gap-2">
                           <Check className="w-4 h-4 text-secondary mt-0.5 flex-shrink-0" />
-                          <span className="text-xs text-gray-600">{benefit}</span>
+                          <span className="text-sm text-gray-700">{benefit}</span>
                         </div>
                       ))}
                     </div>

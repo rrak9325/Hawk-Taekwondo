@@ -64,6 +64,17 @@ body {
   padding: 0;
 }
 
+/* Mobile performance optimizations */
+@media (max-width: 768px) {
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  body {
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
 /* ============================
    Typography
 ============================ */
@@ -328,6 +339,19 @@ hr {
   max-width: none;
   object-fit: cover;
   object-position: center;
+}
+
+/* Mobile video optimization */
+@media (max-width: 768px) {
+  .hero-background-wrapper video {
+    /* Reduce quality on mobile for better performance */
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+  }
+  
+  .hero-container {
+    height: 70vh;
+  }
 }
 
 .hero-bg-image {

@@ -6,6 +6,7 @@ import CapturedMomentsGallery from '../components/CapturedMomentsGallery'
 import Testimonials from '../components/Testimonials'
 import { useSchoolData } from '../hooks/useSchoolData.js'
 import { PageLoadingFallback } from '../components/LoadingFallback'
+import ServerDownPage from '../components/ServerDownPage'
 
 export default function Home() {
   const { data, loading, error } = useSchoolData()
@@ -19,21 +20,7 @@ export default function Home() {
 
   if (loading) return <PageLoadingFallback />
 
-  if (error) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-        <div className="text-center">
-          <p className="text-red-600 mb-4">Failed to load content: {error}</p>
-          <button
-            onClick={() => window.location.reload()}
-            className="bg-primary text-white px-6 py-2 rounded-lg hover:bg-primary/90"
-          >
-            Retry
-          </button>
-        </div>
-      </div>
-    )
-  }
+  if (error) return <ServerDownPage />
 
   if (!data) return null
 

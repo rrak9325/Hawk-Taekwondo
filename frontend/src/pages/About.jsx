@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { AlertCircle, Shield, Award, Heart, Target, Users, TrendingUp } from 'lucide-react'
 import { useSchoolData } from '../hooks/useSchoolData.js'
 import { PageLoadingFallback } from '../components/LoadingFallback'
+import ServerDownPage from '../components/ServerDownPage'
 
 // Lightweight scroll animation hook
 function useScrollAnimation() {
@@ -75,22 +76,7 @@ export default function About() {
 
   if (loading) return <PageLoadingFallback />
 
-  if (error) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-white px-4">
-        <div className="text-center max-w-md">
-          <AlertCircle className="w-16 h-16 text-red-600 mx-auto mb-6" />
-          <p className="text-xl text-red-600 mb-6">Failed to load content: {error}</p>
-          <button
-            onClick={() => window.location.reload()}
-            className="bg-red-600 text-white px-10 py-4 rounded-lg text-lg font-semibold hover:bg-red-700 transition"
-          >
-            Try Again
-          </button>
-        </div>
-      </div>
-    )
-  }
+  if (error) return <ServerDownPage />
 
   if (!data) return null
 

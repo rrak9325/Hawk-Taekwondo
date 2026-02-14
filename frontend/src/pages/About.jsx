@@ -228,9 +228,9 @@ function TributeSection() {
     <section ref={ref} className="py-16 md:py-32 bg-gradient-to-b from-white to-gray-50">
       <div className="container mx-auto px-4 md:px-6">
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center">
-          <div className={`rounded-2xl overflow-hidden shadow-2xl border-4 md:border-8 border-red-100 bg-gray-100 ${isVisible ? 'animate-in-left' : 'opacity-0'}`}>
+          <div className={`max-w-md mx-auto lg:mx-0 rounded-2xl overflow-hidden shadow-2xl border-4 md:border-8 border-red-100 bg-white ${isVisible ? 'animate-in-left' : 'opacity-0'}`}>
             <img 
-              src="https://res.cloudinary.com/dem7arres/image/upload/v1771093457/vijay-nana2_axwbqh.jpg"
+              src="https://res.cloudinary.com/dem7arres/image/upload/f_auto,q_auto:best/v1771093457/vijay-nana2_axwbqh.jpg"
               alt="Master Late Vijaysinh Rathod"
               className="w-full h-auto"
               loading="lazy"

@@ -7,8 +7,8 @@ import cloudinary from './cloudinary.js'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
-export const DATA_PATH = path.join(__dirname, '../../public/mockData.json')
-export const UPLOADS_PATH = path.join(__dirname, '../../public/uploads')
+export const DATA_PATH = path.join(__dirname, '../../../public/mockData.json')
+export const UPLOADS_PATH = path.join(__dirname, '../../../public/uploads')
 const CLOUDINARY_DATA_FILE = 'hawk-taekwondo/data/mockData.json'
 
 // Ensure directories exist

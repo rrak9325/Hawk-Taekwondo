@@ -13,7 +13,7 @@ export class DataController {
       
       const __filename = fileURLToPath(import.meta.url)
       const __dirname = path.dirname(__filename)
-      const mockDataPath = path.join(__dirname, '../../public/mockData.json')
+      const mockDataPath = path.join(__dirname, '../../../public/mockData.json')
       
       if (!fs.existsSync(mockDataPath)) {
         console.error('mockData.json not found')
@@ -54,7 +54,7 @@ export class DataController {
       
       const __filename = fileURLToPath(import.meta.url)
       const __dirname = path.dirname(__filename)
-      const mockDataPath = path.join(__dirname, '../../public/mockData.json')
+      const mockDataPath = path.join(__dirname, '../../../public/mockData.json')
       
       // Read existing data to preserve any missing fields
       let existingData = {}

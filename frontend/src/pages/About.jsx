@@ -196,7 +196,7 @@ function HeroSection({ about }) {
         ) : about?.hero?.backgroundImage ? (
           <div
             className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat"
-            style={{ backgroundImage: `url(${about.hero.backgroundImage})` }}
+            style={{ backgroundImage: `https://res.cloudinary.com/dem7arres/image/upload/v1771093457/vijay-nana2_axwbqh.jpg` }}
           />
         ) : (
           <div className="w-full h-full bg-gray-100" />
@@ -228,7 +228,14 @@ function TributeSection() {
     <section ref={ref} className="py-16 md:py-32 bg-gradient-to-b from-white to-gray-50">
       <div className="container mx-auto px-4 md:px-6">
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center">
-          <div className={`aspect-[4/3] lg:aspect-square rounded-2xl overflow-hidden shadow-2xl border-4 md:border-8 border-red-100 bg-gray-100 ${isVisible ? 'animate-in-left' : 'opacity-0'}`} />
+          <div className={`rounded-2xl overflow-hidden shadow-2xl border-4 md:border-8 border-red-100 bg-gray-100 ${isVisible ? 'animate-in-left' : 'opacity-0'}`}>
+            <img 
+              src="https://res.cloudinary.com/dem7arres/image/upload/v1771093457/vijay-nana2_axwbqh.jpg"
+              alt="Master Late Vijaysinh Rathod"
+              className="w-full h-auto"
+              loading="lazy"
+            />
+          </div>
 
           <div className={isVisible ? 'animate-in-right' : 'opacity-0'} style={{ animationDelay: '0.2s' }}>
             <h2 className="text-3xl md:text-5xl font-black text-red-600 mb-6 md:mb-8">

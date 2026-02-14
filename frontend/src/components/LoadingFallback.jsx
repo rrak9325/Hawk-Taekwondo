@@ -1,5 +1,4 @@
 import { motion } from 'framer-motion'
-import { Heart, Sparkles } from 'lucide-react'
 
 export default function LoadingFallback({ message = "Loading..." }) {
   return (
@@ -8,55 +7,55 @@ export default function LoadingFallback({ message = "Loading..." }) {
         initial={{ opacity: 0, scale: 0.92 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5 }}
-        className="flex flex-col items-center gap-5"
+        className="flex flex-col items-center gap-6"
       >
-        <div className="relative">
-          {/* Cute spinning heart */}
+        {/* Martial arts blocks animation */}
+        <div className="relative w-20 h-20">
+          {/* Center block */}
           <motion.div
-            animate={{ 
-              rotate: 360,
-              scale: [1, 1.1, 1]
+            className="absolute inset-0 bg-secondary rounded-lg"
+            animate={{
+              scale: [1, 0.8, 1],
+              rotate: [0, 90, 180, 270, 360],
             }}
             transition={{
-              rotate: { duration: 3, repeat: Infinity, ease: "linear" },
-              scale: { duration: 2, repeat: Infinity, ease: "easeInOut" }
+              duration: 2,
+              repeat: Infinity,
+              ease: "easeInOut"
             }}
-          >
-            <Heart 
-              className="w-12 h-12 text-secondary fill-secondary/30" 
-              strokeWidth={2}
-            />
-          </motion.div>
-
-          {/* Orbiting sparkles */}
+          />
+          
+          {/* Orbiting blocks */}
           {[0, 90, 180, 270].map((angle, i) => (
             <motion.div
               key={i}
-              className="absolute w-4 h-4 flex items-center justify-center"
+              className="absolute w-4 h-4 bg-primary rounded"
               style={{
-                transformOrigin: '24px 24px',
+                top: '50%',
+                left: '50%',
+                marginTop: '-8px',
+                marginLeft: '-8px',
               }}
-              animate={{ rotate: 360 }}
+              animate={{
+                x: [0, Math.cos((angle * Math.PI) / 180) * 35],
+                y: [0, Math.sin((angle * Math.PI) / 180) * 35],
+                rotate: 360,
+                scale: [1, 1.2, 1],
+              }}
               transition={{
-                duration: 4,
+                duration: 2,
                 repeat: Infinity,
-                ease: "linear",
-                delay: i * 0.25,
+                ease: "easeInOut",
+                delay: i * 0.15,
               }}
-              initial={{ rotate: angle }}
-            >
-              <Sparkles 
-                className="w-3 h-3 text-yellow-500 fill-yellow-400" 
-                strokeWidth={2}
-              />
-            </motion.div>
+            />
           ))}
         </div>
 
         <motion.p
-          className="text-primary font-medium text-lg tracking-wide"
+          className="text-primary font-semibold text-lg tracking-wide"
           animate={{
-            opacity: [0.7, 1, 0.7],
+            opacity: [0.5, 1, 0.5],
           }}
           transition={{
             duration: 1.5,
@@ -80,27 +79,12 @@ export function PageLoadingFallback() {
         transition={{ duration: 0.4 }}
         className="flex flex-col items-center gap-4"
       >
-        {/* Mini cute loader */}
-        <div className="relative">
+        {/* Mini blocks loader */}
+        <div className="relative w-12 h-12">
           <motion.div
-            animate={{ rotate: 360 }}
-            transition={{
-              duration: 2,
-              repeat: Infinity,
-              ease: "linear"
-            }}
-          >
-            <Heart 
-              className="w-8 h-8 text-secondary fill-secondary/20" 
-              strokeWidth={2}
-            />
-          </motion.div>
-          
-          {/* Mini sparkles */}
-          <motion.div
-            className="absolute -top-1 -right-1"
+            className="absolute inset-0 bg-secondary rounded-md"
             animate={{
-              scale: [0.8, 1.2, 0.8],
+              scale: [1, 0.8, 1],
               rotate: [0, 180, 360],
             }}
             transition={{
@@ -108,18 +92,40 @@ export function PageLoadingFallback() {
               repeat: Infinity,
               ease: "easeInOut"
             }}
-          >
-            <Sparkles className="w-3 h-3 text-yellow-500 fill-yellow-400" />
-          </motion.div>
+          />
+          
+          {[0, 120, 240].map((angle, i) => (
+            <motion.div
+              key={i}
+              className="absolute w-3 h-3 bg-primary rounded-sm"
+              style={{
+                top: '50%',
+                left: '50%',
+                marginTop: '-6px',
+                marginLeft: '-6px',
+              }}
+              animate={{
+                x: [0, Math.cos((angle * Math.PI) / 180) * 20],
+                y: [0, Math.sin((angle * Math.PI) / 180) * 20],
+                rotate: 360,
+              }}
+              transition={{
+                duration: 1.5,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: i * 0.2,
+              }}
+            />
+          ))}
         </div>
 
         <motion.p
           className="text-gray-600 text-sm font-medium"
           animate={{
-            opacity: [0.6, 1, 0.6],
+            opacity: [0.5, 1, 0.5],
           }}
           transition={{
-            duration: 1.8,
+            duration: 1.5,
             repeat: Infinity,
             ease: "easeInOut"
           }}

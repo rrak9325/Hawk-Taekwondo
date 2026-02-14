@@ -30,51 +30,81 @@ const PageLoader = () => (
       alignItems: 'center',
       justifyContent: 'center',
       background: 'linear-gradient(135deg, #f8fafc 0%, #ffffff 100%)',
-      gap: '1rem'
+      gap: '1.5rem'
     }}
   >
-    <div style={{ position: 'relative' }}>
+    <div style={{ position: 'relative', width: '80px', height: '80px' }}>
+      {/* Center rotating block */}
       <div 
         style={{
-          width: '40px',
-          height: '40px',
-          border: '3px solid transparent',
-          borderTop: '3px solid #DC143C',
-          borderRight: '3px solid #1A1A1A',
-          borderRadius: '50%',
-          animation: 'spin 1.5s linear infinite'
-        }}
-      />
-      <div
-        style={{
           position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          width: '12px',
-          height: '12px',
-          background: 'linear-gradient(45deg, #DC143C, #1A1A1A)',
-          borderRadius: '50%',
-          animation: 'pulse 1.2s ease-in-out infinite'
+          inset: 0,
+          background: '#DC143C',
+          borderRadius: '8px',
+          animation: 'centerSpin 2s ease-in-out infinite'
         }}
       />
+      
+      {/* Orbiting blocks */}
+      {[0, 90, 180, 270].map((angle, i) => (
+        <div
+          key={i}
+          style={{
+            position: 'absolute',
+            width: '16px',
+            height: '16px',
+            background: '#1A1A1A',
+            borderRadius: '4px',
+            top: '50%',
+            left: '50%',
+            marginTop: '-8px',
+            marginLeft: '-8px',
+            animation: `orbit${i} 2s ease-in-out infinite`,
+            animationDelay: `${i * 0.15}s`
+          }}
+        />
+      ))}
     </div>
+    
     <div style={{ 
       color: '#1A1A1A', 
-      fontSize: '14px', 
-      fontWeight: '500',
-      opacity: '0.8'
+      fontSize: '16px', 
+      fontWeight: '600',
+      opacity: '0.8',
+      animation: 'fadeInOut 1.5s ease-in-out infinite'
     }}>
-      ✨ Loading...
+      Loading...
     </div>
+    
     <style>{`
-      @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
+      @keyframes centerSpin {
+        0%, 100% { transform: scale(1) rotate(0deg); }
+        50% { transform: scale(0.8) rotate(180deg); }
       }
-      @keyframes pulse {
-        0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
-        50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.7; }
+      
+      @keyframes orbit0 {
+        0%, 100% { transform: translate(0, 0) rotate(0deg) scale(1); }
+        50% { transform: translate(${Math.cos(0) * 35}px, ${Math.sin(0) * 35}px) rotate(180deg) scale(1.2); }
+      }
+      
+      @keyframes orbit1 {
+        0%, 100% { transform: translate(0, 0) rotate(0deg) scale(1); }
+        50% { transform: translate(${Math.cos(Math.PI/2) * 35}px, ${Math.sin(Math.PI/2) * 35}px) rotate(180deg) scale(1.2); }
+      }
+      
+      @keyframes orbit2 {
+        0%, 100% { transform: translate(0, 0) rotate(0deg) scale(1); }
+        50% { transform: translate(${Math.cos(Math.PI) * 35}px, ${Math.sin(Math.PI) * 35}px) rotate(180deg) scale(1.2); }
+      }
+      
+      @keyframes orbit3 {
+        0%, 100% { transform: translate(0, 0) rotate(0deg) scale(1); }
+        50% { transform: translate(${Math.cos(3*Math.PI/2) * 35}px, ${Math.sin(3*Math.PI/2) * 35}px) rotate(180deg) scale(1.2); }
+      }
+      
+      @keyframes fadeInOut {
+        0%, 100% { opacity: 0.5; }
+        50% { opacity: 1; }
       }
     `}</style>
   </div>

@@ -136,7 +136,6 @@ export function createApp() {
       if (allowedOrigins.includes(origin)) {
         callback(null, true)
       } else {
-        console.log('CORS: Allowing origin:', origin)
         callback(null, true) // Allow all for development
       }
     },

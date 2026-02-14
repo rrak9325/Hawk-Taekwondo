@@ -40,10 +40,9 @@ export class JSONDatabase {
           
           // Cache locally
           fs.writeFileSync(this.filePath, JSON.stringify(data, null, 2))
-          console.log('✅ Data loaded from Cloudinary')
           return data
         } catch (cloudError) {
-          console.log('⚠️ Could not load from Cloudinary, using local file:', cloudError.message)
+          console.warn('Could not load from Cloudinary:', cloudError.message)
         }
       }
       
@@ -77,9 +76,8 @@ export class JSONDatabase {
             resource_type: 'raw',
             overwrite: true
           })
-          console.log('✅ Data backed up to Cloudinary')
         } catch (cloudError) {
-          console.error('⚠️ Could not backup to Cloudinary:', cloudError.message)
+          console.error('Could not backup to Cloudinary:', cloudError.message)
         }
       }
       

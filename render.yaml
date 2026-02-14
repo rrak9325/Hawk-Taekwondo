@@ -7,10 +7,11 @@ services:
     buildCommand: |
       echo "=== Installing Frontend Dependencies ===" &&
       cd frontend &&
+      rm -rf dist &&
       npm ci --include=dev &&
       npm run build &&
       echo "=== Frontend build complete ===" &&
-      ls -la dist &&
+      ls -la dist/assets &&
       cd ../backend &&
       echo "=== Installing Backend Dependencies ===" &&
       npm ci --omit=dev &&

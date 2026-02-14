@@ -32,16 +32,12 @@ export class DataService {
 
   async updateSchoolData(newData) {
     try {
-      console.log('📝 Data service: Starting update...')
-      
       // Validate data size
       const dataSize = JSON.stringify(newData).length
       const maxSize = 10 * 1024 * 1024 // 10MB
       
-      console.log('📊 Data size:', (dataSize / 1024).toFixed(2), 'KB')
-      
       if (dataSize > maxSize) {
-        console.error('❌ Payload too large:', (dataSize / 1024 / 1024).toFixed(2), 'MB')
+        console.error('Payload too large:', (dataSize / 1024 / 1024).toFixed(2), 'MB')
         return {
           success: false,
           status: 413,
@@ -49,14 +45,12 @@ export class DataService {
         }
       }
 
-      console.log('🔄 Calling dataModel.write()...')
       const success = await dataModel.write(newData)
       
       if (success) {
-        console.log('✅ Data service: Update successful')
         return { success: true }
       } else {
-        console.error('❌ Data service: dataModel.write() returned false')
+        console.error('Data write failed')
         return {
           success: false,
           status: 500,

@@ -39,10 +39,11 @@ const Footer = () => {
       <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           <div>
-            <div className="flex items-center space-x-2 mb-4">
-              <img src="/images/hawk-taekwondo-logo.png" 
-                className='w-auto h-8 text-secondary'
-                alt="" 
+            <div className="flex items-center space-x-3 mb-4">
+              <img 
+                src="https://res.cloudinary.com/dem7arres/image/upload/v1771086460/2nd_logo_krdaqk.jpg" 
+                className="w-12 h-12 rounded-full object-cover"
+                alt="Hawk Taekwondo Logo" 
                 loading="lazy"
               />
               <span className="font-heading text-xl font-bold">Hawk Taekwondo</span>

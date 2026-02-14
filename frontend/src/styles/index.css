@@ -53,8 +53,6 @@ body, html {
 
 html {
   scroll-behavior: smooth;
-  /* Enable hardware acceleration for better scrolling */
-  transform: translateZ(0);
 }
 
 body {
@@ -62,10 +60,6 @@ body {
   font-feature-settings: "rlig" 1, "calt" 1;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
-  /* Improve scrolling performance */
-  -webkit-overflow-scrolling: touch;
-  /* Enable hardware acceleration */
-  transform: translateZ(0);
   margin: 0;
   padding: 0;
 }
@@ -87,10 +81,6 @@ video {
   height: auto;
   object-fit: cover;
   object-position: center;
-  /* Enable hardware acceleration for smoother animations */
-  transform: translateZ(0);
-  /* Improve image rendering performance */
-  image-rendering: -webkit-optimize-contrast;
 }
 
 video {

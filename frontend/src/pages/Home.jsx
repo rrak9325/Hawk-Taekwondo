@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
-import * as Icons from 'lucide-react'
+import { Shield, CheckCircle, Award, Users, Target, Heart, TrendingUp, Star } from 'lucide-react'
 import Hero from '../components/Hero'
 import CapturedMomentsGallery from '../components/CapturedMomentsGallery'
 import Testimonials from '../components/Testimonials'
@@ -52,7 +52,7 @@ export default function Home() {
       className="bg-white"
       initial={{ opacity: 0 }}
       animate={{ opacity: ready ? 1 : 0 }}
-      transition={{ duration: 0.5 }}
+      transition={{ duration: 0.3 }}
     >
       <Hero
         {...hero}
@@ -78,14 +78,15 @@ export default function Home() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
             {safeFeatures.map((f, i) => {
-              const Icon = Icons[f?.icon] || Icons.Shield
+              const iconMap = { Shield, Award, Users, Target, Heart, TrendingUp, Star }
+              const Icon = iconMap[f?.icon] || Shield
               return (
                 <motion.div
                   key={f?.title || i}
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, amount: 0.25 }}
-                  transition={{ duration: 0.6, delay: i * 0.1 }}
+                  transition={{ duration: 0.4, delay: i * 0.08 }}
                   className="card text-center hover:shadow-2xl transition-all duration-300 border-b-4 border-transparent hover:border-secondary p-6"
                 >
                   <div className="w-14 h-14 lg:w-16 lg:h-16 bg-secondary/10 rounded-2xl flex items-center justify-center mx-auto mb-4 lg:mb-6 transform group-hover:rotate-12 transition-transform">
@@ -156,7 +157,7 @@ export default function Home() {
                 <ul className="space-y-2 mb-6">
                   {(Array.isArray(p.benefits) ? p.benefits : Object.values(p.benefits)).slice(0, 3).map((b, idx) => (
                     <li key={idx} className="flex gap-2 text-sm">
-                      <Icons.CheckCircle className="w-4 h-4 text-success mt-0.5 flex-shrink-0" />
+                      <CheckCircle className="w-4 h-4 text-success mt-0.5 flex-shrink-0" />
                       <span>{b}</span>
                     </li>
                   ))}

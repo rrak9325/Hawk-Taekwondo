@@ -92,7 +92,7 @@ export default function CapturedMomentsGallery({ gallery }) {
                   src={item.image}
                   alt={item.title || `Moment ${index + 1}`}
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                  loading={index < 6 ? 'eager' : 'lazy'}
+                  loading={index < 4 ? 'eager' : 'lazy'}
                   decoding="async"
                   width="400"
                   height="400"

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import * as Icons from 'lucide-react'
+import { AlertCircle, Shield, Award, Heart, Target, Users, TrendingUp } from 'lucide-react'
 import { useSchoolData } from '../hooks/useSchoolData.js'
 import { PageLoadingFallback } from '../components/LoadingFallback'
 
@@ -20,7 +20,7 @@ export default function About() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-white px-4">
         <div className="text-center max-w-md">
-          <Icons.AlertCircle className="w-16 h-16 text-red-600 mx-auto mb-6" />
+          <AlertCircle className="w-16 h-16 text-red-600 mx-auto mb-6" />
           <p className="text-xl text-red-600 mb-6">Failed to load content: {error}</p>
           <button
             onClick={() => window.location.reload()}
@@ -306,7 +306,8 @@ export default function About() {
           </h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10">
             {safeValues.map((v, i) => {
-              const Icon = Icons[v.icon] || Icons.Shield
+              const iconMap = { Shield, Award, Heart, Target, Users, TrendingUp }
+              const Icon = iconMap[v.icon] || Shield
               return (
                 <motion.div
                   key={i}
@@ -380,7 +381,7 @@ export default function About() {
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
-            <Icons.Award className="w-20 h-20 md:w-24 md:h-24 text-white mx-auto mb-8 opacity-90" />
+            <Award className="w-20 h-20 md:w-24 md:h-24 text-white mx-auto mb-8 opacity-90" />
             <h2 className="text-4xl md:text-6xl font-black mb-8">{cta.title || 'Join the Hawk Legacy'}</h2>
             <p className="text-xl md:text-2xl mb-10 md:mb-12 max-w-4xl mx-auto opacity-90">
               {cta.text ||

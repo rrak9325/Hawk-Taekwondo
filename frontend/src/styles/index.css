@@ -5,6 +5,9 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
+/* Performance optimizations */
+@import "./performance.css";
+
 /* ============================
    CSS Variables
 ============================ */

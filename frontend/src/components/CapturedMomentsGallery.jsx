@@ -93,6 +93,9 @@ export default function CapturedMomentsGallery({ gallery }) {
                   alt={item.title || `Moment ${index + 1}`}
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                   loading={index < 6 ? 'eager' : 'lazy'}
+                  decoding="async"
+                  width="400"
+                  height="400"
                 />
                 {/* Overlay on hover */}
                 <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">

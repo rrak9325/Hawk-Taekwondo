@@ -294,19 +294,48 @@ export class UploadService {
     }
   }
 
-  async deleteFile(filePath) {
+  async deleteFile(identifier) {
     try {
-      // Construct the full file path
-      const fullPath = path.join(__dirname, '../../..', filePath);
+      // Check if it's a Cloudinary URL
+      if (typeof identifier === 'string' && identifier.includes('cloudinary.com')) {
+        // Extract public_id from Cloudinary URL
+        const match = identifier.match(/\/v\d+\/(.+?)\./)
+        if (match) {
+          const publicId = match[1]
+          
+          // Determine resource type (image or video)
+          const resourceType = identifier.includes('/video/') ? 'video' : 'image'
+          
+          try {
+            await cloudinary.uploader.destroy(publicId, { resource_type: resourceType })
+            return {
+              success: true,
+              data: { 
+                message: 'File deleted from Cloudinary successfully', 
+                publicId,
+                url: identifier
+              }
+            }
+          } catch (cloudinaryError) {
+            console.error('Cloudinary deletion error:', cloudinaryError)
+            return {
+              success: false,
+              status: 500,
+              error: `Cloudinary deletion failed: ${cloudinaryError.message}`
+            }
+          }
+        }
+      }
       
-      // Check if file exists
+      // Handle local file path
+      const fullPath = path.join(__dirname, '../../..', identifier)
+      
       if (fs.existsSync(fullPath)) {
-        // Delete the file
-        fs.unlinkSync(fullPath);
+        fs.unlinkSync(fullPath)
         
         return {
           success: true,
-          data: { message: 'File deleted successfully', filePath }
+          data: { message: 'Local file deleted successfully', filePath: identifier }
         }
       } else {
         return {
@@ -343,64 +372,143 @@ export class UploadService {
         }
       }
       
-      // Get all used URLs from mockData
-      const usedUrls = [];
+      // Extract all Cloudinary URLs and public IDs from mockData
+      const usedCloudinaryUrls = new Set()
+      const usedPublicIds = new Set()
       
-      // Extract URLs from various parts of mockData
-      if (Array.isArray(mockData.programs)) {
-        mockData.programs.forEach(program => {
-          if (program.imageUrl) usedUrls.push(program.imageUrl);
-          if (program.videoUrl) usedUrls.push(program.videoUrl);
-        });
-      }
-      
-      if (Array.isArray(mockData.instructors)) {
-        mockData.instructors.forEach(instructor => {
-          if (instructor.imageUrl) usedUrls.push(instructor.imageUrl);
-        });
-      }
-      
-      if (Array.isArray(mockData.videos)) {
-        mockData.videos.forEach(video => {
-          if (video.videoUrl) usedUrls.push(video.videoUrl);
-          if (video.thumbnailUrl) usedUrls.push(video.thumbnailUrl);
-        });
-      }
-      
-      if (mockData.home?.hero?.imageUrl) usedUrls.push(mockData.home.hero.imageUrl);
-      if (mockData.about?.hero?.imageUrl) usedUrls.push(mockData.about.hero.imageUrl);
-      if (mockData.contactPage?.hero?.imageUrl) usedUrls.push(mockData.contactPage.hero.imageUrl);
-      
-      // Get all files in upload directories
-      const uploadDirs = [
-        path.join(__dirname, '../../../public/uploads/images'),
-        path.join(__dirname, '../../../public/uploads/videos'),
-        path.join(__dirname, '../../../public/uploads/files')
-      ];
-      
-      const deletedFiles = [];
-      
-      for (const dir of uploadDirs) {
-        if (fs.existsSync(dir)) {
-          const files = fs.readdirSync(dir);
-          
-          for (const file of files) {
-            const fileUrl = `/uploads/${path.basename(dir)}/${file}`;
-            
-            if (!usedUrls.includes(fileUrl)) {
-              const filePath = path.join(dir, file);
-              fs.unlinkSync(filePath);
-              deletedFiles.push(fileUrl);
-            }
+      const extractCloudinaryInfo = (obj) => {
+        if (!obj) return
+        
+        if (typeof obj === 'string' && obj.includes('cloudinary.com')) {
+          usedCloudinaryUrls.add(obj)
+          // Extract public_id from URL
+          const match = obj.match(/\/v\d+\/(.+?)\./)
+          if (match) {
+            usedPublicIds.add(match[1])
           }
+        } else if (typeof obj === 'object') {
+          Object.values(obj).forEach(extractCloudinaryInfo)
         }
       }
       
-      return {
-        success: true,
-        data: {
-          deletedCount: deletedFiles.length,
-          deletedFiles
+      extractCloudinaryInfo(mockData)
+      
+      console.log(`Found ${usedCloudinaryUrls.size} Cloudinary URLs in use`)
+      console.log(`Extracted ${usedPublicIds.size} public IDs`)
+      
+      // Get all resources from Cloudinary
+      const deletedFiles = []
+      let totalDeleted = 0
+      
+      try {
+        // Check images folder
+        const imagesResult = await cloudinary.api.resources({
+          type: 'upload',
+          prefix: 'hawk-taekwondo/images',
+          max_results: 500,
+          resource_type: 'image'
+        })
+        
+        for (const resource of imagesResult.resources) {
+          const isUsed = usedCloudinaryUrls.has(resource.secure_url) || 
+                        usedPublicIds.has(resource.public_id)
+          
+          if (!isUsed) {
+            try {
+              await cloudinary.uploader.destroy(resource.public_id, { resource_type: 'image' })
+              deletedFiles.push({
+                url: resource.secure_url,
+                publicId: resource.public_id,
+                type: 'image'
+              })
+              totalDeleted++
+              console.log(`Deleted unused image: ${resource.public_id}`)
+            } catch (deleteError) {
+              console.error(`Failed to delete ${resource.public_id}:`, deleteError.message)
+            }
+          }
+        }
+        
+        // Check videos folder
+        const videosResult = await cloudinary.api.resources({
+          type: 'upload',
+          prefix: 'hawk-taekwondo/videos',
+          max_results: 500,
+          resource_type: 'video'
+        })
+        
+        for (const resource of videosResult.resources) {
+          const isUsed = usedCloudinaryUrls.has(resource.secure_url) || 
+                        usedPublicIds.has(resource.public_id)
+          
+          if (!isUsed) {
+            try {
+              await cloudinary.uploader.destroy(resource.public_id, { resource_type: 'video' })
+              deletedFiles.push({
+                url: resource.secure_url,
+                publicId: resource.public_id,
+                type: 'video'
+              })
+              totalDeleted++
+              console.log(`Deleted unused video: ${resource.public_id}`)
+            } catch (deleteError) {
+              console.error(`Failed to delete ${resource.public_id}:`, deleteError.message)
+            }
+          }
+        }
+        
+        // Also cleanup local files
+        const uploadDirs = [
+          path.join(__dirname, '../../../public/uploads/images'),
+          path.join(__dirname, '../../../public/uploads/videos'),
+          path.join(__dirname, '../../../public/uploads/files')
+        ]
+        
+        for (const dir of uploadDirs) {
+          if (fs.existsSync(dir)) {
+            const files = fs.readdirSync(dir)
+            
+            for (const file of files) {
+              const fileUrl = `/uploads/${path.basename(dir)}/${file}`
+              
+              // Check if this local file is used
+              let isUsed = false
+              for (const url of usedCloudinaryUrls) {
+                if (url.includes(file) || url === fileUrl) {
+                  isUsed = true
+                  break
+                }
+              }
+              
+              if (!isUsed) {
+                const filePath = path.join(dir, file)
+                fs.unlinkSync(filePath)
+                deletedFiles.push({
+                  url: fileUrl,
+                  publicId: file,
+                  type: 'local'
+                })
+                totalDeleted++
+                console.log(`Deleted unused local file: ${fileUrl}`)
+              }
+            }
+          }
+        }
+        
+        return {
+          success: true,
+          data: {
+            deletedCount: totalDeleted,
+            deletedFiles: deletedFiles,
+            message: `Successfully deleted ${totalDeleted} unused files from Cloudinary and local storage`
+          }
+        }
+      } catch (cloudinaryError) {
+        console.error('Cloudinary API error:', cloudinaryError)
+        return {
+          success: false,
+          status: 500,
+          error: `Cloudinary cleanup failed: ${cloudinaryError.message}`
         }
       }
     } catch (error) {

@@ -90,6 +90,8 @@ export default function Faculty() {
                           style={{ objectPosition: 'center top' }}
                           loading={i < 2 ? 'eager' : 'lazy'}
                           decoding="async"
+                          width="192"
+                          height="192"
                           onError={(e) => {
                             console.log('Instructor image failed to load:', instructor.image)
                             e.target.style.display = 'none'

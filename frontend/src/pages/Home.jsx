@@ -138,6 +138,9 @@ export default function Home() {
                       alt={p.name}
                       className="w-full h-full object-cover"
                       loading="lazy"
+                      decoding="async"
+                      width="400"
+                      height="225"
                     />
                   </div>
                 )}

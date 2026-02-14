@@ -31,18 +31,24 @@ export default function Hero({
             muted
             playsInline
             webkit-playsinline="true"
-            preload="auto"
+            preload="metadata"
             poster={backgroundImage}
             className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 min-w-full min-h-full w-auto h-auto object-cover"
+            width="1920"
+            height="1080"
           >
             <source src={videoUrl} type="video/mp4" />
           </video>
         ) : backgroundImage ? (
-          <div 
-            className="hero-bg-image"
-            style={{
-              backgroundImage: `url(${backgroundImage})`
-            }}
+          <img
+            src={backgroundImage}
+            alt={titleMain || 'Hero background'}
+            className="hero-bg-image absolute inset-0 w-full h-full object-cover"
+            loading="eager"
+            fetchpriority="high"
+            width="1920"
+            height="1080"
+            decoding="async"
           />
         ) : (
           <div className="w-full h-full bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900" />

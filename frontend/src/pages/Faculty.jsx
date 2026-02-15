@@ -8,11 +8,24 @@ import { PageLoadingFallback } from '../components/LoadingFallback'
 export default function Faculty() {
   const { data, loading, error } = useSchoolData()
   const [ready, setReady] = useState(false)
+  const [activeIndex, setActiveIndex] = useState(0)
 
   useEffect(() => {
     if (data) {
       setTimeout(() => setReady(true), 150)
     }
+  }, [data])
+
+  // Cycle through instructors every 4 seconds
+  useEffect(() => {
+    if (!data) return
+    
+    const instructors = Object.values(data.instructors || {})
+    const interval = setInterval(() => {
+      setActiveIndex((prev) => (prev + 1) % instructors.length)
+    }, 4000)
+    
+    return () => clearInterval(interval)
   }, [data])
 
   if (loading) return <PageLoadingFallback />
@@ -77,81 +90,100 @@ export default function Faculty() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
-                className="bg-gradient-to-br from-white to-gray-50 rounded-3xl border border-gray-200 shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden group"
+                className="relative p-1"
               >
-                <div className="md:flex">
-                  <div className="md:w-2/5 p-6 flex items-center justify-center bg-gradient-to-br from-primary/5 to-secondary/5">
-                    {instructor.image ? (
-                      <div className="relative">
-                        <img
-                          src={instructor.image} 
-                          alt={instructor.name}
-                          className="w-48 h-48 object-cover rounded-full border-4 border-white shadow-xl group-hover:scale-105 transition-transform duration-500"
-                          style={{ objectPosition: 'center top' }}
-                          loading={i < 2 ? 'eager' : 'lazy'}
-                          decoding="async"
-                          width="192"
-                          height="192"
-                          onError={(e) => {
-                            console.log('Instructor image failed to load:', instructor.image)
-                            e.target.style.display = 'none'
-                            e.target.parentElement.innerHTML = `
-                              <div class="w-48 h-48 bg-gradient-to-br from-primary/10 to-secondary/10 rounded-full flex items-center justify-center border-4 border-white shadow-xl">
-                                <div class="w-20 h-20 rounded-full bg-primary/20 flex items-center justify-center">
-                                  <svg class="w-10 h-10 text-primary" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
-                                  </svg>
+                {/* Animated gradient border background - always present */}
+                <div 
+                  className={`absolute inset-0 rounded-3xl transition-all duration-1000 bg-gradient-to-r from-red-600 via-yellow-500 via-orange-500 to-red-600 animate-gradient-spotlight ${
+                    activeIndex === i ? 'opacity-100' : 'opacity-0'
+                  }`}
+                  style={{
+                    backgroundSize: '200% 200%'
+                  }}
+                ></div>
+                
+                {/* Card content with consistent spacing */}
+                <div className={`relative bg-gradient-to-br from-white to-gray-50 rounded-3xl shadow-lg transition-all duration-1000 overflow-hidden ${
+                  activeIndex === i ? 'shadow-2xl' : 'shadow-lg'
+                }`}>
+                  <div className="md:flex">
+                    <div className="md:w-2/5 p-6 flex items-center justify-center bg-gradient-to-br from-primary/5 to-secondary/5">
+                      {instructor.image ? (
+                        <div className="relative">
+                          <img
+                            src={instructor.image} 
+                            alt={instructor.name}
+                            className={`w-48 h-48 object-cover rounded-full border-4 border-white shadow-xl transition-transform duration-1000 ${
+                              activeIndex === i ? 'scale-110' : 'scale-100'
+                            }`}
+                            style={{ objectPosition: 'center top' }}
+                            loading={i < 2 ? 'eager' : 'lazy'}
+                            decoding="async"
+                            width="192"
+                            height="192"
+                            onError={(e) => {
+                              console.log('Instructor image failed to load:', instructor.image)
+                              e.target.style.display = 'none'
+                              e.target.parentElement.innerHTML = `
+                                <div class="w-48 h-48 bg-gradient-to-br from-primary/10 to-secondary/10 rounded-full flex items-center justify-center border-4 border-white shadow-xl">
+                                  <div class="w-20 h-20 rounded-full bg-primary/20 flex items-center justify-center">
+                                    <svg class="w-10 h-10 text-primary" fill="currentColor" viewBox="0 0 20 20">
+                                      <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+                                    </svg>
+                                  </div>
                                 </div>
-                              </div>
-                            `
-                          }}
-                        />
-                        <div className="absolute inset-0 rounded-full bg-gradient-to-t from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                      </div>
-                    ) : (
-                      <div className="w-48 h-48 bg-gradient-to-br from-primary/10 to-secondary/10 rounded-full flex items-center justify-center border-4 border-white shadow-xl">
-                        <div className="w-20 h-20 rounded-full bg-primary/20 flex items-center justify-center">
-                          <Users className="w-10 h-10 text-primary" />
+                              `
+                            }}
+                          />
+                          <div className={`absolute inset-0 rounded-full bg-gradient-to-t from-primary/10 to-transparent transition-opacity duration-1000 ${
+                            activeIndex === i ? 'opacity-100' : 'opacity-0'
+                          }`}></div>
                         </div>
-                      </div>
-                    )}
-                  </div>
-                  
-                  <div className="md:w-3/5 p-6 md:p-8">
-                    <div className="mb-4">
-                      <h3 className="font-heading text-2xl font-bold text-primary mb-1">
-                        {instructor.name}
-                      </h3>
-                      <p className="text-secondary font-semibold">{instructor.rank}</p>
+                      ) : (
+                        <div className="w-48 h-48 bg-gradient-to-br from-primary/10 to-secondary/10 rounded-full flex items-center justify-center border-4 border-white shadow-xl">
+                          <div className="w-20 h-20 rounded-full bg-primary/20 flex items-center justify-center">
+                            <Users className="w-10 h-10 text-primary" />
+                          </div>
+                        </div>
+                      )}
                     </div>
                     
-                    <div className="space-y-3 mb-6">
-                      <div className="flex items-center gap-2">
-                        <Award className="w-5 h-5 text-yellow-500" />
-                        <span className="text-sm font-medium text-gray-700">
-                          {instructor.specialization}
-                        </span>
+                    <div className="md:w-3/5 p-6 md:p-8">
+                      <div className="mb-4">
+                        <h3 className="font-heading text-2xl font-bold text-primary mb-1">
+                          {instructor.name}
+                        </h3>
+                        <p className="text-secondary font-semibold">{instructor.rank}</p>
                       </div>
                       
-                      <div className="flex items-center gap-2">
-                        <Star className="w-5 h-5 text-blue-500" />
-                        <span className="text-sm font-medium text-gray-700">
-                          {instructor.experience} experience
-                        </span>
+                      <div className="space-y-3 mb-6">
+                        <div className="flex items-center gap-2">
+                          <Award className="w-5 h-5 text-yellow-500" />
+                          <span className="text-sm font-medium text-gray-700">
+                            {instructor.specialization}
+                          </span>
+                        </div>
+                        
+                        <div className="flex items-center gap-2">
+                          <Star className="w-5 h-5 text-blue-500" />
+                          <span className="text-sm font-medium text-gray-700">
+                            {instructor.experience} experience
+                          </span>
+                        </div>
                       </div>
-                    </div>
-                    
-                    <p className="text-gray-600 text-sm leading-relaxed mb-6">
-                      {instructor.bio}
-                    </p>
-                    
-                    <div className="flex gap-2">
-                      <a 
-                        href="/contact" 
-                        className="flex-1 bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-white text-center py-2.5 rounded-xl font-semibold transition-all duration-300 transform hover:scale-[1.02]"
-                      >
-                        Contact Instructor
-                      </a>
+                      
+                      <p className="text-gray-600 text-sm leading-relaxed mb-6">
+                        {instructor.bio}
+                      </p>
+                      
+                      <div className="flex gap-2">
+                        <a 
+                          href="/contact" 
+                          className="flex-1 bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-white text-center py-2.5 rounded-xl font-semibold transition-all duration-300 transform hover:scale-[1.02]"
+                        >
+                          Contact Instructor
+                        </a>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -203,4 +235,27 @@ export default function Faculty() {
       </section>
     </motion.div>
   )
+}
+
+// Add CSS animation for rotating gradient spotlight
+const style = document.createElement('style')
+style.textContent = `
+  @keyframes gradient-spotlight {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+  
+  .animate-gradient-spotlight {
+    animation: gradient-spotlight 2s ease infinite;
+  }
+`
+if (typeof document !== 'undefined') {
+  document.head.appendChild(style)
 }

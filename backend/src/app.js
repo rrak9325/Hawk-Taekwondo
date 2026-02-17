@@ -1,6 +1,3 @@
-// Main Application
-// Express app configuration
-
 import express from 'express'
 import cors from 'cors'
 import fileUpload from 'express-fileupload'

@@ -39,6 +39,7 @@ export default function Home() {
         {...hero}
         height="h-[92vh]"
         overlayOpacity="bg-black/1"
+        showHawk={false}
       />
 
       <section className="py-16 lg:py-20 bg-white">

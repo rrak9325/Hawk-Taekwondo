@@ -56,7 +56,7 @@ export default function Hero({
 
       {/* Background Media - Fades in */}
       <div 
-        className="absolute inset-0 w-full h-full transition-opacity duration-1000"
+        className="absolute inset-0 w-full h-full transition-opacity duration-1000 overflow-hidden"
         style={{ 
           opacity: showVideo ? 1 : 0,
           willChange: showVideo ? 'auto' : 'opacity'
@@ -69,8 +69,12 @@ export default function Hero({
             muted
             playsInline
             preload="auto"
-            className="w-full h-full object-cover"
-            style={{ willChange: 'auto' }}
+            className="absolute w-full h-full object-cover"
+            style={{ 
+              willChange: 'auto',
+              transform: 'scale(1.15)',
+              top: '0%'
+            }}
           >
             <source src={videoUrl} type="video/mp4" />
           </video>

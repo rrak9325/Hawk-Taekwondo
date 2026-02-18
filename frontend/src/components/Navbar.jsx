@@ -1,8 +1,18 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X, Trophy, Flame, Zap } from 'lucide-react'
 import logo from '../assets/logo1.png'
+
+// Move navLinks outside component to prevent recreation on every render
+const NAV_LINKS = [
+  { path: '/', label: 'Home', icon: Flame },
+  { path: '/about', label: 'About', icon: Trophy },
+  { path: '/programs', label: 'Programs', icon: Zap },
+  { path: '/faculty', label: 'Faculty', icon: Trophy },
+  { path: '/schedule', label: 'Schedule', icon: Flame },
+  { path: '/contact', label: 'Contact', icon: Trophy },
+]
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false)
@@ -34,17 +44,8 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', throttledScroll)
   }, [handleScroll])
 
-  const navLinks = [
-    { path: '/', label: 'Home', icon: <Flame className="w-4 h-4" /> },
-    { path: '/about', label: 'About', icon: <Trophy className="w-4 h-4" /> },
-    { path: '/programs', label: 'Programs', icon: <Zap className="w-4 h-4" /> },
-    { path: '/faculty', label: 'Faculty', icon: <Trophy className="w-4 h-4" /> },
-    { path: '/schedule', label: 'Schedule', icon: <Flame className="w-4 h-4" /> },
-    { path: '/contact', label: 'Contact', icon: <Trophy className="w-4 h-4" /> },
-  ]
-
   // Calculate menu height when open (approximate)
-  const menuHeight = isOpen ? 'h-auto pb-4' : 'h-16 md:h-20'
+  const menuHeight = useMemo(() => isOpen ? 'h-auto pb-4' : 'h-16 md:h-20', [isOpen])
 
   return (
     <div className="w-full">
@@ -91,8 +92,9 @@ const Navbar = () => {
               </motion.div>
 
               <div className="hidden md:flex items-center gap-2">
-                {navLinks.map((link, index) => {
+                {NAV_LINKS.map((link) => {
                   const isActive = location.pathname === link.path
+                  const Icon = link.icon
                   return (
                     <Link 
                       key={link.path} 
@@ -103,9 +105,7 @@ const Navbar = () => {
                           : 'text-white/90 hover:text-white hover:bg-white/10 hover:shadow-md hover:scale-102'
                       }`}
                     >
-                      <div className={`transition-all duration-300 ${isActive ? 'text-secondary' : 'text-white/80'}`}>
-                        {link.icon}
-                      </div>
+                      <Icon className={`w-4 h-4 transition-all duration-300 ${isActive ? 'text-secondary' : 'text-white/80'}`} />
                       <span className="text-sm">{link.label}</span>
                     </Link>
                   )
@@ -135,8 +135,9 @@ const Navbar = () => {
               className="md:hidden w-full  bg-black border-t border-white/10 shadow-2xl"
             >
               <div className="max-w-7xl mx-auto px-4 py-4 space-y-2">
-                {navLinks.map((link, index) => {
+                {NAV_LINKS.map((link, index) => {
                   const isActive = location.pathname === link.path
+                  const Icon = link.icon
                   return (
                     <motion.div
                       key={link.path}
@@ -158,9 +159,7 @@ const Navbar = () => {
                             : 'hover:bg-white/10 text-white/90 hover:text-white hover:shadow-md'
                         }`}
                       >
-                        <div className={`transition-colors duration-300 ${isActive ? 'text-white' : 'text-white/80'}`}>
-                          {link.icon}
-                        </div>
+                        <Icon className={`w-4 h-4 transition-colors duration-300 ${isActive ? 'text-white' : 'text-white/80'}`} />
                         <span className="text-lg">{link.label}</span>
                       </Link>
                     </motion.div>

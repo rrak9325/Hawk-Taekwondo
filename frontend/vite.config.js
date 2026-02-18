@@ -12,11 +12,9 @@ export default defineConfig({
     emptyOutDir: true,
     sourcemap: false,
     minify: 'esbuild',
-    // esbuild is faster and included by default,
+    
     rollupOptions: {
       output: {
-        manualChunks: undefined,
-        // Ensure proper file extensions for modules
         entryFileNames: 'assets/[name]-[hash].js',
         chunkFileNames: 'assets/[name]-[hash].js',
         assetFileNames: 'assets/[name]-[hash].[ext]'

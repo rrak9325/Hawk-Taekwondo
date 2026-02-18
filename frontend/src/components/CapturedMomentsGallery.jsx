@@ -23,6 +23,14 @@ export default function CapturedMomentsGallery({ gallery }) {
     setIsOpen(false)
     document.body.style.overflow = ''
   }, [])
+  
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      // Ensure body overflow is reset if component unmounts while lightbox is open
+      document.body.style.overflow = ''
+    }
+  }, [])
 
   // Navigation
   const goToPrev = useCallback(() => {

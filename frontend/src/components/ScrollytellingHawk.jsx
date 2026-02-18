@@ -8,6 +8,7 @@ export default function ScrollytellingHawk() {
   const hawkRef = useRef(null)
   const [isVisible, setIsVisible] = useState(false)
   const [hasLanded, setHasLanded] = useState(false)
+  const [isInView, setIsInView] = useState(false)
 
   useEffect(() => {
     const hawk = hawkRef.current
@@ -20,6 +21,16 @@ export default function ScrollytellingHawk() {
     }
 
     console.log('Eagle initialized!')
+    
+    // Intersection Observer to pause animation when off-screen
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsInView(entry.isIntersecting)
+      },
+      { threshold: 0.1 }
+    )
+    
+    observer.observe(hawk)
 
     // Create zigzag timeline that goes to TODAY and STAYS there
     const tl = gsap.timeline({
@@ -122,6 +133,7 @@ export default function ScrollytellingHawk() {
       tl.kill()
       ScrollTrigger.getAll().forEach(t => t.kill())
       if (navbarEagle) navbarEagle.style.opacity = '1'
+      observer.disconnect()
     }
   }, [])
 
@@ -131,15 +143,14 @@ export default function ScrollytellingHawk() {
         ref={hawkRef}
         className={`fixed z-50 pointer-events-none ${
           (isVisible || hasLanded) ? 'opacity-100' : 'opacity-0'
-        } ${hasLanded ? 'eagle-landed' : 'eagle-flying'}`}
+        } ${hasLanded ? 'eagle-landed' : (isInView ? 'eagle-flying' : '')}`}
         style={{
           left: '15vw',
-          top: '20vh', // Start position matches animation start
+          top: '20vh',
           width: '100px',
           height: '100px',
           transform: 'translate(-50%, -50%)',
-          transition: 'opacity 0.3s',
-          willChange: 'transform' // Performance optimization
+          transition: 'opacity 0.3s'
         }}
       >
         <img

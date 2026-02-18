@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import dataService from '../services/dataService.js'
 
 export function useSchoolData() {
@@ -6,28 +6,45 @@ export function useSchoolData() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
+    let isMounted = true
+    
     try {
       setLoading(true)
       setError(null)
       const result = await dataService.getSchoolData()
       
-      if (result.success) {
-        setData(result.data)
-      } else {
-        setError(result.error)
+      if (isMounted) {
+        if (result.success) {
+          setData(result.data)
+        } else {
+          setError(result.error)
+        }
       }
     } catch (err) {
-      setError(err.message)
-      console.error('Error fetching school data:', err)
+      if (isMounted) {
+        setError(err.message)
+        console.error('Error fetching school data:', err)
+      }
     } finally {
-      setLoading(false)
+      if (isMounted) {
+        setLoading(false)
+      }
     }
-  }
+    
+    return () => {
+      isMounted = false
+    }
+  }, [])
 
   useEffect(() => {
-    fetchData()
-  }, [])
+    const cleanup = fetchData()
+    return () => {
+      if (cleanup && typeof cleanup === 'function') {
+        cleanup()
+      }
+    }
+  }, [fetchData])
 
   const refetch = () => fetchData()
 

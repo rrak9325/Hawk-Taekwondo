@@ -1,4 +1,4 @@
-import { useState, useEffect, memo } from 'react'
+import { useState, useEffect, memo, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { Shield, CheckCircle, Award, Users, Target, Heart, TrendingUp, Star } from 'lucide-react'
 import Hero from '../components/Hero'
@@ -7,6 +7,22 @@ import Testimonials from '../components/Testimonials'
 import { useSchoolData } from '../hooks/useSchoolData.js'
 import { PageLoadingFallback } from '../components/LoadingFallback'
 import ServerDownPage from '../components/ServerDownPage'
+import useScrollReveal from '../hooks/useScrollReveal'
+
+// Scroll reveal wrapper component
+const ScrollReveal = ({ children, delay = 0 }) => {
+  const ref = useScrollReveal()
+  
+  return (
+    <div 
+      ref={ref} 
+      className="scroll-reveal"
+      style={{ transitionDelay: `${delay}ms` }}
+    >
+      {children}
+    </div>
+  )
+}
 
 // Memoized Feature Card component for better performance
 const FeatureCard = memo(({ feature, index }) => {
@@ -287,6 +303,23 @@ export default function Home() {
       setTimeout(() => setReady(true), 100)
     }
   }, [data])
+  
+  // Memoize computed arrays to prevent re-renders
+  const safeFeatures = useMemo(() => {
+    if (!data?.home?.features) return []
+    const features = data.home.features
+    return Array.isArray(features)
+      ? features.filter(f => f && f.icon)
+      : Object.values(features).filter(f => f && f.icon)
+  }, [data?.home?.features])
+  
+  const safePrograms = useMemo(() => {
+    if (!data?.programs) return []
+    const programs = data.programs
+    return Array.isArray(programs)
+      ? programs.filter(p => p && p.name)
+      : Object.values(programs).filter(p => p && p.name)
+  }, [data?.programs])
 
   if (loading) return <PageLoadingFallback />
 
@@ -294,14 +327,8 @@ export default function Home() {
 
   if (!data) return null
 
-  const { schoolInfo, programs: programsData, home, gallery } = data
-  const { hero, features } = home
-  const safeFeatures = Array.isArray(features)
-    ? features.filter(f => f && f.icon)
-    : (features ? Object.values(features).filter(f => f && f.icon) : [])
-  const safePrograms = Array.isArray(programsData)
-    ? programsData.filter(p => p && p.name)
-    : (programsData ? Object.values(programsData).filter(p => p && p.name) : [])
+  const { schoolInfo, home, gallery } = data
+  const { hero } = home
 
   return (
     <div className="bg-white" style={{ opacity: ready ? 1 : 0, transition: 'opacity 0.3s' }}>
@@ -317,36 +344,44 @@ export default function Home() {
       {/* Programs Preview Section */}
       <section className="py-12 lg:py-16 xl:py-24">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-12 lg:mb-16">
-            <h2 className="font-heading text-2xl md:text-3xl lg:text-5xl font-bold text-primary mb-4">
-              Our <span className="text-secondary">Programs</span>
-            </h2>
-            <p className="text-gray-600 text-base lg:text-lg">
-              Discover the perfect program for your martial arts journey.
-            </p>
-          </div>
+          <ScrollReveal>
+            <div className="text-center mb-12 lg:mb-16">
+              <h2 className="font-heading text-2xl md:text-3xl lg:text-5xl font-bold text-primary mb-4">
+                Our <span className="text-secondary">Programs</span>
+              </h2>
+              <p className="text-gray-600 text-base lg:text-lg">
+                Discover the perfect program for your martial arts journey.
+              </p>
+            </div>
+          </ScrollReveal>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
             {safePrograms.slice(0, 3).map((p, i) => (
-              <ProgramCard key={p?.id || `program-${i}`} program={p} index={i} />
+              <ScrollReveal key={p?.id || `program-${i}`} delay={i * 100}>
+                <ProgramCard program={p} index={i} />
+              </ScrollReveal>
             ))}
           </div>
         </div>
       </section>
       <section className="py-16 lg:py-20 bg-white">
         <div className="container mx-auto px-4">
-          <div className="text-center max-w-3xl mx-auto mb-12 lg:mb-16">
-            <h2 className="font-heading text-2xl md:text-3xl lg:text-5xl font-bold text-primary mb-4">
-              Why Choose <span className="text-secondary">Hawk Taekwondo?</span>
-            </h2>
-            <p className="text-gray-600 text-base lg:text-lg">
-              We provide a safe, supportive, and professional environment where students of all ages can excel in martial arts and character development.
-            </p>
-          </div>
+          <ScrollReveal>
+            <div className="text-center max-w-3xl mx-auto mb-12 lg:mb-16">
+              <h2 className="font-heading text-2xl md:text-3xl lg:text-5xl font-bold text-primary mb-4">
+                Why Choose <span className="text-secondary">Hawk Taekwondo?</span>
+              </h2>
+              <p className="text-gray-600 text-base lg:text-lg">
+                We provide a safe, supportive, and professional environment where students of all ages can excel in martial arts and character development.
+              </p>
+            </div>
+          </ScrollReveal>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
             {safeFeatures.map((f, i) => (
-              <FeatureCard key={f?.title || i} feature={f} index={i} />
+              <ScrollReveal key={f?.title || i} delay={i * 80}>
+                <FeatureCard feature={f} index={i} />
+              </ScrollReveal>
             ))}
           </div>
         </div>
@@ -360,18 +395,20 @@ export default function Home() {
       {/* Call to Action Section */}
       <section className="py-12 lg:py-16 xl:py-20 bg-gradient-to-br from-primary to-primary-light text-white text-center">
         <div className="container mx-auto px-4">
-          <h2 className="font-heading text-2xl md:text-3xl lg:text-4xl font-bold mb-4 lg:mb-6">
-            Ready to Start Your Journey?
-          </h2>
-          <p className="text-white/90 text-base lg:text-lg mb-6 lg:mb-8 max-w-2xl mx-auto">
-            Join {schoolInfo.name} and discover the transformative power of martial arts.
-            Build confidence, discipline, and strength in a supportive community.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Link to="/contact" className="btn-secondary px-6 lg:px-8 py-3 lg:py-4 text-base lg:text-lg font-semibold w-full sm:w-auto">
-              Book A Free Trial
-            </Link>
-          </div>
+          <ScrollReveal>
+            <h2 className="font-heading text-2xl md:text-3xl lg:text-4xl font-bold mb-4 lg:mb-6">
+              Ready to Start Your Journey?
+            </h2>
+            <p className="text-white/90 text-base lg:text-lg mb-6 lg:mb-8 max-w-2xl mx-auto">
+              Join {schoolInfo.name} and discover the transformative power of martial arts.
+              Build confidence, discipline, and strength in a supportive community.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <Link to="/contact" className="btn-secondary px-6 lg:px-8 py-3 lg:py-4 text-base lg:text-lg font-semibold w-full sm:w-auto hover-lift">
+                Book A Free Trial
+              </Link>
+            </div>
+          </ScrollReveal>
         </div>
       </section>
     </div>

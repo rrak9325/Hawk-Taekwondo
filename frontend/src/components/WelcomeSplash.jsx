@@ -1,8 +1,13 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import performanceDetector from '../utils/performanceDetector'
 
 export default function WelcomeSplash() {
   const [isVisible, setIsVisible] = useState(true)
+  
+  // Get performance config once
+  const perfConfig = useMemo(() => performanceDetector.getAnimationConfig(), [])
+  const shouldAnimate = perfConfig.enabled
 
   useEffect(() => {
     // Check if user has visited before
@@ -13,11 +18,11 @@ export default function WelcomeSplash() {
       return
     }
 
-    // Hide splash after 4.5 seconds
+    // Hide splash after 3 seconds (reduced from 4.5s)
     const timer = setTimeout(() => {
       setIsVisible(false)
       sessionStorage.setItem('hasVisitedHTTC', 'true')
-    }, 4500)
+    }, 3000)
 
     return () => clearTimeout(timer)
   }, [])
@@ -53,8 +58,8 @@ export default function WelcomeSplash() {
               }}
             />
             
-            {/* Elegant Floating Orbs */}
-            {[...Array(8)].map((_, i) => (
+            {/* Elegant Floating Orbs - Adaptive count based on device */}
+            {shouldAnimate && [...Array(perfConfig.orbCount)].map((_, i) => (
               <motion.div
                 key={i}
                 className="absolute rounded-full"
@@ -111,8 +116,8 @@ export default function WelcomeSplash() {
               </div>
             </motion.div>
             
-            {/* Subtle Particles */}
-            {[...Array(15)].map((_, i) => (
+            {/* Subtle Particles - Adaptive count */}
+            {shouldAnimate && [...Array(perfConfig.particleCount)].map((_, i) => (
               <motion.div
                 key={i}
                 className="absolute w-1 h-1 rounded-full"
@@ -152,70 +157,73 @@ export default function WelcomeSplash() {
             >
               <div className="relative">
                 {/* Glow Effect Behind Logo */}
-                <motion.div
-                  className="absolute inset-0 blur-2xl opacity-20"
-                  animate={{
-                    scale: [1, 1.1, 1],
-                    opacity: [0.2, 0.3, 0.2]
-                  }}
-                  transition={{
-                    duration: 3,
-                    repeat: Infinity,
-                    ease: 'easeInOut'
-                  }}
-                  style={{
-                    background: 'radial-gradient(circle, rgba(220, 38, 38, 0.4), transparent)',
-                    willChange: 'transform, opacity'
-                  }}
-                />
+                {shouldAnimate && (
+                  <motion.div
+                    className="absolute inset-0 blur-2xl opacity-20"
+                    animate={{
+                      scale: [1, 1.1, 1],
+                      opacity: [0.2, 0.3, 0.2]
+                    }}
+                    transition={{
+                      duration: 3,
+                      repeat: Infinity,
+                      ease: 'easeInOut'
+                    }}
+                    style={{
+                      background: 'radial-gradient(circle, rgba(220, 38, 38, 0.4), transparent)'
+                    }}
+                  />
+                )}
                 
                 {/* Your Eagle Logo */}
                 <motion.div
                   className="relative"
-                  animate={{
+                  animate={shouldAnimate ? {
                     y: [0, -8, 0]
-                  }}
+                  } : {}}
                   transition={{
                     duration: 4,
                     repeat: Infinity,
                     ease: 'easeInOut'
                   }}
-                  style={{ willChange: 'transform' }}
                 >
                   <img
                     src="https://res.cloudinary.com/dem7arres/image/upload/v1771347376/eagle-modified_n3g8to.png"
                     alt="Hawk Taekwondo Logo"
                     className="w-48 h-48 object-contain drop-shadow-2xl"
-                    style={{ willChange: 'auto' }}
                   />
                 </motion.div>
                 
                 {/* Multiple Pulsing Rings */}
-                <motion.div
-                  className="absolute inset-0 border border-gray-200 rounded-full"
-                  animate={{ 
-                    scale: [1, 1.3, 1],
-                    opacity: [0.5, 0, 0.5]
-                  }}
-                  transition={{ 
-                    duration: 3,
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                  }}
-                />
-                <motion.div
-                  className="absolute inset-0 border border-red-200 rounded-full"
-                  animate={{ 
-                    scale: [1, 1.4, 1],
-                    opacity: [0.3, 0, 0.3]
-                  }}
-                  transition={{ 
-                    duration: 3,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                    delay: 0.5
-                  }}
-                />
+                {shouldAnimate && (
+                  <>
+                    <motion.div
+                      className="absolute inset-0 border border-gray-200 rounded-full"
+                      animate={{ 
+                        scale: [1, 1.3, 1],
+                        opacity: [0.5, 0, 0.5]
+                      }}
+                      transition={{ 
+                        duration: 3,
+                        repeat: Infinity,
+                        ease: "easeInOut"
+                      }}
+                    />
+                    <motion.div
+                      className="absolute inset-0 border border-red-200 rounded-full"
+                      animate={{ 
+                        scale: [1, 1.4, 1],
+                        opacity: [0.3, 0, 0.3]
+                      }}
+                      transition={{ 
+                        duration: 3,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                        delay: 0.5
+                      }}
+                    />
+                  </>
+                )}
               </div>
             </motion.div>
 

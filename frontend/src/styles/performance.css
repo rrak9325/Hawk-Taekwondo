@@ -58,5 +58,23 @@ img {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  /* Disable all framer-motion animations */
+  [data-framer-motion] {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* GPU-accelerated animations only */
+@media (prefers-reduced-motion: no-preference) {
+  .gpu-animate {
+    will-change: transform, opacity;
+  }
+  
+  .gpu-animate-complete {
+    will-change: auto;
   }
 }

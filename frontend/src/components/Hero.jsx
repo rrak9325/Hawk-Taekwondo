@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { useState, useEffect, useMemo } from 'react'
 import { ChevronDown } from 'lucide-react'
 import logo from '../assets/logo1.png'
+import performanceDetector from '../utils/performanceDetector'
 
 export default function Hero({ 
   titleMain, 
@@ -18,6 +18,10 @@ export default function Hero({
 }) {
   const [showVideo, setShowVideo] = useState(false)
   const [titleMoved, setTitleMoved] = useState(false)
+  
+  // Get performance config
+  const perfConfig = useMemo(() => performanceDetector.getAnimationConfig(), [])
+  const shouldAnimate = perfConfig.enabled
 
   useEffect(() => {
     // Show video after 2 seconds
@@ -45,21 +49,20 @@ export default function Hero({
 
   return (
     <section className={`relative w-full ${height} overflow-hidden bg-black`}>
-      {/* Decorative Pattern - Behind everything */}
-      <div className="absolute inset-0 z-0 opacity-10 pointer-events-none">
-        <div className="absolute top-10 left-10 w-32 h-32 border-4 border-red-500 rounded-full" style={{ animation: 'float 6s ease-in-out infinite' }} />
-        <div className="absolute top-40 right-20 w-24 h-24 border-4 border-white rotate-45" style={{ animation: 'float 8s ease-in-out infinite 1s' }} />
-        <div className="absolute bottom-32 left-1/4 w-40 h-40 border-4 border-red-500 rounded-full" style={{ animation: 'float 7s ease-in-out infinite 2s' }} />
-        <div className="absolute bottom-20 right-1/3 w-28 h-28 border-4 border-white rotate-12" style={{ animation: 'float 9s ease-in-out infinite 1.5s' }} />
-        <div className="absolute top-1/3 left-1/2 w-36 h-36 border-4 border-red-500 rotate-45" style={{ animation: 'float 10s ease-in-out infinite 0.5s' }} />
-      </div>
+      {/* Decorative Pattern - Behind everything - Only on high-end devices */}
+      {shouldAnimate && perfConfig.complexAnimations && (
+        <div className="absolute inset-0 z-0 opacity-10 pointer-events-none">
+          <div className="absolute top-10 left-10 w-32 h-32 border-4 border-red-500 rounded-full" style={{ animation: 'float 6s ease-in-out infinite' }} />
+          <div className="absolute top-40 right-20 w-24 h-24 border-4 border-white rotate-45" style={{ animation: 'float 8s ease-in-out infinite 1s' }} />
+          <div className="absolute bottom-32 left-1/4 w-40 h-40 border-4 border-red-500 rounded-full" style={{ animation: 'float 7s ease-in-out infinite 2s' }} />
+        </div>
+      )}
 
       {/* Background Media - Fades in */}
       <div 
         className="absolute inset-0 w-full h-full transition-opacity duration-1000 overflow-hidden"
         style={{ 
-          opacity: showVideo ? 1 : 0,
-          willChange: showVideo ? 'auto' : 'opacity'
+          opacity: showVideo ? 1 : 0
         }}
       >
         {videoUrl ? (
@@ -71,7 +74,6 @@ export default function Hero({
             preload="auto"
             className="absolute w-full h-full object-cover"
             style={{ 
-              willChange: 'auto',
               transform: 'scale(1.15)',
               top: '0%'
             }}
@@ -86,7 +88,6 @@ export default function Hero({
             loading="eager"
             fetchpriority="high"
             decoding="async"
-            style={{ willChange: 'auto' }}
           />
         ) : (
           <div className="w-full h-full bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900" />
@@ -103,15 +104,13 @@ export default function Hero({
             ? 'bottom-16 md:bottom-20 left-0 text-left' 
             : 'inset-0 flex items-center justify-center text-center'
         }`}
-        style={{ willChange: titleMoved ? 'auto' : 'transform, opacity' }}
       >
         <div 
           className={`text-white transition-all duration-[1800ms] ease-in-out ${
             titleMoved ? 'max-w-2xl' : 'max-w-5xl'
           }`}
           style={{ 
-            animation: 'fadeInUp 0.6s ease-out',
-            willChange: titleMoved ? 'auto' : 'transform'
+            animation: 'fadeInUp 0.6s ease-out'
           }}
         >
           {showHawk && (
@@ -119,7 +118,7 @@ export default function Hero({
               src={logo} 
               alt="Hawk Mascot" 
               className="w-16 h-16 md:w-20 md:h-20 object-contain drop-shadow-2xl mb-4"
-              style={{ animation: 'hawkFloat 5s ease-in-out infinite' }}
+              style={shouldAnimate ? { animation: 'hawkFloat 5s ease-in-out infinite' } : {}}
             />
           )}
           
@@ -129,7 +128,6 @@ export default function Hero({
                 ? 'text-3xl md:text-5xl' 
                 : 'text-5xl md:text-7xl'
             }`}
-            style={{ willChange: titleMoved ? 'auto' : 'font-size' }}
           >
             {titleMain}{' '}
             {titleHighlight && <span className="text-red-500">{titleHighlight}</span>}

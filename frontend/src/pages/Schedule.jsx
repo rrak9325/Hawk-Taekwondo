@@ -553,8 +553,23 @@ export default function Schedule() {
       <Hero {...schedulePage.hero} />
 
       {/* Header Section */}
-      <section className="py-12 bg-white border-b border-gray-200">
-        <div className="container mx-auto px-4">
+      <section className="py-12 bg-white border-b border-gray-200 relative overflow-hidden">
+        {/* Background Design */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-10 left-1/4 w-64 h-64 bg-purple-500/5 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-10 right-1/4 w-72 h-72 bg-blue-500/5 rounded-full blur-3xl"></div>
+          
+          {/* Clock Pattern */}
+          <div className="absolute top-20 right-20 opacity-5">
+            <svg width="80" height="80" viewBox="0 0 100 100">
+              <circle cx="50" cy="50" r="45" stroke="#6b7280" strokeWidth="2" fill="none" />
+              <line x1="50" y1="50" x2="50" y2="20" stroke="#6b7280" strokeWidth="3" />
+              <line x1="50" y1="50" x2="70" y2="50" stroke="#6b7280" strokeWidth="2" />
+            </svg>
+          </div>
+        </div>
+        
+        <div className="container mx-auto px-4 relative z-10">
           <div className="text-center mb-8">
             <h1 className="text-4xl md:text-5xl font-black text-gray-900 mb-4">
               Weekly Training <span className="text-red-600">Schedule</span>

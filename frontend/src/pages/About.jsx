@@ -762,8 +762,26 @@ function LegacyStorySection() {
   const [ref, isVisible] = useScrollAnimation()
   
   return (
-    <section id="legacy-section" ref={ref} className="py-12 md:py-20 bg-white">
-      <div className="container mx-auto px-4 md:px-6">
+    <section id="legacy-section" ref={ref} className="py-12 md:py-20 bg-white relative overflow-hidden">
+      {/* Background Design Elements */}
+      <div className="absolute inset-0 pointer-events-none">
+        {/* Subtle Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-gray-50/50 via-white to-red-50/30"></div>
+        
+        {/* Decorative Circles */}
+        <div className="absolute top-20 right-10 w-96 h-96 bg-red-500/5 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-40 left-10 w-80 h-80 bg-yellow-500/5 rounded-full blur-3xl"></div>
+        
+        {/* Taekwondo Belt Pattern */}
+        <div className="absolute top-1/4 left-0 w-full h-1 bg-gradient-to-r from-transparent via-red-200/30 to-transparent"></div>
+        <div className="absolute bottom-1/4 left-0 w-full h-1 bg-gradient-to-r from-transparent via-yellow-200/30 to-transparent"></div>
+        
+        {/* Geometric Accents */}
+        <div className="absolute top-40 left-20 w-20 h-20 border-2 border-red-200/20 rounded-lg rotate-45"></div>
+        <div className="absolute bottom-60 right-32 w-16 h-16 border-2 border-yellow-200/20 rounded-full"></div>
+      </div>
+      
+      <div className="container mx-auto px-4 md:px-6 relative z-10">
         {/* Founder Tribute */}
         <div className="grid grid-cols-2 gap-4 md:gap-6 lg:gap-10 items-start max-w-6xl mx-auto mb-16 md:mb-24">
           <div className={`${isVisible ? 'animate-in-left' : 'opacity-0'}`}>

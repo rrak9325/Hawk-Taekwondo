@@ -293,6 +293,8 @@ const WhyChooseCard = memo(({ icon: Icon, title, description, color, index }) =>
           transition: all 500ms cubic-bezier(0.4, 0, 0.2, 1);
           opacity: 0;
           animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+          position: relative;
+          z-index: 10;
         }
         
         .why-choose-card:hover {
@@ -431,8 +433,36 @@ export default function Programs() {
     <div className="bg-white" style={{ opacity: ready ? 1 : 0, transition: 'opacity 0.3s' }}>
       <Hero {...programsPage.hero} />
 
-      <section id="programs-section" className="py-16 md:py-24">
-        <div className="container mx-auto px-4">
+      <section id="programs-section" className="py-16 md:py-24 relative overflow-hidden">
+        {/* Background Design Elements */}
+        <div className="absolute inset-0 pointer-events-none">
+          {/* Gradient Mesh */}
+          <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-red-50/50 via-transparent to-yellow-50/50"></div>
+          
+          {/* Floating Shapes */}
+          <div className="absolute top-10 right-1/4 w-64 h-64 bg-red-500/5 rounded-full blur-2xl animate-float"></div>
+          <div className="absolute bottom-20 left-1/4 w-80 h-80 bg-purple-500/5 rounded-full blur-3xl animate-float" style={{ animationDelay: '2s' }}></div>
+          
+          {/* Martial Arts Inspired Patterns */}
+          <div className="absolute top-1/3 left-10 opacity-10">
+            <svg width="100" height="100" viewBox="0 0 100 100">
+              <circle cx="50" cy="50" r="40" stroke="#dc2626" strokeWidth="2" fill="none" />
+              <circle cx="50" cy="50" r="30" stroke="#dc2626" strokeWidth="2" fill="none" />
+              <circle cx="50" cy="50" r="20" stroke="#dc2626" strokeWidth="2" fill="none" />
+            </svg>
+          </div>
+          
+          {/* Grid Pattern */}
+          <div className="absolute bottom-10 right-10 w-40 h-40 opacity-5">
+            <div className="grid grid-cols-4 gap-2 h-full">
+              {[...Array(16)].map((_, i) => (
+                <div key={i} className="bg-gray-900 rounded"></div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="container mx-auto px-4 relative z-10">
           <div className="text-center mb-16">
             <h2 className="font-heading text-3xl md:text-4xl font-bold text-primary mb-4">
               Our Martial Arts Programs
@@ -448,10 +478,48 @@ export default function Programs() {
             ))}
           </div>
         </div>
+        
+        <style>{`
+          @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+          }
+          
+          .animate-float {
+            animation: float 6s ease-in-out infinite;
+          }
+        `}</style>
       </section>
 
-      <section className="py-16 md:py-24 bg-gray-50">
-        <div className="container mx-auto px-4">
+      <section className="py-16 md:py-24 bg-gray-50 relative overflow-hidden">
+        {/* Enhanced Background Design */}
+        <div className="absolute inset-0 pointer-events-none">
+          {/* Gradient Background */}
+          <div className="absolute inset-0 bg-gradient-to-br from-gray-100 via-gray-50 to-red-50/30"></div>
+          
+          {/* Large Decorative Circles */}
+          <div className="absolute -top-20 -left-20 w-96 h-96 bg-red-500/5 rounded-full blur-3xl"></div>
+          <div className="absolute -bottom-20 -right-20 w-96 h-96 bg-yellow-500/5 rounded-full blur-3xl"></div>
+          
+          {/* Geometric Grid Pattern */}
+          <div className="absolute top-10 right-10 opacity-5">
+            <div className="grid grid-cols-6 gap-3">
+              {[...Array(24)].map((_, i) => (
+                <div key={i} className="w-3 h-3 bg-gray-900 rounded-sm"></div>
+              ))}
+            </div>
+          </div>
+          
+          {/* Diagonal Lines */}
+          <div className="absolute top-0 left-1/4 w-px h-full bg-gradient-to-b from-transparent via-red-200/20 to-transparent"></div>
+          <div className="absolute top-0 right-1/4 w-px h-full bg-gradient-to-b from-transparent via-yellow-200/20 to-transparent"></div>
+          
+          {/* Floating Shapes */}
+          <div className="absolute top-1/3 left-10 w-20 h-20 border-2 border-red-300/20 rounded-lg rotate-12 animate-float"></div>
+          <div className="absolute bottom-1/3 right-10 w-16 h-16 border-2 border-yellow-300/20 rounded-full animate-float" style={{ animationDelay: '1.5s' }}></div>
+        </div>
+        
+        <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="font-heading text-3xl md:text-4xl font-bold text-primary mb-6">
               Why Choose Our Programs?
@@ -482,6 +550,17 @@ export default function Programs() {
             </div>
           </div>
         </div>
+        
+        <style>{`
+          @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(12deg); }
+            50% { transform: translateY(-15px) rotate(12deg); }
+          }
+          
+          .animate-float {
+            animation: float 5s ease-in-out infinite;
+          }
+        `}</style>
       </section>
     </div>
   )

@@ -9,7 +9,7 @@
     "email": "httc.tkd29@gmail.com",
     "mapLink": "https://www.google.com/maps/place/Hawk+Taekwondo+Training+Centre/@23.0039668,72.5541008,17z/data=!3m1!4b1!4m6!3m5!1s0x395e851bc7092e07:0x21ae1c75bac35a33!8m2!3d23.0039668!4d72.5541008!16s%2Fg%2F11d_tj5tvw?hl=en-GB&entry=ttu&g_ep=EgoyMDI2MDEyOC4wIKXMDSoKLDEwMDc5MjA3M0gBUAM%3D",
     "hours": {
-      "0": "Mon - Fri: 3:00 PM - 9:00 PM  Sat: 9:00 AM - 2:00 PM  Sun: Closed"
+      "0": "Mon - Fri: 5:00 PM - 7:00 PM  Sat: 5:00 PM - 7:00 PM  Sun: Closed"
     }
   },
   "home": {
@@ -25,7 +25,7 @@
       "titleMain": "Master the Art of",
       "titleHighlight": "Taekwondo",
       "subtitle": "Find your strength. Build your confidence.",
-      "videoUrl": "https://res.cloudinary.com/dem7arres/video/upload/v1770910919/hawk-taekwondo/videos/tmp-1-89761770910918869_ed5fdf.mp4",
+      "videoUrl": "https://res.cloudinary.com/dem7arres/video/upload/v1771426207/bestvideoever_xkg0iw.mp4",
       "backgroundImage": ""
     },
     "features": {
@@ -278,7 +278,7 @@
           "1": "Saturday",
           "2": "Thursday"
         },
-        "time": "5:00 PM to 6:00 PM &",
+        "time": "5:00 PM to 6:00 PM ",
         "ageGroup": "4 to 17 age group ",
         "description": "Kids and Teens"
       },
@@ -311,7 +311,7 @@
         "classes": {
           "0": {
             "name": "Kids and Teens",
-            "time": "5:00 PM to 6:00 PM &",
+            "time": "5:00 PM to 6:00 PM ",
             "ageGroup": "4 to 17 age group ",
             "type": "Youth"
           },
@@ -339,7 +339,7 @@
         "classes": {
           "0": {
             "name": "Kids and Teens",
-            "time": "5:00 PM to 6:00 PM &",
+            "time": "5:00 PM to 6:00 PM ",
             "ageGroup": "4 to 17 age group ",
             "type": "Youth"
           },
@@ -367,7 +367,7 @@
         "classes": {
           "0": {
             "name": "Kids and Teens",
-            "time": "5:00 PM to 6:00 PM &",
+            "time": "5:00 PM to 6:00 PM ",
             "ageGroup": "4 to 17 age group ",
             "type": "Youth"
           },

@@ -19,6 +19,7 @@ const NotFound = lazy(() => import('./pages/NotFound'))
 // 🔹 Utilities
 import ScrollToTop from './components/ScrollToTop'
 import ErrorBoundary from './components/ErrorBoundary'
+import WelcomeSplash from './components/WelcomeSplash'
 
 const PageLoader = () => (
   <div
@@ -113,6 +114,9 @@ const PageLoader = () => (
 const App = () => {
   return (
     <>
+      {/* Welcome Splash Screen */}
+      <WelcomeSplash />
+      
       {/* Runs once per navigation – lightweight */}
       <ScrollToTop />
 

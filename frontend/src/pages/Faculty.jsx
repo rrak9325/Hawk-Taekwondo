@@ -197,6 +197,8 @@ const WhyChooseCard = memo(({ icon: Icon, title, description, color, index }) =>
           transition: all 500ms cubic-bezier(0.4, 0, 0.2, 1);
           opacity: 0;
           animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+          position: relative;
+          z-index: 10;
         }
         
         .why-choose-card:hover {
@@ -320,8 +322,26 @@ export default function Faculty() {
         overlayOpacity="bg-black/40"
       />
 
-      <section className="py-16 md:py-24">
-        <div className="container mx-auto px-4">
+      <section className="py-16 md:py-24 relative overflow-hidden">
+        {/* Background Design Elements */}
+        <div className="absolute inset-0 pointer-events-none">
+          {/* Gradient Orbs */}
+          <div className="absolute top-20 left-10 w-72 h-72 bg-red-500/10 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute bottom-20 right-10 w-96 h-96 bg-yellow-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+          
+          {/* Geometric Patterns */}
+          <div className="absolute top-40 right-20 w-32 h-32 border-4 border-red-200/30 rounded-lg rotate-45"></div>
+          <div className="absolute bottom-40 left-20 w-24 h-24 border-4 border-yellow-200/30 rounded-full"></div>
+          
+          {/* Dots Pattern */}
+          <div className="absolute top-1/4 left-1/4 grid grid-cols-3 gap-4 opacity-20">
+            {[...Array(9)].map((_, i) => (
+              <div key={i} className="w-2 h-2 bg-red-600 rounded-full"></div>
+            ))}
+          </div>
+        </div>
+
+        <div className="container mx-auto px-4 relative z-10">
           <div className="text-center mb-16">
             <h2 className="font-heading text-3xl md:text-4xl font-bold text-primary mb-4">
               Expert Faculty
@@ -344,8 +364,36 @@ export default function Faculty() {
         </div>
       </section>
 
-      <section className="py-16 md:py-24 bg-gray-50">
-        <div className="container mx-auto px-4">
+      <section className="py-16 md:py-24 bg-gray-50 relative overflow-hidden">
+        {/* Enhanced Background Design */}
+        <div className="absolute inset-0 pointer-events-none">
+          {/* Gradient Mesh */}
+          <div className="absolute inset-0 bg-gradient-to-tr from-gray-100 via-gray-50 to-yellow-50/30"></div>
+          
+          {/* Large Blurred Orbs */}
+          <div className="absolute top-10 left-1/4 w-80 h-80 bg-yellow-500/8 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute bottom-10 right-1/4 w-96 h-96 bg-red-500/8 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
+          
+          {/* Trophy/Award Pattern */}
+          <div className="absolute top-20 right-20 opacity-5">
+            <svg width="100" height="100" viewBox="0 0 100 100">
+              <path d="M50 10 L60 40 L90 40 L65 60 L75 90 L50 70 L25 90 L35 60 L10 40 L40 40 Z" fill="#111827" />
+            </svg>
+          </div>
+          
+          {/* Dots Grid */}
+          <div className="absolute bottom-20 left-20 grid grid-cols-4 gap-4 opacity-10">
+            {[...Array(16)].map((_, i) => (
+              <div key={i} className="w-2 h-2 bg-red-600 rounded-full"></div>
+            ))}
+          </div>
+          
+          {/* Diagonal Accent Lines */}
+          <div className="absolute top-0 left-1/3 w-0.5 h-full bg-gradient-to-b from-transparent via-red-200/15 to-transparent transform -skew-x-12"></div>
+          <div className="absolute top-0 right-1/3 w-0.5 h-full bg-gradient-to-b from-transparent via-yellow-200/15 to-transparent transform skew-x-12"></div>
+        </div>
+        
+        <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="font-heading text-3xl md:text-4xl font-bold text-primary mb-6">
               Why Train With Our Instructors?

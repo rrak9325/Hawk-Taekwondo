@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { ChevronDown } from 'lucide-react'
 import logo from '../assets/logo1.png'
@@ -15,6 +16,26 @@ export default function Hero({
   overlayOpacity = "bg-black/25",
   showHawk = false
 }) {
+  const [showVideo, setShowVideo] = useState(false)
+  const [titleMoved, setTitleMoved] = useState(false)
+
+  useEffect(() => {
+    // Show video after 2 seconds
+    const videoTimer = setTimeout(() => {
+      setShowVideo(true)
+    }, 2000)
+
+    // Move title after 3.5 seconds
+    const titleTimer = setTimeout(() => {
+      setTitleMoved(true)
+    }, 3500)
+
+    return () => {
+      clearTimeout(videoTimer)
+      clearTimeout(titleTimer)
+    }
+  }, [])
+
   const scrollToContent = () => {
     window.scrollTo({
       top: window.innerHeight * 0.8,
@@ -23,9 +44,9 @@ export default function Hero({
   }
 
   return (
-    <div className="hero-container relative w-full overflow-hidden">
+    <section className={`relative w-full ${height} overflow-hidden bg-black`}>
       {/* Decorative Pattern - Behind everything */}
-      <div className="absolute inset-0 z-0 opacity-10">
+      <div className="absolute inset-0 z-0 opacity-10 pointer-events-none">
         <div className="absolute top-10 left-10 w-32 h-32 border-4 border-red-500 rounded-full" style={{ animation: 'float 6s ease-in-out infinite' }} />
         <div className="absolute top-40 right-20 w-24 h-24 border-4 border-white rotate-45" style={{ animation: 'float 8s ease-in-out infinite 1s' }} />
         <div className="absolute bottom-32 left-1/4 w-40 h-40 border-4 border-red-500 rounded-full" style={{ animation: 'float 7s ease-in-out infinite 2s' }} />
@@ -33,19 +54,22 @@ export default function Hero({
         <div className="absolute top-1/3 left-1/2 w-36 h-36 border-4 border-red-500 rotate-45" style={{ animation: 'float 10s ease-in-out infinite 0.5s' }} />
       </div>
 
-      <div className="hero-background-wrapper">
+      {/* Background Media - Fades in */}
+      <div 
+        className="absolute inset-0 w-full h-full transition-opacity duration-1000"
+        style={{ 
+          opacity: showVideo ? 1 : 0,
+          willChange: showVideo ? 'auto' : 'opacity'
+        }}
+      >
         {videoUrl ? (
           <video
             autoPlay
             loop
             muted
             playsInline
-            webkit-playsinline="true"
             preload="auto"
-            poster={backgroundImage}
-            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 min-w-full min-h-full w-auto h-auto object-cover"
-            width="1920"
-            height="1080"
+            className="w-full h-full object-cover"
             style={{ willChange: 'auto' }}
           >
             <source src={videoUrl} type="video/mp4" />
@@ -54,12 +78,11 @@ export default function Hero({
           <img
             src={backgroundImage}
             alt={titleMain || 'Hero background'}
-            className="hero-bg-image absolute inset-0 w-full h-full object-cover"
+            className="w-full h-full object-cover"
             loading="eager"
             fetchpriority="high"
-            width="1920"
-            height="1080"
             decoding="async"
+            style={{ willChange: 'auto' }}
           />
         ) : (
           <div className="w-full h-full bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900" />
@@ -67,40 +90,67 @@ export default function Hero({
       </div>
 
       {/* Overlay */}
-      <div className={`absolute top-0 left-0 w-full h-full ${overlayOpacity} z-10`} />
+      <div className={`absolute inset-0 ${overlayOpacity} z-10`} />
 
-      {/* Content */}
-      <div className="absolute top-0 left-0 w-full h-full z-20 flex items-center justify-center px-4">
-        <div className="max-w-5xl text-center text-white relative" style={{ animation: 'fadeInUp 0.6s ease-out' }}>
-          {/* Hawk positioned absolutely to float from above title to subtitle */}
+      {/* Content - Moves from center to bottom-left */}
+      <div 
+        className={`absolute z-20 px-4 md:px-8 transition-all duration-[1800ms] ease-in-out ${
+          titleMoved 
+            ? 'bottom-16 md:bottom-20 left-0 text-left' 
+            : 'inset-0 flex items-center justify-center text-center'
+        }`}
+        style={{ willChange: titleMoved ? 'auto' : 'transform, opacity' }}
+      >
+        <div 
+          className={`text-white transition-all duration-[1800ms] ease-in-out ${
+            titleMoved ? 'max-w-2xl' : 'max-w-5xl'
+          }`}
+          style={{ 
+            animation: 'fadeInUp 0.6s ease-out',
+            willChange: titleMoved ? 'auto' : 'transform'
+          }}
+        >
           {showHawk && (
             <img 
               src={logo} 
               alt="Hawk Mascot" 
-              className="absolute left-1/2 w-16 h-16 md:w-20 md:h-20 object-contain drop-shadow-2xl"
-              style={{ animation: 'hawkFloat 5s ease-in-out infinite', top: '0px' }}
+              className="w-16 h-16 md:w-20 md:h-20 object-contain drop-shadow-2xl mb-4"
+              style={{ animation: 'hawkFloat 5s ease-in-out infinite' }}
             />
           )}
           
-          <h1 className="font-heading text-4xl md:text-6xl font-bold mb-6">
+          <h1 
+            className={`font-heading font-bold mb-4 md:mb-6 transition-all duration-[1800ms] ease-in-out ${
+              titleMoved 
+                ? 'text-3xl md:text-5xl' 
+                : 'text-5xl md:text-7xl'
+            }`}
+            style={{ willChange: titleMoved ? 'auto' : 'font-size' }}
+          >
             {titleMain}{' '}
             {titleHighlight && <span className="text-red-500">{titleHighlight}</span>}
           </h1>
 
           {subtitle && (
-            <p className="text-xl md:text-2xl text-white font-medium mb-10 relative">
+            <p 
+              className={`text-white font-medium transition-all duration-[1800ms] ease-in-out ${
+                titleMoved 
+                  ? 'text-base md:text-lg' 
+                  : 'text-xl md:text-2xl mb-10'
+              }`}
+            >
               {subtitle}
             </p>
           )}
         </div>
       </div>
 
-      {/* Scroll Down Symbol - Desktop only */}
-      {showScroll && (
+      {/* Scroll Down Symbol - Desktop only - Always centered */}
+      {showScroll && titleMoved && (
         <div 
-          className="hidden md:flex absolute bottom-10 left-1/2 transform -translate-x-1/2 z-20 text-white flex-col items-center gap-2 cursor-pointer opacity-80 hover:opacity-100 transition"
+          className="hidden md:flex absolute bottom-10 left-1/2 -translate-x-1/2 z-20 text-white flex-col items-center gap-2 cursor-pointer opacity-80 hover:opacity-100 transition"
           onClick={scrollToContent}
-          style={{ animation: 'fadeIn 1s 1.5s both' }}
+          style={{ animation: 'fadeIn 1s 1s both' }}
         >
           <span className="text-[10px] uppercase tracking-widest font-bold hover:text-red-500 transition-colors">Scroll Down</span>
           <ChevronDown size={35} className="text-red-500" style={{ animation: 'bounce 2s infinite' }} />
@@ -128,10 +178,10 @@ export default function Hero({
         }
         @keyframes hawkFloat {
           0%, 100% { 
-            transform: translate(-50%, -60px) rotate(0deg); 
+            transform: translateY(0) rotate(0deg); 
           }
           50% { 
-            transform: translate(-50%, 100px) rotate(0deg); 
+            transform: translateY(-10px) rotate(0deg); 
           }
         }
         @keyframes float {
@@ -143,6 +193,6 @@ export default function Hero({
           }
         }
       `}</style>
-    </div>
+    </section>
   )
 }

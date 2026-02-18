@@ -12,7 +12,7 @@ import ServerDownPage from '../components/ServerDownPage'
 const FeatureCard = memo(({ feature, index }) => {
   const iconMap = { Shield, Award, Users, Target, Heart, TrendingUp, Star }
   const Icon = iconMap[feature?.icon] || Shield
-  
+
   return (
     <div
       className="feature-card"
@@ -23,7 +23,7 @@ const FeatureCard = memo(({ feature, index }) => {
       </div>
       <h3 className="feature-title">{feature?.title}</h3>
       <p className="feature-description">{feature?.description}</p>
-      
+
       <style>{`
         .feature-card {
           background: white;
@@ -119,10 +119,10 @@ FeatureCard.displayName = 'FeatureCard'
 
 // Memoized Program Card component
 const ProgramCard = memo(({ program, index }) => {
-  const benefits = Array.isArray(program.benefits) 
-    ? program.benefits 
+  const benefits = Array.isArray(program.benefits)
+    ? program.benefits
     : Object.values(program.benefits || {})
-  
+
   return (
     <div
       className="program-card"
@@ -160,7 +160,7 @@ const ProgramCard = memo(({ program, index }) => {
           Learn More
         </Link>
       </div>
-      
+
       <style>{`
         .program-card {
           background: white;
@@ -296,8 +296,8 @@ export default function Home() {
 
   const { schoolInfo, programs: programsData, home, gallery } = data
   const { hero, features } = home
-  const safeFeatures = Array.isArray(features) 
-    ? features.filter(f => f && f.icon) 
+  const safeFeatures = Array.isArray(features)
+    ? features.filter(f => f && f.icon)
     : (features ? Object.values(features).filter(f => f && f.icon) : [])
   const safePrograms = Array.isArray(programsData)
     ? programsData.filter(p => p && p.name)
@@ -312,24 +312,7 @@ export default function Home() {
         showHawk={false}
       />
 
-      <section className="py-16 lg:py-20 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="text-center max-w-3xl mx-auto mb-12 lg:mb-16">
-            <h2 className="font-heading text-2xl md:text-3xl lg:text-5xl font-bold text-primary mb-4">
-              Why Choose <span className="text-secondary">Hawk Taekwondo?</span>
-            </h2>
-            <p className="text-gray-600 text-base lg:text-lg">
-              We provide a safe, supportive, and professional environment where students of all ages can excel in martial arts and character development.
-            </p>
-          </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
-            {safeFeatures.map((f, i) => (
-              <FeatureCard key={f?.title || i} feature={f} index={i} />
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* Programs Preview Section */}
       <section className="py-12 lg:py-16 xl:py-24">
@@ -350,7 +333,24 @@ export default function Home() {
           </div>
         </div>
       </section>
+      <section className="py-16 lg:py-20 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="text-center max-w-3xl mx-auto mb-12 lg:mb-16">
+            <h2 className="font-heading text-2xl md:text-3xl lg:text-5xl font-bold text-primary mb-4">
+              Why Choose <span className="text-secondary">Hawk Taekwondo?</span>
+            </h2>
+            <p className="text-gray-600 text-base lg:text-lg">
+              We provide a safe, supportive, and professional environment where students of all ages can excel in martial arts and character development.
+            </p>
+          </div>
 
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+            {safeFeatures.map((f, i) => (
+              <FeatureCard key={f?.title || i} feature={f} index={i} />
+            ))}
+          </div>
+        </div>
+      </section>
       {/* Gallery Section - Captured Moments */}
       <CapturedMomentsGallery gallery={gallery} />
 

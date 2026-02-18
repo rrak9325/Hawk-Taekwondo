@@ -224,7 +224,7 @@
   transition: opacity 0.3s ease;
 }
 
-/* Respect reduced motion */
+/* Respect reduced motion for all animations */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -232,20 +232,5 @@
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
-  }
-  
-  .animate-fade-in-up,
-  .animate-fade-in-left,
-  .animate-fade-in-right,
-  .animate-scale-in,
-  .animate-subtle-float,
-  .animate-glow-pulse,
-  .animate-shimmer {
-    animation: none !important;
-  }
-  
-  .scroll-reveal {
-    opacity: 1 !important;
-    transform: none !important;
   }
 }

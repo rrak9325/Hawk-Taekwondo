@@ -8,6 +8,7 @@ import { useSchoolData } from '../hooks/useSchoolData.js'
 import { PageLoadingFallback } from '../components/LoadingFallback'
 import ServerDownPage from '../components/ServerDownPage'
 import useScrollReveal from '../hooks/useScrollReveal'
+import LazySection from '../components/LazySection'
 
 // Scroll reveal wrapper component
 const ScrollReveal = ({ children, delay = 0 }) => {
@@ -341,8 +342,8 @@ export default function Home() {
 
 
 
-      {/* Programs Preview Section */}
-      <section className="py-12 lg:py-16 xl:py-24">
+      {/* Programs Preview Section - Only renders when in viewport */}
+      <LazySection className="py-12 lg:py-16 xl:py-24" rootMargin="300px">
         <div className="container mx-auto px-4">
           <ScrollReveal>
             <div className="text-center mb-12 lg:mb-16">
@@ -363,8 +364,9 @@ export default function Home() {
             ))}
           </div>
         </div>
-      </section>
-      <section className="py-16 lg:py-20 bg-white">
+      </LazySection>
+      {/* Features Section - Only renders when in viewport */}
+      <LazySection className="py-16 lg:py-20 bg-white" rootMargin="300px">
         <div className="container mx-auto px-4">
           <ScrollReveal>
             <div className="text-center max-w-3xl mx-auto mb-12 lg:mb-16">
@@ -385,15 +387,19 @@ export default function Home() {
             ))}
           </div>
         </div>
-      </section>
-      {/* Gallery Section - Captured Moments */}
-      <CapturedMomentsGallery gallery={gallery} />
+      </LazySection>
+      {/* Gallery Section - Only renders when in viewport */}
+      <LazySection rootMargin="400px">
+        <CapturedMomentsGallery gallery={gallery} />
+      </LazySection>
 
-      {/* Testimonials Section */}
-      <Testimonials testimonials={data.testimonials || []} />
+      {/* Testimonials Section - Only renders when in viewport */}
+      <LazySection rootMargin="400px">
+        <Testimonials testimonials={data.testimonials || []} />
+      </LazySection>
 
-      {/* Call to Action Section */}
-      <section className="py-12 lg:py-16 xl:py-20 bg-gradient-to-br from-primary to-primary-light text-white text-center">
+      {/* Call to Action Section - Only renders when in viewport */}
+      <LazySection className="py-12 lg:py-16 xl:py-20 bg-gradient-to-br from-primary to-primary-light text-white text-center" rootMargin="300px">
         <div className="container mx-auto px-4">
           <ScrollReveal>
             <h2 className="font-heading text-2xl md:text-3xl lg:text-4xl font-bold mb-4 lg:mb-6">
@@ -410,7 +416,7 @@ export default function Home() {
             </div>
           </ScrollReveal>
         </div>
-      </section>
+      </LazySection>
     </div>
   )
 }

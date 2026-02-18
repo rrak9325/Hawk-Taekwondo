@@ -20,6 +20,8 @@ const NotFound = lazy(() => import('./pages/NotFound'))
 import ScrollToTop from './components/ScrollToTop'
 import ErrorBoundary from './components/ErrorBoundary'
 import WelcomeSplash from './components/WelcomeSplash'
+// import QuantumParticles from './components/QuantumParticles'
+// import performanceDetector from './utils/performanceDetector'
 
 const PageLoader = () => (
   <div
@@ -116,6 +118,10 @@ const App = () => {
     <>
       {/* Welcome Splash Screen */}
       <WelcomeSplash />
+      
+      {/* Quantum Particles - Only on capable devices */}
+      {/* Temporarily disabled for debugging */}
+      {/* {showQuantumParticles && <QuantumParticles />} */}
       
       {/* Runs once per navigation – lightweight */}
       <ScrollToTop />

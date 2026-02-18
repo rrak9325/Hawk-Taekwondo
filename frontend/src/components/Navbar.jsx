@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X, Trophy, Flame, Zap } from 'lucide-react'
 
 // Use Cloudinary URL instead of local import to reduce bundle size
-const logo = 'https://res.cloudinary.com/dem7arres/image/upload/f_auto,q_auto:good,w_200/v1771086460/2nd_logo_krdaqk.jpg'
+const logo = 'https://res.cloudinary.com/dem7arres/image/upload/f_auto,q_auto:good,w_200/v1771436615/logo1_weejgq.png'
 
 // Move navLinks outside component to prevent recreation on every render
 const NAV_LINKS = [

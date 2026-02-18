@@ -1,9 +1,9 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, useRef } from 'react'
 import { ChevronDown } from 'lucide-react'
 import performanceDetector from '../utils/performanceDetector'
 
 // Use Cloudinary URL instead of local import to reduce bundle size
-const logo = 'https://res.cloudinary.com/dem7arres/image/upload/f_auto,q_auto:good,w_200/v1771086460/2nd_logo_krdaqk.jpg'
+const logo = 'https://res.cloudinary.com/dem7arres/image/upload/f_auto,q_auto:good,w_200/v1771436615/logo1_weejgq.png'
 
 export default function Hero({ 
   titleMain, 
@@ -11,36 +11,58 @@ export default function Hero({
   subtitle, 
   videoUrl, 
   backgroundImage, 
-  primaryButton, 
-  secondaryButton,
   height = "min-h-[60vh] md:min-h-[70vh]",
   showScroll = true,
   overlayOpacity = "bg-black/25",
   showHawk = false
 }) {
-  const [showVideo, setShowVideo] = useState(false)
+  const [showContent, setShowContent] = useState(false)
   const [titleMoved, setTitleMoved] = useState(false)
+  const [videoReady, setVideoReady] = useState(false)
+  const [useVideo, setUseVideo] = useState(true)
+  const videoRef = useRef(null)
   
   // Get performance config
   const perfConfig = useMemo(() => performanceDetector.getAnimationConfig(), [])
   const shouldAnimate = perfConfig.enabled
 
+  // Detect if device should use video
   useEffect(() => {
-    // Show video after 2 seconds
-    const videoTimer = setTimeout(() => {
-      setShowVideo(true)
-    }, 2000)
-
+    const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection
+    const isSlow = connection && (connection.effectiveType === 'slow-2g' || connection.effectiveType === '2g')
+    const isLowEnd = perfConfig.tier === 'minimal' || perfConfig.tier === 'low'
+    
+    // Disable video on low-end devices or slow connections
+    if (isSlow || isLowEnd || !videoUrl) {
+      setUseVideo(false)
+    }
+    
+    // Show content immediately
+    setShowContent(true)
+    
     // Move title after 3.5 seconds
     const titleTimer = setTimeout(() => {
       setTitleMoved(true)
     }, 3500)
 
-    return () => {
-      clearTimeout(videoTimer)
-      clearTimeout(titleTimer)
+    return () => clearTimeout(titleTimer)
+  }, [videoUrl, perfConfig.tier])
+
+  // Handle video loading
+  const handleVideoCanPlay = () => {
+    setVideoReady(true)
+    if (videoRef.current) {
+      videoRef.current.play().catch(() => {
+        // Autoplay blocked, fallback to image
+        setUseVideo(false)
+      })
     }
-  }, [])
+  }
+
+  const handleVideoError = () => {
+    console.log('Video failed to load, using fallback image')
+    setUseVideo(false)
+  }
 
   const scrollToContent = () => {
     window.scrollTo({
@@ -49,9 +71,12 @@ export default function Hero({
     })
   }
 
+  // Optimize video URL with Cloudinary transformations
+  const optimizedVideoUrl = videoUrl ? videoUrl.replace('/upload/', '/upload/q_auto,f_auto,vc_auto/') : null
+
   return (
     <section className={`relative w-full ${height} overflow-hidden bg-black`}>
-      {/* Decorative Pattern - Behind everything - Only on high-end devices */}
+      {/* Decorative Pattern - Only on high-end devices */}
       {shouldAnimate && perfConfig.complexAnimations && (
         <div className="absolute inset-0 z-0 opacity-10 pointer-events-none">
           <div className="absolute top-10 left-10 w-32 h-32 border-4 border-red-500 rounded-full" style={{ animation: 'float 6s ease-in-out infinite' }} />
@@ -60,38 +85,50 @@ export default function Hero({
         </div>
       )}
 
-      {/* Background Media - Fades in */}
+      {/* Background Media */}
       <div 
         className="absolute inset-0 w-full h-full transition-opacity duration-1000 overflow-hidden"
-        style={{ 
-          opacity: showVideo ? 1 : 0
-        }}
+        style={{ opacity: showContent ? 1 : 0 }}
       >
-        {videoUrl ? (
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            preload="auto"
-            className="absolute w-full h-full object-cover"
-            style={{ 
-              transform: 'scale(1.15)',
-              top: '0%'
-            }}
-          >
-            <source src={videoUrl} type="video/mp4" />
-          </video>
-        ) : backgroundImage ? (
+        {/* Background Image - Always loads first */}
+        {backgroundImage && (
           <img
             src={backgroundImage}
             alt={titleMain || 'Hero background'}
-            className="w-full h-full object-cover"
+            className="absolute w-full h-full object-cover"
             loading="eager"
             fetchpriority="high"
             decoding="async"
+            style={{ zIndex: useVideo && videoReady ? 0 : 1 }}
           />
-        ) : (
+        )}
+        
+        {/* Video - Only on capable devices */}
+        {useVideo && optimizedVideoUrl && (
+          <video
+            ref={videoRef}
+            loop
+            muted
+            playsInline
+            preload="none"
+            poster={backgroundImage}
+            className="absolute w-full h-full object-cover"
+            style={{ 
+              transform: 'scale(1.15)',
+              top: '0%',
+              zIndex: videoReady ? 1 : 0,
+              opacity: videoReady ? 1 : 0,
+              transition: 'opacity 1.5s ease-in-out'
+            }}
+            onCanPlay={handleVideoCanPlay}
+            onError={handleVideoError}
+          >
+            <source src={optimizedVideoUrl} type="video/mp4" />
+          </video>
+        )}
+        
+        {/* Fallback gradient */}
+        {!backgroundImage && !videoUrl && (
           <div className="w-full h-full bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900" />
         )}
       </div>
@@ -99,7 +136,7 @@ export default function Hero({
       {/* Overlay */}
       <div className={`absolute inset-0 ${overlayOpacity} z-10`} />
 
-      {/* Content - Moves from center to bottom-left */}
+      {/* Content */}
       <div 
         className={`absolute z-20 px-4 md:px-8 transition-all duration-[1800ms] ease-in-out ${
           titleMoved 
@@ -111,9 +148,7 @@ export default function Hero({
           className={`text-white transition-all duration-[1800ms] ease-in-out ${
             titleMoved ? 'max-w-2xl' : 'max-w-5xl'
           }`}
-          style={{ 
-            animation: 'fadeInUp 0.6s ease-out'
-          }}
+          style={{ animation: 'fadeInUp 0.6s ease-out' }}
         >
           {showHawk && (
             <img 
@@ -128,9 +163,7 @@ export default function Hero({
           
           <h1 
             className={`font-heading font-bold mb-4 md:mb-6 transition-all duration-[1800ms] ease-in-out ${
-              titleMoved 
-                ? 'text-3xl md:text-5xl' 
-                : 'text-5xl md:text-7xl'
+              titleMoved ? 'text-3xl md:text-5xl' : 'text-5xl md:text-7xl'
             }`}
           >
             {titleMain}{' '}
@@ -140,9 +173,7 @@ export default function Hero({
           {subtitle && (
             <p 
               className={`text-white font-medium transition-all duration-[1800ms] ease-in-out ${
-                titleMoved 
-                  ? 'text-base md:text-lg' 
-                  : 'text-xl md:text-2xl mb-10'
+                titleMoved ? 'text-base md:text-lg' : 'text-xl md:text-2xl mb-10'
               }`}
             >
               {subtitle}
@@ -151,7 +182,7 @@ export default function Hero({
         </div>
       </div>
 
-      {/* Scroll Down Symbol - Desktop only - Always centered */}
+      {/* Scroll Down */}
       {showScroll && titleMoved && (
         <div 
           className="hidden md:flex absolute bottom-10 left-1/2 -translate-x-1/2 z-20 text-white flex-col items-center gap-2 cursor-pointer opacity-80 hover:opacity-100 transition"
@@ -165,14 +196,8 @@ export default function Hero({
       
       <style>{`
         @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
+          from { opacity: 0; transform: translateY(30px); }
+          to { opacity: 1; transform: translateY(0); }
         }
         @keyframes fadeIn {
           from { opacity: 0; }
@@ -183,20 +208,12 @@ export default function Hero({
           50% { transform: translateY(12px); }
         }
         @keyframes hawkFloat {
-          0%, 100% { 
-            transform: translateY(0) rotate(0deg); 
-          }
-          50% { 
-            transform: translateY(-10px) rotate(0deg); 
-          }
+          0%, 100% { transform: translateY(0) rotate(0deg); }
+          50% { transform: translateY(-10px) rotate(0deg); }
         }
         @keyframes float {
-          0%, 100% { 
-            transform: translateY(0) rotate(0deg); 
-          }
-          50% { 
-            transform: translateY(-20px) rotate(10deg); 
-          }
+          0%, 100% { transform: translateY(0) rotate(0deg); }
+          50% { transform: translateY(-20px) rotate(10deg); }
         }
       `}</style>
     </section>

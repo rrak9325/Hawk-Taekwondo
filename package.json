@@ -28,7 +28,13 @@
     "install:all": "npm install && cd frontend && npm install && cd ../backend && npm install",
     "clean": "cd frontend && rm -rf dist node_modules && cd ../backend && rm -rf node_modules && rm -rf node_modules",
     "vercel-build": "cd frontend && npm run build",
-    "deploy:upload-data": "node upload-initial-data.js"
+    "deploy:upload-data": "node upload-initial-data.js",
+    "optimize:images": "python scripts/optimize_images.py",
+    "analyze:bundle": "npm run build:frontend && python scripts/analyze_bundle.py",
+    "check:unused": "python scripts/unused_code_finder.py",
+    "check:css": "python scripts/css_optimizer.py",
+    "check:deps": "python scripts/dependency_checker.py",
+    "report:performance": "python scripts/performance_report.py"
   },
   "dependencies": {
     "concurrently": "^9.2.1",

@@ -2,7 +2,9 @@ import { useState, useEffect, useCallback, useMemo } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X, Trophy, Flame, Zap } from 'lucide-react'
-import logo from '../assets/logo1.png'
+
+// Use Cloudinary URL instead of local import to reduce bundle size
+const logo = 'https://res.cloudinary.com/dem7arres/image/upload/f_auto,q_auto:good,w_200/v1771086460/2nd_logo_krdaqk.jpg'
 
 // Move navLinks outside component to prevent recreation on every render
 const NAV_LINKS = [
@@ -65,7 +67,8 @@ const Navbar = () => {
                       src={logo} 
                       alt="Hawk Taekwondo Logo" 
                       className="h-10 w-auto md:h-14 md:w-24 object-contain" 
-                      loading="eager"
+                      loading="lazy"
+                      decoding="async"
                       whileHover={{ rotate: 5 }}
                       transition={{ type: "spring", stiffness: 300, damping: 20 }}
                     />

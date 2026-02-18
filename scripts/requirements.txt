@@ -1,0 +1,6 @@
+# Python dependencies for optimization scripts
+Pillow>=10.0.0
+pillow-heif>=0.13.0
+
+# Note: No additional dependencies needed for other scripts
+# They use only Python standard library

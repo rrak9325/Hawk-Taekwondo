@@ -1,7 +1,9 @@
 import { useState, useEffect, useMemo } from 'react'
 import { ChevronDown } from 'lucide-react'
-import logo from '../assets/logo1.png'
 import performanceDetector from '../utils/performanceDetector'
+
+// Use Cloudinary URL instead of local import to reduce bundle size
+const logo = 'https://res.cloudinary.com/dem7arres/image/upload/f_auto,q_auto:good,w_200/v1771086460/2nd_logo_krdaqk.jpg'
 
 export default function Hero({ 
   titleMain, 
@@ -118,6 +120,8 @@ export default function Hero({
               src={logo} 
               alt="Hawk Mascot" 
               className="w-16 h-16 md:w-20 md:h-20 object-contain drop-shadow-2xl mb-4"
+              loading="lazy"
+              decoding="async"
               style={shouldAnimate ? { animation: 'hawkFloat 5s ease-in-out infinite' } : {}}
             />
           )}

@@ -28,13 +28,22 @@ export default function Hero({
 
   // Detect if device should use video
   useEffect(() => {
+    console.log('Hero videoUrl:', videoUrl)
+    console.log('Performance tier:', perfConfig.tier)
+    
     const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection
     const isSlow = connection && (connection.effectiveType === 'slow-2g' || connection.effectiveType === '2g')
     const isLowEnd = perfConfig.tier === 'minimal' || perfConfig.tier === 'low'
     
+    console.log('Connection slow?', isSlow)
+    console.log('Low-end device?', isLowEnd)
+    
     // Disable video on low-end devices or slow connections
     if (isSlow || isLowEnd || !videoUrl) {
+      console.log('Video disabled - reason:', !videoUrl ? 'no URL' : isSlow ? 'slow connection' : 'low-end device')
       setUseVideo(false)
+    } else {
+      console.log('Video enabled')
     }
     
     // Show content immediately
@@ -50,17 +59,27 @@ export default function Hero({
 
   // Handle video loading
   const handleVideoCanPlay = () => {
+    console.log('Video can play!')
     setVideoReady(true)
     if (videoRef.current) {
-      videoRef.current.play().catch(() => {
+      videoRef.current.play().catch((err) => {
+        console.error('Autoplay blocked:', err)
         // Autoplay blocked, fallback to image
         setUseVideo(false)
       })
     }
   }
 
-  const handleVideoError = () => {
-    console.log('Video failed to load, using fallback image')
+  // Load video when component mounts
+  useEffect(() => {
+    if (useVideo && videoRef.current) {
+      console.log('Loading video...')
+      videoRef.current.load()
+    }
+  }, [useVideo])
+
+  const handleVideoError = (e) => {
+    console.error('Video failed to load:', e)
     setUseVideo(false)
   }
 
@@ -110,7 +129,7 @@ export default function Hero({
             loop
             muted
             playsInline
-            preload="none"
+            preload="auto"
             poster={backgroundImage}
             className="absolute w-full h-full object-cover"
             style={{ 

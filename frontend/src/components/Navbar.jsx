@@ -69,12 +69,12 @@ const Navbar = () => {
                       transition={{ type: "spring", stiffness: 300, damping: 20 }}
                     />
                   </div>
-                  <div className="flex flex-col relative">
-                    {/* Eagle positioned above the text with bright glow for visibility */}
+                  <div className="flex flex-col relative overflow-visible">
+                    {/* Eagle resting on top of the "H" */}
                     <img 
                       src="https://res.cloudinary.com/dem7arres/image/upload/v1771347376/eagle-modified_n3g8to.png"
                       alt="Eagle"
-                      className="absolute -top-8 left-0 h-10 w-10 md:h-12 md:w-12 object-contain navbar-eagle"
+                      className="absolute -top-3 md:-top-4 left-0 h-6 w-6 md:h-10 md:w-10 object-contain navbar-eagle"
                       style={{ 
                         filter: 'drop-shadow(0 0 8px rgba(251, 191, 36, 1)) drop-shadow(0 0 12px rgba(255, 255, 255, 0.8)) brightness(1.3)',
                         zIndex: 10

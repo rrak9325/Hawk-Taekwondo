@@ -1,9 +1,449 @@
-import { useEffect, useState, useMemo, useCallback } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { useEffect, useState, useMemo, useCallback, memo } from 'react'
 import { Clock, Users, Calendar, ChevronLeft, ChevronRight, Zap } from 'lucide-react'
 import Hero from '../components/Hero'
 
 const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+
+// Memoized Filter Button
+const FilterBtn = memo(({ active, onClick, label, color = 'gray', icon: Icon }) => {
+  const colors = {
+    gray: active 
+      ? 'bg-gray-900 text-white shadow-lg scale-105' 
+      : 'bg-white text-gray-700 hover:bg-gray-50 border-2 border-gray-200',
+    purple: active 
+      ? 'bg-purple-600 text-white shadow-lg scale-105' 
+      : 'bg-white text-purple-600 hover:bg-purple-50 border-2 border-purple-200',
+    blue: active 
+      ? 'bg-blue-600 text-white shadow-lg scale-105' 
+      : 'bg-white text-blue-600 hover:bg-blue-50 border-2 border-blue-200'
+  }
+
+  return (
+    <button 
+      onClick={onClick} 
+      className={`flex items-center gap-2 px-6 py-3 rounded-xl font-semibold transition-all duration-400 ${colors[color]}`}
+      style={{ transition: 'all 400ms cubic-bezier(0.4, 0, 0.2, 1)' }}
+    >
+      {Icon && <Icon size={18} />}
+      {label}
+    </button>
+  )
+})
+
+FilterBtn.displayName = 'FilterBtn'
+
+// Memoized Mobile Day Card
+const MobileDayCard = memo(({ dayData }) => {
+  if (!dayData) return null
+  const { day, classes, isToday } = dayData
+
+  return (
+    <div className={`mobile-day-card ${isToday ? 'today' : ''}`}>
+      <div className={`day-header ${isToday ? 'today' : ''}`}>
+        <h2 className="day-title">{day}</h2>
+        {isToday && (
+          <span className="today-badge">
+            Today
+          </span>
+        )}
+      </div>
+
+      <div className="classes-container">
+        {classes.length > 0 ? (
+          classes.map((cls, i) => (
+            <MobileClassCard key={i} cls={cls} index={i} />
+          ))
+        ) : (
+          <div className="no-classes">
+            <Calendar size={48} className="no-classes-icon" />
+            <p className="no-classes-text">No classes scheduled</p>
+          </div>
+        )}
+      </div>
+      
+      <style>{`
+        .mobile-day-card {
+          background: white;
+          border-radius: 16px;
+          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+          overflow: hidden;
+          opacity: 0;
+          animation: scaleIn 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+        
+        .mobile-day-card.today {
+          ring: 4px;
+          ring-color: #dc2626;
+        }
+        
+        .day-header {
+          padding: 1.5rem;
+          text-align: center;
+          background: #111827;
+          color: white;
+        }
+        
+        .day-header.today {
+          background: linear-gradient(to right, #dc2626, #b91c1c);
+        }
+        
+        .day-title {
+          font-size: 1.875rem;
+          font-weight: 900;
+          margin-bottom: 0.25rem;
+        }
+        
+        .today-badge {
+          display: inline-block;
+          padding: 0.25rem 0.75rem;
+          background: rgba(255, 255, 255, 0.2);
+          border-radius: 9999px;
+          font-size: 0.75rem;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+        }
+        
+        .classes-container {
+          padding: 1.5rem;
+          display: flex;
+          flex-direction: column;
+          gap: 1rem;
+          min-height: 300px;
+        }
+        
+        .no-classes {
+          height: 100%;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-center;
+          color: #9ca3af;
+          padding: 3rem 0;
+        }
+        
+        .no-classes-icon {
+          margin-bottom: 0.75rem;
+          opacity: 0.5;
+        }
+        
+        .no-classes-text {
+          font-size: 1.125rem;
+          font-weight: 500;
+        }
+        
+        @keyframes scaleIn {
+          from {
+            opacity: 0;
+            transform: scale(0.95);
+          }
+          to {
+            opacity: 1;
+            transform: scale(1);
+          }
+        }
+      `}</style>
+    </div>
+  )
+})
+
+MobileDayCard.displayName = 'MobileDayCard'
+
+// Memoized Mobile Class Card
+const MobileClassCard = memo(({ cls, index }) => {
+  const isAdult = cls.type?.toLowerCase().includes('adult')
+  const colors = isAdult
+    ? { bg: 'bg-blue-50', border: 'border-blue-200', text: 'text-blue-700', badge: 'bg-blue-600' }
+    : { bg: 'bg-purple-50', border: 'border-purple-200', text: 'text-purple-700', badge: 'bg-purple-600' }
+
+  return (
+    <div
+      className={`mobile-class-card ${colors.bg} ${colors.border}`}
+      style={{ animationDelay: `${index * 0.08}s` }}
+    >
+      <div className="class-header">
+        <div className="class-time-wrapper">
+          <div className={`class-icon ${colors.badge}`}>
+            <Clock size={20} className="icon" />
+          </div>
+          <div>
+            <p className="class-time">{cls.time}</p>
+            <p className={`class-age ${colors.text}`}>{cls.ageGroup}</p>
+          </div>
+        </div>
+        <span className={`class-badge ${colors.badge}`}>
+          {isAdult ? 'Adults' : 'Kids'}
+        </span>
+      </div>
+      
+      <style>{`
+        .mobile-class-card {
+          border: 2px solid;
+          border-radius: 12px;
+          padding: 1.25rem;
+          transition: all 500ms cubic-bezier(0.4, 0, 0.2, 1);
+          opacity: 0;
+          animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+        
+        .mobile-class-card:hover {
+          transform: translateY(-2px) scale(1.02);
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .class-header {
+          display: flex;
+          align-items: flex-start;
+          justify-content: space-between;
+        }
+        
+        .class-time-wrapper {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+        }
+        
+        .class-icon {
+          padding: 0.5rem;
+          border-radius: 8px;
+        }
+        
+        .icon {
+          color: white;
+        }
+        
+        .class-time {
+          font-size: 1.5rem;
+          font-weight: 900;
+          color: #111827;
+        }
+        
+        .class-age {
+          font-size: 0.875rem;
+          font-weight: 600;
+        }
+        
+        .class-badge {
+          color: white;
+          padding: 0.25rem 0.75rem;
+          border-radius: 9999px;
+          font-size: 0.75rem;
+          font-weight: 700;
+          text-transform: uppercase;
+        }
+        
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+      `}</style>
+    </div>
+  )
+})
+
+MobileClassCard.displayName = 'MobileClassCard'
+
+// Memoized Desktop Day Card
+const DesktopDayCard = memo(({ dayData }) => {
+  const { day, classes, isToday } = dayData
+
+  return (
+    <div className={`desktop-day-card ${isToday ? 'today' : ''}`}>
+      <div className={`desktop-day-header ${isToday ? 'today' : ''}`}>
+        <h3 className="desktop-day-title">{day.substring(0, 3)}</h3>
+        {isToday && (
+          <span className="desktop-today-badge">
+            Today
+          </span>
+        )}
+      </div>
+
+      <div className="desktop-classes-container">
+        {classes.length > 0 ? (
+          classes.map((cls, i) => (
+            <DesktopClassCard key={i} cls={cls} index={i} />
+          ))
+        ) : (
+          <div className="desktop-no-classes">
+            <Calendar size={32} className="desktop-no-classes-icon" />
+            <p className="desktop-no-classes-text">Rest Day</p>
+          </div>
+        )}
+      </div>
+      
+      <style>{`
+        .desktop-day-card {
+          background: white;
+          border-radius: 12px;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+          overflow: hidden;
+          border: 2px solid #e5e7eb;
+          transition: all 500ms cubic-bezier(0.4, 0, 0.2, 1);
+          opacity: 0;
+          animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+        
+        .desktop-day-card:hover {
+          transform: translateY(-4px);
+          box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
+        }
+        
+        .desktop-day-card.today {
+          border-color: #dc2626;
+          ring: 2px;
+          ring-color: rgba(220, 38, 38, 0.2);
+        }
+        
+        .desktop-day-header {
+          padding: 1rem;
+          text-align: center;
+          border-bottom: 2px solid #e5e7eb;
+          background: #f9fafb;
+          color: #111827;
+        }
+        
+        .desktop-day-header.today {
+          background: #dc2626;
+          color: white;
+          border-bottom-color: #b91c1c;
+        }
+        
+        .desktop-day-title {
+          font-size: 1.125rem;
+          font-weight: 900;
+        }
+        
+        .desktop-today-badge {
+          display: inline-block;
+          margin-top: 0.25rem;
+          padding: 0.125rem 0.5rem;
+          background: rgba(255, 255, 255, 0.2);
+          border-radius: 9999px;
+          font-size: 0.625rem;
+          font-weight: 700;
+          text-transform: uppercase;
+        }
+        
+        .desktop-classes-container {
+          padding: 0.75rem;
+          display: flex;
+          flex-direction: column;
+          gap: 0.5rem;
+          min-height: 400px;
+        }
+        
+        .desktop-no-classes {
+          height: 100%;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          color: #9ca3af;
+          padding: 2rem 0;
+        }
+        
+        .desktop-no-classes-icon {
+          margin-bottom: 0.5rem;
+          opacity: 0.5;
+        }
+        
+        .desktop-no-classes-text {
+          font-size: 0.75rem;
+          font-weight: 500;
+        }
+      `}</style>
+    </div>
+  )
+})
+
+DesktopDayCard.displayName = 'DesktopDayCard'
+
+// Memoized Desktop Class Card
+const DesktopClassCard = memo(({ cls, index }) => {
+  const isAdult = cls.type?.toLowerCase().includes('adult')
+  const colors = isAdult
+    ? { bg: 'bg-blue-50', text: 'text-blue-700', badge: 'bg-blue-600' }
+    : { bg: 'bg-purple-50', text: 'text-purple-700', badge: 'bg-purple-600' }
+
+  return (
+    <div
+      className={`desktop-class-card ${colors.bg}`}
+      style={{ animationDelay: `${index * 0.05}s` }}
+    >
+      <div className="desktop-class-time">
+        <Clock size={14} className={colors.text} />
+        <p className="desktop-time-text">{cls.time}</p>
+      </div>
+      <p className="desktop-age-text">{cls.ageGroup}</p>
+      <span className={`desktop-class-badge ${colors.badge}`}>
+        {isAdult ? 'Adults' : 'Kids'}
+      </span>
+      
+      <style>{`
+        .desktop-class-card {
+          border-radius: 8px;
+          padding: 0.75rem;
+          transition: all 500ms cubic-bezier(0.4, 0, 0.2, 1);
+          opacity: 0;
+          animation: scaleIn 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+        
+        .desktop-class-card:hover {
+          transform: scale(1.03);
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .desktop-class-time {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          margin-bottom: 0.5rem;
+        }
+        
+        .desktop-time-text {
+          font-size: 0.875rem;
+          font-weight: 700;
+          color: #111827;
+        }
+        
+        .desktop-age-text {
+          font-size: 0.75rem;
+          color: #6b7280;
+          margin-bottom: 0.5rem;
+        }
+        
+        .desktop-class-badge {
+          color: white;
+          padding: 0.25rem 0.5rem;
+          border-radius: 4px;
+          font-size: 0.625rem;
+          font-weight: 700;
+          text-transform: uppercase;
+          display: inline-block;
+        }
+        
+        @keyframes scaleIn {
+          from {
+            opacity: 0;
+            transform: scale(0.95);
+          }
+          to {
+            opacity: 1;
+            transform: scale(1);
+          }
+        }
+      `}</style>
+    </div>
+  )
+})
+
+DesktopClassCard.displayName = 'DesktopClassCard'
 
 export default function Schedule() {
   const [data, setData] = useState(null)
@@ -173,17 +613,9 @@ export default function Schedule() {
             ))}
           </div>
 
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={currentDayIndex}
-              initial={{ x: 100, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              exit={{ x: -100, opacity: 0 }}
-              transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-            >
-              <MobileDayCard dayData={filteredDays[currentDayIndex]} />
-            </motion.div>
-          </AnimatePresence>
+          <div className="schedule-mobile-card-container">
+            <MobileDayCard dayData={filteredDays[currentDayIndex]} />
+          </div>
 
           {/* Navigation Arrows */}
           <button
@@ -217,12 +649,7 @@ export default function Schedule() {
       {/* CTA Section */}
       <section className="py-16 bg-gradient-to-br from-red-600 to-red-700 text-white">
         <div className="container mx-auto px-4 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
+          <div className="cta-content">
             <h2 className="text-3xl md:text-5xl font-black mb-4">
               Ready to Start Training?
             </h2>
@@ -235,167 +662,28 @@ export default function Schedule() {
             >
               Book Your Free Trial
             </a>
-          </motion.div>
+          </div>
         </div>
+        
+        <style>{`
+          .cta-content {
+            opacity: 0;
+            animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.2s forwards;
+          }
+          
+          @keyframes fadeInUp {
+            from {
+              opacity: 0;
+              transform: translateY(20px);
+            }
+            to {
+              opacity: 1;
+              transform: translateY(0);
+            }
+          }
+        `}</style>
       </section>
     </div>
   )
 }
 
-// Components
-function FilterBtn({ active, onClick, label, color = 'gray', icon: Icon }) {
-  const colors = {
-    gray: active 
-      ? 'bg-gray-900 text-white shadow-lg scale-105' 
-      : 'bg-white text-gray-700 hover:bg-gray-50 border-2 border-gray-200',
-    purple: active 
-      ? 'bg-purple-600 text-white shadow-lg scale-105' 
-      : 'bg-white text-purple-600 hover:bg-purple-50 border-2 border-purple-200',
-    blue: active 
-      ? 'bg-blue-600 text-white shadow-lg scale-105' 
-      : 'bg-white text-blue-600 hover:bg-blue-50 border-2 border-blue-200'
-  }
-
-  return (
-    <button 
-      onClick={onClick} 
-      className={`flex items-center gap-2 px-6 py-3 rounded-xl font-semibold transition-all ${colors[color]}`}
-    >
-      {Icon && <Icon size={18} />}
-      {label}
-    </button>
-  )
-}
-
-function MobileDayCard({ dayData }) {
-  if (!dayData) return null
-  const { day, classes, isToday } = dayData
-
-  return (
-    <div className={`bg-white rounded-2xl shadow-xl overflow-hidden ${
-      isToday ? 'ring-4 ring-red-500' : ''
-    }`}>
-      <div className={`p-6 text-center ${
-        isToday 
-          ? 'bg-gradient-to-r from-red-600 to-red-700 text-white' 
-          : 'bg-gray-900 text-white'
-      }`}>
-        <h2 className="text-3xl font-black mb-1">{day}</h2>
-        {isToday && (
-          <span className="inline-block px-3 py-1 bg-white/20 rounded-full text-xs font-bold uppercase tracking-wider">
-            Today
-          </span>
-        )}
-      </div>
-
-      <div className="p-6 space-y-4 min-h-[300px]">
-        {classes.length > 0 ? (
-          classes.map((cls, i) => (
-            <MobileClassCard key={i} cls={cls} />
-          ))
-        ) : (
-          <div className="h-full flex flex-col items-center justify-center text-gray-400 py-12">
-            <Calendar size={48} className="mb-3 opacity-50" />
-            <p className="text-lg font-medium">No classes scheduled</p>
-          </div>
-        )}
-      </div>
-    </div>
-  )
-}
-
-function MobileClassCard({ cls }) {
-  const isAdult = cls.type?.toLowerCase().includes('adult')
-  const colors = isAdult
-    ? { bg: 'bg-blue-50', border: 'border-blue-200', text: 'text-blue-700', badge: 'bg-blue-600' }
-    : { bg: 'bg-purple-50', border: 'border-purple-200', text: 'text-purple-700', badge: 'bg-purple-600' }
-
-  return (
-    <motion.div
-      className={`${colors.bg} border-2 ${colors.border} rounded-xl p-5 hover:shadow-md transition-all`}
-      whileHover={{ scale: 1.02 }}
-      transition={{ type: 'spring', stiffness: 400, damping: 25 }}
-    >
-      <div className="flex items-start justify-between mb-3">
-        <div className="flex items-center gap-3">
-          <div className={`${colors.badge} p-2 rounded-lg`}>
-            <Clock size={20} className="text-white" />
-          </div>
-          <div>
-            <p className="text-2xl font-black text-gray-900">{cls.time}</p>
-            <p className={`text-sm font-semibold ${colors.text}`}>{cls.ageGroup}</p>
-          </div>
-        </div>
-        <span className={`${colors.badge} text-white px-3 py-1 rounded-full text-xs font-bold uppercase`}>
-          {isAdult ? 'Adults' : 'Kids'}
-        </span>
-      </div>
-    </motion.div>
-  )
-}
-
-function DesktopDayCard({ dayData }) {
-  const { day, classes, isToday } = dayData
-
-  return (
-    <motion.div
-      className={`bg-white rounded-xl shadow-lg overflow-hidden border-2 transition-all hover:shadow-xl ${
-        isToday 
-          ? 'border-red-500 ring-2 ring-red-200' 
-          : 'border-gray-200 hover:border-gray-300'
-      }`}
-      whileHover={{ y: -4 }}
-      transition={{ type: 'spring', stiffness: 400, damping: 25 }}
-    >
-      <div className={`p-4 text-center border-b-2 ${
-        isToday 
-          ? 'bg-red-600 text-white border-red-700' 
-          : 'bg-gray-50 text-gray-900 border-gray-200'
-      }`}>
-        <h3 className="text-lg font-black">{day.substring(0, 3)}</h3>
-        {isToday && (
-          <span className="inline-block mt-1 px-2 py-0.5 bg-white/20 rounded-full text-[10px] font-bold uppercase">
-            Today
-          </span>
-        )}
-      </div>
-
-      <div className="p-3 space-y-2 min-h-[400px]">
-        {classes.length > 0 ? (
-          classes.map((cls, i) => (
-            <DesktopClassCard key={i} cls={cls} />
-          ))
-        ) : (
-          <div className="h-full flex flex-col items-center justify-center text-gray-400 py-8">
-            <Calendar size={32} className="mb-2 opacity-50" />
-            <p className="text-xs font-medium">Rest Day</p>
-          </div>
-        )}
-      </div>
-    </motion.div>
-  )
-}
-
-function DesktopClassCard({ cls }) {
-  const isAdult = cls.type?.toLowerCase().includes('adult')
-  const colors = isAdult
-    ? { bg: 'bg-blue-50', text: 'text-blue-700', badge: 'bg-blue-600' }
-    : { bg: 'bg-purple-50', text: 'text-purple-700', badge: 'bg-purple-600' }
-
-  return (
-    <motion.div
-      className={`${colors.bg} rounded-lg p-3 hover:shadow-md transition-all`}
-      whileHover={{ scale: 1.03 }}
-      transition={{ type: 'spring', stiffness: 400, damping: 25 }}
-    >
-      <div className="flex items-center gap-2 mb-2">
-        <Clock size={14} className={colors.text} />
-        <p className="text-sm font-bold text-gray-900">{cls.time}</p>
-      </div>
-      <p className="text-xs text-gray-600 mb-2">{cls.ageGroup}</p>
-      <span className={`${colors.badge} text-white px-2 py-1 rounded text-[10px] font-bold uppercase inline-block`}>
-        {isAdult ? 'Adults' : 'Kids'}
-      </span>
-    </motion.div>
-  )
-}

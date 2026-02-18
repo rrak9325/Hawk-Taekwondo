@@ -1,7 +1,32 @@
 import { useState, useEffect, useCallback, useMemo, memo } from 'react'
-import { motion } from 'framer-motion'
 import { MapPin, Phone, Mail, Clock, Send, CheckCircle, MessageCircle } from 'lucide-react'
 import Hero from '../components/Hero'
+
+// Memoized IconWrap component
+const IconWrap = memo(({ icon: Icon }) => {
+  return (
+    <div className="w-12 h-12 bg-red-600/10 rounded-lg flex items-center justify-center flex-shrink-0 transition-all hover:scale-110 hover:bg-red-600/15">
+      <Icon className="w-6 h-6 text-red-600" />
+    </div>
+  )
+})
+
+IconWrap.displayName = 'IconWrap'
+
+// Memoized Info component
+const Info = memo(({ icon, title, text }) => {
+  return (
+    <div className="flex gap-4">
+      <IconWrap icon={icon} />
+      <div>
+        <h3 className="font-semibold text-gray-900 mb-1">{title}</h3>
+        <p className="text-gray-600">{text}</p>
+      </div>
+    </div>
+  )
+})
+
+Info.displayName = 'Info'
 
 export default function Contact() {
   const [data, setData] = useState(null)
@@ -80,14 +105,20 @@ Message: ${formData.message}`
     // Redirect to WhatsApp with pre-filled message
     window.open(`https://wa.me/918487829291?text=${encodedMessage}`, '_blank')
     
-    // Reset form
-    setFormData({
-      name: '',
-      email: '',
-      phone: '',
-      program: '',
-      message: '',
-    })
+    // Show success message
+    setSubmitted(true)
+    
+    // Reset form after 3 seconds
+    setTimeout(() => {
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        program: '',
+        message: '',
+      })
+      setSubmitted(false)
+    }, 3000)
   }, [formData])
 
   // Memoize program options to prevent re-computation
@@ -111,14 +142,12 @@ Message: ${formData.message}`
 
   if (!data || !ready) return null
 
-  const { schoolInfo, programs, contactPage } = data
+  const { schoolInfo, contactPage } = data
 
   return (
-    <motion.div
+    <div
       className="bg-white"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: ready ? 1 : 0 }}
-      transition={{ duration: 0.5 }}
+      style={{ opacity: ready ? 1 : 0, transition: 'opacity 0.5s' }}
     >
 
       <Hero {...contactPage.hero} />
@@ -126,13 +155,8 @@ Message: ${formData.message}`
       <section className="py-16 md:py-24">
         <div className="container mx-auto px-4 grid lg:grid-cols-2 gap-12">
 
-          <motion.div
-            initial={{ opacity: 0, x: -40 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.6 }}
-          >
-            <h2 className="font-heading text-3xl font-bold text-primary mb-8">
+          <div className="animate-fade-in">
+            <h2 className="text-3xl font-bold text-gray-900 mb-8">
               Contact Information
             </h2>
 
@@ -145,7 +169,7 @@ Message: ${formData.message}`
               <div className="flex gap-4">
                 <IconWrap icon={Clock} />
                 <div>
-                  <h3 className="font-semibold text-primary mb-1">
+                  <h3 className="font-semibold text-gray-900 mb-1">
                     Operating Hours
                   </h3>
                   {Array.isArray(schoolInfo.hours) 
@@ -164,7 +188,7 @@ Message: ${formData.message}`
 
             {/* MAP SECTION */}
             <div className="mt-10">
-              <h3 className="font-heading text-xl font-semibold text-primary mb-4">
+              <h3 className="text-xl font-semibold text-gray-900 mb-4">
                 Visit Our Dojang
               </h3>
 
@@ -178,21 +202,6 @@ Message: ${formData.message}`
                     loading="lazy" 
                     referrerPolicy="no-referrer-when-downgrade"
                     title="Hawk Taekwondo Location"
-                    onError={(e) => {
-                      console.log('Map failed to load, showing fallback')
-                      e.target.style.display = 'none'
-                      e.target.parentElement.innerHTML = `
-                        <div class="w-full h-full bg-gray-100 flex items-center justify-center">
-                          <div class="text-center p-8">
-                            <svg class="w-16 h-16 mx-auto mb-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                              <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
-                            </svg>
-                            <p class="text-gray-600 font-medium">Map temporarily unavailable</p>
-                            <p class="text-gray-500 text-sm mt-2">Please use the address below</p>
-                          </div>
-                        </div>
-                      `
-                    }}
                   ></iframe>
                 </div>
                 
@@ -204,7 +213,7 @@ Message: ${formData.message}`
                     href={schoolInfo.mapLink} 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 text-xs text-secondary hover:underline transition-colors"
+                    className="inline-flex items-center gap-2 text-xs text-red-400 hover:underline transition-colors"
                   >
                     <MapPin size={12} /> View on Google Maps
                   </a>
@@ -212,33 +221,23 @@ Message: ${formData.message}`
               </div>
             </div>
 
-          </motion.div>
+          </div>
 
-          <motion.div
-            initial={{ opacity: 0, x: 40 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.6 }}
-            className="card"
-          >
-            <h2 className="font-heading text-3xl font-bold text-primary mb-6">
+          <div className="bg-white p-8 rounded-2xl shadow-lg border border-gray-100 animate-fade-in">
+            <h2 className="text-3xl font-bold text-gray-900 mb-6">
               Send a Message
             </h2>
 
             {submitted ? (
-              <motion.div
-                initial={{ opacity: 0, scale: .9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="text-center py-12"
-              >
-                <CheckCircle className="w-16 h-16 text-success mx-auto mb-4" />
-                <h3 className="font-heading text-2xl font-bold text-primary mb-2">
+              <div className="text-center py-12">
+                <CheckCircle className="w-16 h-16 text-green-600 mx-auto mb-4" />
+                <h3 className="text-2xl font-bold text-gray-900 mb-2">
                   Thank You!
                 </h3>
                 <p className="text-gray-600">
-                  We’ll get back to you shortly.
+                  We'll get back to you shortly.
                 </p>
-              </motion.div>
+              </div>
             ) : (
 
               <form onSubmit={handleSubmit} className="space-y-6">
@@ -249,31 +248,33 @@ Message: ${formData.message}`
                   onChange={handleChange}
                   required
                   placeholder="Full Name"
-                  className="input-field"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent outline-none transition-all"
                 />
 
                 <input
                   name="email"
+                  type="email"
                   value={formData.email}
                   onChange={handleChange}
                   required
                   placeholder="Email"
-                  className="input-field"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent outline-none transition-all"
                 />
 
                 <input
                   name="phone"
+                  type="tel"
                   value={formData.phone}
                   onChange={handleChange}
                   placeholder="Phone"
-                  className="input-field"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent outline-none transition-all"
                 />
 
                 <select
                   name="program"
                   value={formData.program}
                   onChange={handleChange}
-                  className="input-field"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent outline-none transition-all"
                 >
                   <option value="">Select Program</option>
                   {programOptions}
@@ -286,33 +287,33 @@ Message: ${formData.message}`
                   required
                   rows={5}
                   placeholder="Your message..."
-                  className="input-field resize-none"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent outline-none transition-all resize-none"
                 />
 
                 <button 
                   type="submit"
-                  className="btn-primary w-full flex justify-center gap-2 hover:scale-105 transition-transform"
+                  className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg flex items-center justify-center gap-2 transition-all hover:scale-105"
                 >
                   Send via WhatsApp <Send className="w-5 h-5" />
                 </button>
 
               </form>
             )}
-          </motion.div>
+          </div>
 
         </div>
       </section>
 
-      <section className="py-16 bg-gradient-to-br from-primary to-gray-800 text-white text-center">
+      <section className="py-16 bg-gradient-to-br from-red-600 to-gray-800 text-white text-center">
         <div className="container mx-auto px-4">
-          <h2 className="font-heading text-3xl md:text-4xl font-bold mb-6">
+          <h2 className="text-3xl md:text-4xl font-bold mb-6">
             Ready to Begin?
           </h2>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-2xl mx-auto">
             <a 
               href={`tel:${schoolInfo.phone}`} 
-              className="bg-white text-primary hover:bg-gray-100 px-6 py-3 text-lg font-semibold rounded-xl flex items-center justify-center gap-2 transition-colors"
+              className="bg-white text-red-600 hover:bg-gray-100 px-6 py-3 text-lg font-semibold rounded-xl flex items-center justify-center gap-2 transition-colors"
             >
               <Phone className="w-5 h-5" />
               Call Now
@@ -331,26 +332,23 @@ Message: ${formData.message}`
         </div>
       </section>
 
-    </motion.div>
+      <style>{`
+        .animate-fade-in {
+          animation: fadeIn 0.6s ease-out forwards;
+        }
+        
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+      `}</style>
+
+    </div>
   )
 }
-
-const IconWrap = memo(({ icon: Icon }) => {
-  return (
-    <div className="w-12 h-12 bg-secondary/10 rounded-lg flex items-center justify-center">
-      <Icon className="w-6 h-6 text-secondary" />
-    </div>
-  )
-})
-
-const Info = memo(({ icon, title, text }) => {
-  return (
-    <div className="flex gap-4">
-      <IconWrap icon={icon} />
-      <div>
-        <h3 className="font-semibold text-primary mb-1">{title}</h3>
-        <p className="text-gray-600">{text}</p>
-      </div>
-    </div>
-  )
-})

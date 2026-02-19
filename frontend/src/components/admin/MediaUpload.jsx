@@ -176,6 +176,11 @@ export default function MediaUpload({
                   if (import.meta.env.DEV) {
                     console.error('Image load error:', e.target.src)
                   }
+                  // Try to reload once with cache busting
+                  if (!e.target.dataset.retried) {
+                    e.target.dataset.retried = 'true'
+                    e.target.src = value + '?retry=' + Date.now()
+                  }
                 }}
                 onLoad={() => {
                   if (import.meta.env.DEV) {

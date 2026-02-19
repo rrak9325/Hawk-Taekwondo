@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
+import { resolveImageUrl } from '../utils/imageUrlResolver'
 
 export default function OptimizedImage({ 
   src, 
@@ -18,41 +19,67 @@ export default function OptimizedImage({
   const [currentSrc, setCurrentSrc] = useState('')
   const imgRef = useRef(null)
 
+  // Don't render anything if src is empty or invalid
+  if (!src || src.trim() === '') {
+    return (
+      <div className={`relative overflow-hidden ${className}`} style={{ width, height }}>
+        <div className="absolute inset-0 bg-gray-200 flex items-center justify-center">
+          <div className="text-gray-400 text-center">
+            <svg className="w-8 h-8 mx-auto mb-2" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clipRule="evenodd" />
+            </svg>
+            <p className="text-xs">No image</p>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   // Generate optimized image sources
   const generateSources = (originalSrc) => {
     if (!originalSrc) return []
     
+    // Resolve the URL first
+    const resolvedSrc = resolveImageUrl(originalSrc)
+    
     // Check if this is already an optimized image (contains dimensions)
-    if (originalSrc.includes('-') && /\d+x\d+/.test(originalSrc)) {
+    if (resolvedSrc.includes('-') && /\d+x\d+/.test(resolvedSrc)) {
       return [{
-        srcSet: originalSrc,
-        type: originalSrc.endsWith('.webp') ? 'image/webp' : 'image/jpeg'
+        srcSet: resolvedSrc,
+        type: resolvedSrc.endsWith('.webp') ? 'image/webp' : 'image/jpeg'
       }]
     }
     
-    // For non-optimized images, try to generate optimized paths
-    const basePath = originalSrc.replace(/\.[^/.]+$/, '')
-    const sources = []
+    // For Cloudinary images, try to generate optimized paths
+    if (resolvedSrc.includes('cloudinary.com')) {
+      const sources = []
+      
+      // Try WebP first (best compression)
+      sources.push({
+        srcSet: resolvedSrc.replace('/upload/', '/upload/f_webp,q_auto:good,w_800,h_600,c_limit/'),
+        type: 'image/webp'
+      })
+      
+      // Fallback to optimized JPEG
+      sources.push({
+        srcSet: resolvedSrc.replace('/upload/', '/upload/f_auto,q_auto:good,w_800,h_600,c_limit/'),
+        type: 'image/jpeg'
+      })
+      
+      // Original as final fallback
+      sources.push({
+        srcSet: resolvedSrc,
+        type: 'image/jpeg'
+      })
+      
+      return sources
+    }
     
-    // Try WebP first (best compression) - but fallback gracefully
-    sources.push({
-      srcSet: `${basePath}-800x600.webp`,
-      type: 'image/webp'
-    })
-    
-    // Fallback to JPEG
-    sources.push({
-      srcSet: `${basePath}-800x600.jpg`,
+    // For non-Cloudinary images, just return the resolved URL
+    return [{
+      srcSet: resolvedSrc,
       type: 'image/jpeg'
-    })
-    
-    // Original as final fallback
-    sources.push({
-      srcSet: originalSrc,
-      type: 'image/jpeg'
-    })
-    
-    return sources
+    }]
   }
 
   // Intersection Observer for lazy loading

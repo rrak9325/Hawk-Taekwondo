@@ -126,7 +126,7 @@ export default function Hero({
         style={{ opacity: showContent ? 1 : 0 }}
       >
         {/* Background Image - Always loads first */}
-        {backgroundImage && (
+        {backgroundImage && backgroundImage.trim() !== '' && (
           <img
             src={backgroundImage}
             alt={titleMain || 'Hero background'}
@@ -135,6 +135,10 @@ export default function Hero({
             fetchpriority="high"
             decoding="async"
             style={{ zIndex: useVideo && videoReady ? 0 : 1 }}
+            onError={(e) => {
+              console.warn('Background image failed to load:', backgroundImage)
+              e.target.style.display = 'none'
+            }}
           />
         )}
         

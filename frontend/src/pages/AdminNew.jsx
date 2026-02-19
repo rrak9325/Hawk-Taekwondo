@@ -1589,12 +1589,28 @@ export default function AdminNew() {
                       key={media.id}
                       className={`aspect-square rounded-2xl overflow-hidden relative group ${darkMode ? 'bg-slate-800' : 'bg-slate-200'}`}
                     >
+                      {/* Optimized image with thumbnail */}
                       <img
-                        src={media.image}
-                        className="w-full h-full object-cover"
+                        src={media.image.includes('cloudinary') 
+                          ? media.image.replace('/upload/', '/upload/w_300,h_300,c_fill,f_auto,q_auto/') 
+                          : media.image
+                        }
+                        className="w-full h-full object-cover transition-opacity duration-300"
                         alt="gallery"
                         loading="lazy"
+                        decoding="async"
+                        onError={(e) => {
+                          // Fallback to original image if optimized version fails
+                          if (e.target.src !== media.image) {
+                            e.target.src = media.image
+                          }
+                        }}
                       />
+                      
+                      {/* Loading placeholder */}
+                      <div className="absolute inset-0 bg-gradient-to-br from-gray-200 to-gray-300 animate-pulse opacity-0 peer-loading:opacity-100" />
+                      
+                      {/* Hover overlay */}
                       <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center gap-3">
                         <button
                           onClick={async () => {

@@ -15,6 +15,7 @@ export class FileValidator {
     this.videoMimeTypes = ['video/mp4', 'video/webm', 'video/quicktime', 'video/x-msvideo', 'video/x-matroska']
   }
 
+  // Remove debug logging in production
   validate(file) {
     if (!file || !file.name) {
       return { isValid: false, error: 'No file provided' }
@@ -22,6 +23,15 @@ export class FileValidator {
 
     const ext = this.getExtension(file.name)
     const mimetype = file.mimetype
+    
+    // Debug logging only in development
+    if (process.env.NODE_ENV !== 'production') {
+      console.log('File validation debug:', {
+        fileName: file.name,
+        extractedExt: ext,
+        mimetype: mimetype
+      })
+    }
 
     // Check if file type is allowed
     const isImage = this.isImage(ext, mimetype)
@@ -62,31 +72,51 @@ export class FileValidator {
 
   validateMagicNumbers(filePath, ext) {
     try {
-      const buffer = Buffer.alloc(12)
+      if (process.env.NODE_ENV !== 'production') {
+        console.log('Magic number validation for:', { filePath, ext })
+      }
+      
+      const buffer = Buffer.alloc(16) // Read more bytes for better detection
       const fd = fs.openSync(filePath, 'r')
-      fs.readSync(fd, buffer, 0, 12, 0)
+      fs.readSync(fd, buffer, 0, 16, 0)
       fs.closeSync(fd)
 
       const hex = buffer.toString('hex').toUpperCase()
+      
+      if (process.env.NODE_ENV !== 'production') {
+        console.log('File hex signature:', hex.substring(0, 24))
+      }
 
-      // Magic number signatures
+      // Improved magic number signatures
       const signatures = {
         '.jpg': ['FFD8FF'],
         '.jpeg': ['FFD8FF'],
         '.png': ['89504E47'],
-        '.gif': ['474946383761', '474946383961'],
-        '.webp': ['52494646'],
+        '.gif': ['474946383761', '474946383961'], // GIF87a, GIF89a
+        '.webp': ['52494646'], // RIFF
         '.bmp': ['424D'],
+        '.svg': ['3C3F786D6C', '3C737667', '3C21444F43'], // <?xml, <svg, <!DOC
         '.mp4': ['00000018667479706D703432', '00000020667479706D703432', '667479706D703432'],
         '.webm': ['1A45DFA3'],
-        '.mov': ['6674797071742020'],
+        '.mov': ['6674797071742020', '6674797066726565'], // ftypqt  , ftypfree
         '.avi': ['52494646']
       }
 
       const expectedSignatures = signatures[ext.toLowerCase()] || []
+      
+      // If no signatures defined for this extension, allow it (less strict)
+      if (expectedSignatures.length === 0) {
+        console.warn(`No magic number validation for extension: ${ext}`)
+        return { isValid: true }
+      }
+      
       const isValid = expectedSignatures.some(sig => hex.startsWith(sig))
 
       if (!isValid) {
+        console.warn(`Magic number mismatch for ${ext}:`, {
+          expected: expectedSignatures,
+          actual: hex.substring(0, 24)
+        })
         return { 
           isValid: false, 
           error: `File content does not match extension ${ext}. Possible file type mismatch or corrupted file.` 
@@ -112,7 +142,14 @@ export class FileValidator {
   }
 
   getExtension(filename) {
-    return path.extname(filename).toLowerCase()
+    const ext = path.extname(filename).toLowerCase()
+    // Handle edge case where filename might have multiple extensions
+    if (!ext && filename.includes('.')) {
+      // Fallback: get the last part after the last dot
+      const parts = filename.toLowerCase().split('.')
+      return '.' + parts[parts.length - 1]
+    }
+    return ext
   }
 }
 

@@ -7,6 +7,16 @@ import { validateFileUpload } from '../utils/security.js'
 export class UploadController {
   async uploadFile(req, res) {
     try {
+      console.log('Upload request received:', {
+        hasFiles: !!req.files,
+        fileKeys: req.files ? Object.keys(req.files) : [],
+        file: req.files?.file ? {
+          name: req.files.file.name,
+          mimetype: req.files.file.mimetype,
+          size: req.files.file.size
+        } : null
+      })
+      
       if (!req.files || !req.files.file) {
         return res.status(400).json({ error: 'No file uploaded' })
       }
@@ -16,6 +26,7 @@ export class UploadController {
       // Validate file before processing
       const validation = validateFileUpload(file)
       if (!validation.isValid) {
+        console.log('File validation failed:', validation.error)
         return res.status(400).json({ error: validation.error })
       }
 
@@ -24,6 +35,7 @@ export class UploadController {
       if (result.success) {
         res.json(result.data)
       } else {
+        console.log('Upload processing failed:', result.error)
         res.status(result.status || 500).json({ error: result.error })
       }
     } catch (error) {

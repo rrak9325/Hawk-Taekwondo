@@ -26,7 +26,7 @@ export class UploadService {
       }
 
       const { name: originalName, mimetype } = file
-      const ext = '.' + originalName.toLowerCase().split('.').pop()
+      const ext = fileValidator.getExtension(originalName)
 
       // Handle video files
       if (fileValidator.isVideo(ext, mimetype)) {

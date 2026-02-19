@@ -115,6 +115,7 @@ export function createApp() {
   
   app.use(cors({
     origin: (origin, callback) => {
+      // Allow requests with no origin (mobile apps, Postman, etc.)
       if (!origin) return callback(null, true)
       
       const allowedOrigins = [
@@ -124,10 +125,13 @@ export function createApp() {
         'http://127.0.0.1:5173',
         'http://127.0.0.1:5174',
         'http://127.0.0.1:3000',
+        'https://hawktaekwondo.onrender.com',
+        'https://hawktaekwondo.com',
+        'https://www.hawktaekwondo.com',
         process.env.FRONTEND_URL
-      ]
+      ].filter(Boolean) // Remove any undefined values
       
-      // Allow ngrok domains
+      // Allow ngrok domains for development
       if (origin && (origin.includes('ngrok-free.dev') || origin.includes('ngrok.io') || origin.includes('ngrok.app'))) {
         return callback(null, true)
       }
@@ -135,7 +139,8 @@ export function createApp() {
       if (allowedOrigins.includes(origin)) {
         callback(null, true)
       } else {
-        callback(null, true) // Allow all for development
+        console.warn(`CORS blocked origin: ${origin}`)
+        callback(new Error('Not allowed by CORS'))
       }
     },
     methods: ['GET', 'POST', 'DELETE', 'PUT', 'OPTIONS'],

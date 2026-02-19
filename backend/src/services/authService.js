@@ -10,9 +10,13 @@ const LOCKOUT_DURATION_MS = 30 * 60 * 1000 // 30 minutes
 const SESSION_TOKEN_BYTES = 32
 
 function getAdminCredentials() {
+  if (!process.env.ADMIN_USERNAME || !process.env.ADMIN_PASSWORD_HASH) {
+    throw new Error('Admin credentials not configured. Set ADMIN_USERNAME and ADMIN_PASSWORD_HASH environment variables.')
+  }
+  
   return {
-    username: process.env.ADMIN_USERNAME || 'admin',
-    passwordHash: process.env.ADMIN_PASSWORD_HASH || '$2a$10$8K1TKnwN.N24q5Bp5p8JHeUeZ.bfRFD2.yzY5KkEv.YjZWV3e.C4a'
+    username: process.env.ADMIN_USERNAME,
+    passwordHash: process.env.ADMIN_PASSWORD_HASH
   }
 }
 

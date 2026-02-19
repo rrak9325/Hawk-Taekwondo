@@ -26,7 +26,7 @@
       "titleHighlight": "Taekwondo",
       "subtitle": "Find your strength. Build your confidence.",
       "videoUrl": "https://res.cloudinary.com/dem7arres/video/upload/v1771426207/bestvideoever_xkg0iw.mp4",
-      "backgroundImage": ""
+      "backgroundImage": "https://res.cloudinary.com/dem7arres/image/upload/v1770911449/hawk-taekwondo/images/tmp-6-89761770911451922_zmmboz.jpg"
     },
     "features": {
       "0": {
@@ -404,42 +404,36 @@
   "gallery": {
     "featured": {
       "0": {
-        "id": 1771520044823.9326,
-        "image": "/uploads/images/acbb0421-1bec-4c98-b690-a71134a76414.JPG",
-        "publicId": "acbb0421-1bec-4c98-b690-a71134a76414.JPG",
+        "id": 1771524224246.1587,
+        "image": "https://res.cloudinary.com/dem7arres/image/upload/v1771524221/hawk-taekwondo/images/5eab732c-33fa-4263-93f5-5a2bc80e44ff.jpg",
+        "publicId": "hawk-taekwondo/images/5eab732c-33fa-4263-93f5-5a2bc80e44ff",
         "title": ""
       },
       "1": {
-        "id": 1771520045612.857,
-        "image": "/uploads/images/ed4896c4-cdf3-4eae-b9ce-352c7bdb5073.jpg",
-        "publicId": "ed4896c4-cdf3-4eae-b9ce-352c7bdb5073.jpg",
+        "id": 1771524233999.016,
+        "image": "https://res.cloudinary.com/dem7arres/image/upload/v1771524231/hawk-taekwondo/images/d0aa0b3e-9640-4389-a30b-e755c32d842b.jpg",
+        "publicId": "hawk-taekwondo/images/d0aa0b3e-9640-4389-a30b-e755c32d842b",
         "title": ""
       },
       "2": {
-        "id": 1771520046882.95,
-        "image": "/uploads/images/87de9025-7a77-4951-9f2b-4a9cecd04705.JPG",
-        "publicId": "87de9025-7a77-4951-9f2b-4a9cecd04705.JPG",
+        "id": 1771524196256.911,
+        "image": "https://res.cloudinary.com/dem7arres/image/upload/v1771524193/hawk-taekwondo/images/762f9955-7a88-43c6-9054-6b7ec7706d74.jpg",
+        "publicId": "hawk-taekwondo/images/762f9955-7a88-43c6-9054-6b7ec7706d74",
         "title": ""
       },
       "3": {
-        "id": 1771519987907.3694,
-        "image": "/uploads/images/2590bb2e-2511-47bd-b4ca-311f16e8a118.JPG",
-        "publicId": "2590bb2e-2511-47bd-b4ca-311f16e8a118.JPG",
-        "title": ""
-      },
-      "4": {
         "id": 1770911222993.372,
         "image": "https://res.cloudinary.com/dem7arres/image/upload/v1770911212/hawk-taekwondo/images/tmp-3-89761770911210373_hweax8.jpg",
         "publicId": "hawk-taekwondo/images/tmp-3-89761770911210373_hweax8",
         "title": ""
       },
-      "5": {
+      "4": {
         "id": 1770911228396.7373,
         "image": "https://res.cloudinary.com/dem7arres/image/upload/v1770911218/hawk-taekwondo/images/tmp-4-89761770911223006_etqxya.jpg",
         "publicId": "hawk-taekwondo/images/tmp-4-89761770911223006_etqxya",
         "title": ""
       },
-      "6": {
+      "5": {
         "id": 1770911233953.4697,
         "image": "https://res.cloudinary.com/dem7arres/image/upload/v1770911223/hawk-taekwondo/images/tmp-5-89761770911228412_n5maig.jpg",
         "publicId": "hawk-taekwondo/images/tmp-5-89761770911228412_n5maig",

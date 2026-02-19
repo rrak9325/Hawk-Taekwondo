@@ -3,6 +3,7 @@ import { Shield, Award, Heart, Target, Users, TrendingUp } from 'lucide-react'
 import { useSchoolData } from '../hooks/useSchoolData.js'
 import { PageLoadingFallback } from '../components/LoadingFallback'
 import ServerDownPage from '../components/ServerDownPage'
+import { currentAnimationConfig } from '../utils/devicePerformance.js'
 
 // Lightweight scroll animation hook
 function useScrollAnimation() {
@@ -10,6 +11,12 @@ function useScrollAnimation() {
   const ref = useRef(null)
 
   useEffect(() => {
+    // Skip scroll animations on low-end devices
+    if (!currentAnimationConfig.useScrollAnimations) {
+      setIsVisible(true)
+      return
+    }
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -834,8 +841,8 @@ function LegacyStorySection() {
 
           <div className={`flex flex-col justify-center ${isVisible ? 'animate-in-right' : 'opacity-0'}`} style={{ animationDelay: '0.15s' }}>
             <div className="inline-block bg-red-600 text-white text-xs md:text-sm font-bold px-3 py-1 rounded-full mb-3 w-fit">
-              1985 - FOUNDED
             </div>
+            Found at 1985
             <h2 className="text-lg md:text-4xl font-black text-gray-900 mb-2 md:mb-4">
               Master Late Vijaysinh Rathod
             </h2>

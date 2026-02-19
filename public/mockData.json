@@ -234,27 +234,43 @@
   },
   "testimonials": {
     "0": {
-      "id": 1770911498864,
-      "name": "New Student2",
-      "program": "Adult Program",
+      "id": 1771481740916,
+      "name": "Devi B Shah",
+      "program": "",
       "rating": 5,
-      "comment": "",
+      "comment": "They train very nice. Best taekwondo club in gujarat",
       "image": ""
     },
     "1": {
-      "id": 1770911494339,
-      "name": "New Student1",
-      "program": "Adult Program",
+      "id": 1771481676123,
+      "name": "Rikin mehta",
+      "program": "",
       "rating": 5,
-      "comment": "",
+      "comment": "Very good training centre, children are very happy there and enjoying lot with learning self defence tricks. Trainer is very supportive and guide children very well",
       "image": ""
     },
     "2": {
-      "id": 1770910856115,
-      "name": "New Student",
+      "id": 1771481537970,
+      "name": "Pruthviraj Sinh Chauhan",
       "program": "Adult Program",
       "rating": 5,
-      "comment": "best donjo ever",
+      "comment": "The best taekwondo training in  Central Ahmedabad.",
+      "image": ""
+    },
+    "3": {
+      "id": 1771481442480,
+      "name": "Kruti Shah",
+      "program": "",
+      "rating": 5,
+      "comment": "Very nice training centre for kids nd sir is also good. Good place for girls to learn self defence.",
+      "image": ""
+    },
+    "4": {
+      "id": 1771481404757,
+      "name": "Saurabh Dholakiya",
+      "program": "",
+      "rating": 5,
+      "comment": "If you want Your child to be strong in their physique , then Taekwondo is one of the great disciplined training art..  And Hawk Taekwondo trains it very well..",
       "image": ""
     }
   },
@@ -388,27 +404,45 @@
   "gallery": {
     "featured": {
       "0": {
+        "id": 1771520044823.9326,
+        "image": "/uploads/images/acbb0421-1bec-4c98-b690-a71134a76414.JPG",
+        "publicId": "acbb0421-1bec-4c98-b690-a71134a76414.JPG",
+        "title": ""
+      },
+      "1": {
+        "id": 1771520045612.857,
+        "image": "/uploads/images/ed4896c4-cdf3-4eae-b9ce-352c7bdb5073.jpg",
+        "publicId": "ed4896c4-cdf3-4eae-b9ce-352c7bdb5073.jpg",
+        "title": ""
+      },
+      "2": {
+        "id": 1771520046882.95,
+        "image": "/uploads/images/87de9025-7a77-4951-9f2b-4a9cecd04705.JPG",
+        "publicId": "87de9025-7a77-4951-9f2b-4a9cecd04705.JPG",
+        "title": ""
+      },
+      "3": {
+        "id": 1771519987907.3694,
+        "image": "/uploads/images/2590bb2e-2511-47bd-b4ca-311f16e8a118.JPG",
+        "publicId": "2590bb2e-2511-47bd-b4ca-311f16e8a118.JPG",
+        "title": ""
+      },
+      "4": {
         "id": 1770911222993.372,
         "image": "https://res.cloudinary.com/dem7arres/image/upload/v1770911212/hawk-taekwondo/images/tmp-3-89761770911210373_hweax8.jpg",
         "publicId": "hawk-taekwondo/images/tmp-3-89761770911210373_hweax8",
         "title": ""
       },
-      "1": {
+      "5": {
         "id": 1770911228396.7373,
         "image": "https://res.cloudinary.com/dem7arres/image/upload/v1770911218/hawk-taekwondo/images/tmp-4-89761770911223006_etqxya.jpg",
         "publicId": "hawk-taekwondo/images/tmp-4-89761770911223006_etqxya",
         "title": ""
       },
-      "2": {
+      "6": {
         "id": 1770911233953.4697,
         "image": "https://res.cloudinary.com/dem7arres/image/upload/v1770911223/hawk-taekwondo/images/tmp-5-89761770911228412_n5maig.jpg",
         "publicId": "hawk-taekwondo/images/tmp-5-89761770911228412_n5maig",
-        "title": ""
-      },
-      "3": {
-        "id": 1770911156577.4944,
-        "image": "https://res.cloudinary.com/dem7arres/image/upload/v1770911156/hawk-taekwondo/images/tmp-2-89761770911159608_lkpwy9.jpg",
-        "publicId": "hawk-taekwondo/images/tmp-2-89761770911159608_lkpwy9",
         "title": ""
       }
     }

@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useMemo } from 'react'
 import { motion } from 'framer-motion'
 import { Lock, Eye, EyeOff, Menu, Plus, LogOut, Upload, Trash2, Moon, Sun, X, Info, Video, Package, Users, MessageSquare, Image as ImageIcon, Calendar } from 'lucide-react'
 import { authService, dataService, uploadService } from '../services/index.js'
+import { currentAnimationConfig, shouldUseInfiniteLoops } from '../utils/devicePerformance.js'
 import AdminCard from '../components/admin/AdminCard'
 import AdminInput from '../components/admin/AdminInput'
 import MediaUpload from '../components/admin/MediaUpload'
@@ -394,6 +395,26 @@ export default function AdminNew() {
   }), [])
 
   if (loading) {
+    // Use CSS-only spinner on low-end devices
+    if (!shouldUseInfiniteLoops()) {
+      return (
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950">
+          <div className="flex flex-col items-center gap-6">
+            <div className="relative w-16 h-16">
+              <div className="absolute inset-0 border-4 border-transparent border-t-purple-400 border-r-pink-400 rounded-full animate-spin" />
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="w-6 h-6 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full" />
+              </div>
+            </div>
+            <div className="text-center">
+              <div className="text-purple-400 text-xl font-bold mb-2">Loading admin...</div>
+              <div className="text-purple-300/60 text-sm">🔐 Preparing your dashboard</div>
+            </div>
+          </div>
+        </div>
+      )
+    }
+
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950">
         <motion.div
@@ -1241,7 +1262,9 @@ export default function AdminNew() {
                         <div className="flex flex-wrap gap-3">
                           <button
                             onClick={() => {
-                              console.log('🔄 Refreshing daily schedule...')
+                              if (import.meta.env.DEV) {
+                                console.log('🔄 Refreshing daily schedule...')
+                              }
                               setData(prev => {
                                 const currentBatches = Array.isArray(prev.classSchedule?.batches) 
                                   ? prev.classSchedule.batches 
@@ -1254,7 +1277,9 @@ export default function AdminNew() {
                                     dailySchedule: dailySchedule
                                   }
                                 }
-                                console.log('📅 Daily schedule refreshed:', updated.classSchedule.dailySchedule)
+                                if (import.meta.env.DEV) {
+                                  console.log('📅 Daily schedule refreshed:', updated.classSchedule.dailySchedule)
+                                }
                                 return updated
                               })
                               addToast('success', 'Schedule refreshed!')
@@ -1265,7 +1290,9 @@ export default function AdminNew() {
                           </button>
                           <button
                             onClick={() => {
-                              console.log('🔄 Adding new batch...')
+                              if (import.meta.env.DEV) {
+                                console.log('🔄 Adding new batch...')
+                              }
                               const newBatch = {
                                 name: 'New Batch',
                                 days: ['Monday'],
@@ -1516,7 +1543,9 @@ export default function AdminNew() {
                             try {
                               const result = await dataService.updateSchoolData(newGalleryData)
                               if (result.success) {
-                                console.log('✅ Gallery auto-saved')
+                                if (import.meta.env.DEV) {
+                                  console.log('✅ Gallery auto-saved')
+                                }
                                 addToast('success', '💾 Gallery saved automatically!')
                               }
                             } catch (err) {

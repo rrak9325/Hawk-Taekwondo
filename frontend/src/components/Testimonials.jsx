@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Star, ChevronLeft, ChevronRight } from 'lucide-react'
+import { currentAnimationConfig } from '../utils/devicePerformance.js'
 
 export default function Testimonials({ testimonials = [] }) {
   const [currentIndex, setCurrentIndex] = useState(0)
@@ -73,19 +74,31 @@ export default function Testimonials({ testimonials = [] }) {
       </div>
 
       <div className="container mx-auto px-4 relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center max-w-3xl mx-auto mb-12 lg:mb-16"
-        >
-          <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-primary mb-4">
-            What Our <span className="text-secondary">Students Say</span>
-          </h2>
-          <p className="text-gray-600 text-base lg:text-lg">
-            Hear from our community of dedicated martial artists
-          </p>
-        </motion.div>
+        {/* Use scroll animations only on high-end devices */}
+        {currentAnimationConfig.useScrollAnimations ? (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center max-w-3xl mx-auto mb-12 lg:mb-16"
+          >
+            <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-primary mb-4">
+              What Our <span className="text-secondary">Students Say</span>
+            </h2>
+            <p className="text-gray-600 text-base lg:text-lg">
+              Hear from our community of dedicated martial artists
+            </p>
+          </motion.div>
+        ) : (
+          <div className="text-center max-w-3xl mx-auto mb-12 lg:mb-16">
+            <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-primary mb-4">
+              What Our <span className="text-secondary">Students Say</span>
+            </h2>
+            <p className="text-gray-600 text-base lg:text-lg">
+              Hear from our community of dedicated martial artists
+            </p>
+          </div>
+        )}
 
         {/* Slider Container */}
         <div className="relative max-w-5xl mx-auto">

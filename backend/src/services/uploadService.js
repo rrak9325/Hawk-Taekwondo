@@ -357,7 +357,7 @@ export class UploadService {
   async cleanupOrphanFiles() {
     try {
       // Read current mockData.json to get all used URLs
-      const mockDataPath = path.join(__dirname, '../../../public/mockData.json')
+      const mockDataPath = path.join(__dirname, '../../../frontend/public/mockData.json')
       
       let mockData = {}
       try {

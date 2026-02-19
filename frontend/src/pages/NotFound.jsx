@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { Home, ArrowLeft, Frown } from 'lucide-react'
+import { shouldUseInfiniteLoops } from '../utils/devicePerformance.js'
 
 const NotFound = () => {
   return (
@@ -17,21 +18,32 @@ const NotFound = () => {
         className="text-center max-w-3xl relative z-10"
       >
         {/* Big sarcastic frown as focal point */}
-        <motion.div
-          initial={{ scale: 0.6, rotate: -10, opacity: 0 }}
-          animate={{
-            scale: 1,
-            rotate: [0, -8, 8, -4, 0],
-            opacity: 1,
-          }}
-          transition={{
-            scale: { duration: 0.7, ease: 'backOut' },
-            rotate: { duration: 4, repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut' },
-          }}
-          className="mb-8 md:mb-12"
-        >
-          <Frown className="w-40 h-40 sm:w-56 sm:h-56 md:w-72 md:h-72 mx-auto text-red-600 drop-shadow-[0_0_40px_rgba(220,38,38,0.6)]" />
-        </motion.div>
+        {shouldUseInfiniteLoops() ? (
+          <motion.div
+            initial={{ scale: 0.6, rotate: -10, opacity: 0 }}
+            animate={{
+              scale: 1,
+              rotate: [0, -8, 8, -4, 0],
+              opacity: 1,
+            }}
+            transition={{
+              scale: { duration: 0.7, ease: 'backOut' },
+              rotate: { duration: 4, repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut' },
+            }}
+            className="mb-8 md:mb-12"
+          >
+            <Frown className="w-40 h-40 sm:w-56 sm:h-56 md:w-72 md:h-72 mx-auto text-red-600 drop-shadow-[0_0_40px_rgba(220,38,38,0.6)]" />
+          </motion.div>
+        ) : (
+          <motion.div
+            initial={{ scale: 0.6, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.7, ease: 'backOut' }}
+            className="mb-8 md:mb-12"
+          >
+            <Frown className="w-40 h-40 sm:w-56 sm:h-56 md:w-72 md:h-72 mx-auto text-red-600 drop-shadow-[0_0_40px_rgba(220,38,38,0.6)]" />
+          </motion.div>
+        )}
 
         {/* 404 with red accent */}
        

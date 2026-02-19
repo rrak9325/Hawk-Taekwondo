@@ -99,7 +99,9 @@ export default function OptimizedImage({
     
     // If optimized image fails, try loading the original
     if (currentSrc !== src && src) {
-      console.log('Optimized image failed, falling back to original:', src)
+      if (import.meta.env.DEV) {
+        console.log('Optimized image failed, falling back to original:', src)
+      }
       setCurrentSrc(src)
       setIsError(false) // Reset error state for fallback attempt
     }

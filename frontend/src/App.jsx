@@ -1,5 +1,5 @@
 import { lazy, Suspense } from 'react'
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, useLocation } from 'react-router-dom'
 
 // 🔹 Lazy-loaded layouts
 const MainLayout = lazy(() => import('./layouts/MainLayout'))
@@ -20,6 +20,7 @@ const NotFound = lazy(() => import('./pages/NotFound'))
 import ScrollToTop from './components/ScrollToTop'
 import ErrorBoundary from './components/ErrorBoundary'
 import WelcomeSplash from './components/WelcomeSplash'
+import RouteCleanup from './components/RouteCleanup'
 // import QuantumParticles from './components/QuantumParticles'
 // import performanceDetector from './utils/performanceDetector'
 
@@ -127,30 +128,32 @@ const App = () => {
       <ScrollToTop />
 
       <Suspense fallback={<PageLoader />}>
-        <Routes>
-          {/* 🌐 Public website */}
-          <Route
-            path="/"
-            element={
-              <ErrorBoundary>
-                <MainLayout />
-              </ErrorBoundary>
-            }
-          >
-            <Route index element={<Home />} />
-            <Route path="about" element={<About />} />
-            <Route path="programs" element={<Programs />} />
-            <Route path="schedule" element={<Schedule />} />
-            <Route path="faculty" element={<Faculty />} />
-            <Route path="contact" element={<Contact />} />
-          </Route>
+        <RouteCleanup>
+          <Routes>
+            {/* 🌐 Public website */}
+            <Route
+              path="/"
+              element={
+                <ErrorBoundary>
+                  <MainLayout />
+                </ErrorBoundary>
+              }
+            >
+              <Route index element={<Home />} />
+              <Route path="about" element={<About />} />
+              <Route path="programs" element={<Programs />} />
+              <Route path="schedule" element={<Schedule />} />
+              <Route path="faculty" element={<Faculty />} />
+              <Route path="contact" element={<Contact />} />
+            </Route>
 
-          {/* 🔐 Admin (no outer error boundary to avoid full crash screen) */}
-          <Route path="/admin" element={<AdminNew />} />
+            {/* 🔐 Admin (no outer error boundary to avoid full crash screen) */}
+            <Route path="/admin" element={<AdminNew />} />
 
-          {/* ❌ 404 */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+            {/* ❌ 404 */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </RouteCleanup>
       </Suspense>
     </>
   )

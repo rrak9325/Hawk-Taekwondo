@@ -343,7 +343,7 @@ export default function Home() {
 
 
       {/* Programs Preview Section - Only renders when in viewport */}
-      <LazySection className="py-12 lg:py-16 xl:py-24" rootMargin="300px">
+      <LazySection className="py-12 lg:py-16 xl:py-24" rootMargin="300px" keepMounted={true}>
         <div className="container mx-auto px-4">
           <ScrollReveal>
             <div className="text-center mb-12 lg:mb-16">
@@ -366,7 +366,7 @@ export default function Home() {
         </div>
       </LazySection>
       {/* Features Section - Only renders when in viewport */}
-      <LazySection className="py-16 lg:py-20 bg-white" rootMargin="300px">
+      <LazySection className="py-16 lg:py-20 bg-white" rootMargin="300px" keepMounted={true}>
         <div className="container mx-auto px-4">
           <ScrollReveal>
             <div className="text-center max-w-3xl mx-auto mb-12 lg:mb-16">
@@ -389,17 +389,17 @@ export default function Home() {
         </div>
       </LazySection>
       {/* Gallery Section - Only renders when in viewport */}
-      <LazySection rootMargin="400px">
+      <LazySection rootMargin="400px" keepMounted={true}>
         <CapturedMomentsGallery gallery={gallery} />
       </LazySection>
 
       {/* Testimonials Section - Only renders when in viewport */}
-      <LazySection rootMargin="400px">
+      <LazySection rootMargin="400px" keepMounted={true}>
         <Testimonials testimonials={data.testimonials || []} />
       </LazySection>
 
       {/* Call to Action Section - Only renders when in viewport */}
-      <LazySection className="py-12 lg:py-16 xl:py-20 bg-gradient-to-br from-primary to-primary-light text-white text-center" rootMargin="300px">
+      <LazySection className="py-12 lg:py-16 xl:py-20 bg-gradient-to-br from-primary to-primary-light text-white text-center" rootMargin="300px" keepMounted={true}>
         <div className="container mx-auto px-4">
           <ScrollReveal>
             <h2 className="font-heading text-2xl md:text-3xl lg:text-4xl font-bold mb-4 lg:mb-6">

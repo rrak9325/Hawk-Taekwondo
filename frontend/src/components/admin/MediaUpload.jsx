@@ -81,7 +81,9 @@ export default function MediaUpload({
       }, 1500)
 
     } catch (error) {
-      console.error('Upload error:', error)
+      if (import.meta.env.DEV) {
+        console.error('Upload error:', error)
+      }
       setUploading(false)
       setUploadProgress(0)
       setCompressionStats(null)
@@ -159,7 +161,9 @@ export default function MediaUpload({
                 loop 
                 autoPlay
                 onError={(e) => {
-                  console.error('Video load error:', e.target.src)
+                  if (import.meta.env.DEV) {
+                    console.error('Video load error:', e.target.src)
+                  }
                 }}
               />
             ) : (
@@ -169,10 +173,14 @@ export default function MediaUpload({
                 alt="Upload preview"
                 loading="lazy"
                 onError={(e) => {
-                  console.error('Image load error:', e.target.src)
+                  if (import.meta.env.DEV) {
+                    console.error('Image load error:', e.target.src)
+                  }
                 }}
                 onLoad={() => {
-                  console.log('Image loaded successfully:', value)
+                  if (import.meta.env.DEV) {
+                    console.log('Image loaded successfully:', value)
+                  }
                 }}
               />
             )}

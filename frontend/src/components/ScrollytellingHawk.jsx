@@ -16,11 +16,15 @@ export default function ScrollytellingHawk() {
     const todaySection = document.querySelector('.today-section')
     
     if (!hawk || !todaySection) {
-      console.log('Missing elements:', { hawk: !!hawk, todaySection: !!todaySection })
+      if (import.meta.env.DEV) {
+        console.log('Missing elements:', { hawk: !!hawk, todaySection: !!todaySection })
+      }
       return
     }
 
-    console.log('Eagle initialized!')
+    if (import.meta.env.DEV) {
+      console.log('Eagle initialized!')
+    }
     
     // Intersection Observer to pause animation when off-screen
     const observer = new IntersectionObserver(
@@ -48,11 +52,15 @@ export default function ScrollytellingHawk() {
           
           // Mark as landed when we reach 70% of the scroll
           if (self.progress >= 0.7 && !hasLanded) {
-            console.log('🦅 EAGLE LANDED!')
+            if (import.meta.env.DEV) {
+              console.log('🦅 EAGLE LANDED!')
+            }
             setHasLanded(true)
           }
           
-          console.log('Scroll progress:', self.progress)
+          if (import.meta.env.DEV) {
+            console.log('Scroll progress:', self.progress)
+          }
         }
       }
     })

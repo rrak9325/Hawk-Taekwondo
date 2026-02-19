@@ -1,6 +1,36 @@
 import { motion } from 'framer-motion'
+import { shouldUseInfiniteLoops } from '../utils/devicePerformance.js'
 
 export default function LoadingFallback({ message = "Loading..." }) {
+  // Use CSS-only spinner on low-end devices
+  if (!shouldUseInfiniteLoops()) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-white">
+        <div className="flex flex-col items-center gap-6">
+          <div className="relative w-20 h-20">
+            <div className="absolute inset-0 bg-secondary rounded-lg animate-spin" />
+            {[0, 90, 180, 270].map((angle, i) => (
+              <div
+                key={i}
+                className="absolute w-4 h-4 bg-primary rounded animate-pulse"
+                style={{
+                  top: '50%',
+                  left: '50%',
+                  marginTop: '-8px',
+                  marginLeft: '-8px',
+                  animationDelay: `${i * 150}ms`
+                }}
+              />
+            ))}
+          </div>
+          <p className="text-primary font-semibold text-lg tracking-wide animate-pulse">
+            {message}
+          </p>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-white">
       <motion.div
@@ -71,6 +101,35 @@ export default function LoadingFallback({ message = "Loading..." }) {
 }
 
 export function PageLoadingFallback() {
+  // Use CSS-only spinner on low-end devices
+  if (!shouldUseInfiniteLoops()) {
+    return (
+      <div className="flex items-center justify-center py-16 md:py-24">
+        <div className="flex flex-col items-center gap-4">
+          <div className="relative w-12 h-12">
+            <div className="absolute inset-0 bg-secondary rounded-md animate-spin" />
+            {[0, 120, 240].map((angle, i) => (
+              <div
+                key={i}
+                className="absolute w-3 h-3 bg-primary rounded-sm animate-pulse"
+                style={{
+                  top: '50%',
+                  left: '50%',
+                  marginTop: '-6px',
+                  marginLeft: '-6px',
+                  animationDelay: `${i * 200}ms`
+                }}
+              />
+            ))}
+          </div>
+          <p className="text-gray-600 text-sm font-medium animate-pulse">
+            Loading content...
+          </p>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="flex items-center justify-center py-16 md:py-24">
       <motion.div

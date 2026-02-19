@@ -4,6 +4,7 @@ import Hero from '../components/Hero'
 import { useSchoolData } from '../hooks/useSchoolData.js'
 import { PageLoadingFallback } from '../components/LoadingFallback'
 import ServerDownPage from '../components/ServerDownPage'
+import { currentAnimationConfig } from '../utils/devicePerformance.js'
 
 // Lightweight scroll animation hook
 function useScrollAnimation() {
@@ -11,6 +12,12 @@ function useScrollAnimation() {
   const ref = useState(null)[0]
 
   useEffect(() => {
+    // Skip scroll animations on low-end devices
+    if (!currentAnimationConfig.useScrollAnimations) {
+      setIsVisible(true)
+      return
+    }
+
     if (!ref) return
     
     const observer = new IntersectionObserver(

@@ -3,51 +3,63 @@ import { shouldUseInfiniteLoops } from '../utils/devicePerformance.js'
 import { SkeletonFeatureCard } from './LoadingSkeleton'
 
 export default function LoadingFallback({ message = "Loading..." }) {
-  // Use CSS-only spinner on low-end devices
-  if (!shouldUseInfiniteLoops()) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-white">
-        <div className="flex flex-col items-center gap-6">
-          <div className="relative w-20 h-20">
-            <div className="absolute inset-0 bg-secondary rounded-lg animate-spin" />
-            {[0, 90, 180, 270].map((angle, i) => (
-              <div
-                key={i}
-                className="absolute w-4 h-4 bg-primary rounded animate-pulse"
-                style={{
-                  top: '50%',
-                  left: '50%',
-                  marginTop: '-8px',
-                  marginLeft: '-8px',
-                  animationDelay: `${i * 150}ms`
-                }}
-              />
-            ))}
-          </div>
-          <p className="text-primary font-semibold text-lg tracking-wide animate-pulse">
-            {message}
-          </p>
-        </div>
-      </div>
-    )
-  }
-
+  // Modern loading for all devices
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-white">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-white via-gray-50 to-red-50 relative overflow-hidden">
+      {/* Animated background circles */}
+      <div className="absolute inset-0">
+        <motion.div
+          className="absolute top-1/4 left-1/4 w-64 h-64 bg-red-100/30 rounded-full blur-3xl"
+          animate={{
+            scale: [1, 1.2, 1],
+            opacity: [0.3, 0.5, 0.3],
+          }}
+          transition={{
+            duration: 4,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        />
+        <motion.div
+          className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-gray-200/30 rounded-full blur-3xl"
+          animate={{
+            scale: [1.2, 1, 1.2],
+            opacity: [0.5, 0.3, 0.5],
+          }}
+          transition={{
+            duration: 4,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 2
+          }}
+        />
+      </div>
+
       <motion.div
-        initial={{ opacity: 0, scale: 0.92 }}
+        initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5 }}
-        className="flex flex-col items-center gap-6"
+        className="relative z-10 flex flex-col items-center gap-8"
       >
-        {/* Martial arts blocks animation */}
-        <div className="relative w-20 h-20">
-          {/* Center block */}
+        {/* Modern spinner with logo concept */}
+        <div className="relative w-24 h-24">
+          {/* Outer rotating ring */}
           <motion.div
-            className="absolute inset-0 bg-secondary rounded-lg"
+            className="absolute inset-0 border-4 border-gray-200 border-t-red-600 rounded-full"
+            animate={{ rotate: 360 }}
+            transition={{
+              duration: 1.5,
+              repeat: Infinity,
+              ease: "linear"
+            }}
+          />
+          
+          {/* Inner pulsing circle */}
+          <motion.div
+            className="absolute inset-3 bg-gradient-to-br from-red-500 to-red-600 rounded-full shadow-lg"
             animate={{
-              scale: [1, 0.8, 1],
-              rotate: [0, 90, 180, 270, 360],
+              scale: [0.8, 1, 0.8],
+              opacity: [0.5, 1, 0.5],
             }}
             transition={{
               duration: 2,
@@ -56,46 +68,58 @@ export default function LoadingFallback({ message = "Loading..." }) {
             }}
           />
           
-          {/* Orbiting blocks */}
-          {[0, 90, 180, 270].map((angle, i) => (
+          {/* Center dot */}
+          <div className="absolute inset-0 flex items-center justify-center">
             <motion.div
-              key={i}
-              className="absolute w-4 h-4 bg-primary rounded"
-              style={{
-                top: '50%',
-                left: '50%',
-                marginTop: '-8px',
-                marginLeft: '-8px',
-              }}
+              className="w-3 h-3 bg-white rounded-full shadow-md"
               animate={{
-                x: [0, Math.cos((angle * Math.PI) / 180) * 35],
-                y: [0, Math.sin((angle * Math.PI) / 180) * 35],
-                rotate: 360,
-                scale: [1, 1.2, 1],
+                scale: [1, 1.5, 1],
               }}
               transition={{
-                duration: 2,
+                duration: 1.5,
                 repeat: Infinity,
-                ease: "easeInOut",
-                delay: i * 0.15,
+                ease: "easeInOut"
               }}
             />
-          ))}
+          </div>
         </div>
 
-        <motion.p
-          className="text-primary font-semibold text-lg tracking-wide"
-          animate={{
-            opacity: [0.5, 1, 0.5],
-          }}
-          transition={{
-            duration: 1.5,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-        >
-          {message}
-        </motion.p>
+        {/* Loading text with modern animation */}
+        <div className="text-center space-y-3">
+          <motion.p
+            className="text-gray-900 font-bold text-xl tracking-wide"
+            animate={{
+              opacity: [0.5, 1, 0.5],
+            }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+          >
+            {message}
+          </motion.p>
+          
+          {/* Animated dots */}
+          <div className="flex items-center justify-center gap-2">
+            {[0, 1, 2].map((i) => (
+              <motion.div
+                key={i}
+                className="w-2 h-2 bg-red-600 rounded-full"
+                animate={{
+                  scale: [1, 1.5, 1],
+                  opacity: [0.3, 1, 0.3],
+                }}
+                transition={{
+                  duration: 1.5,
+                  repeat: Infinity,
+                  delay: i * 0.2,
+                  ease: "easeInOut"
+                }}
+              />
+            ))}
+          </div>
+        </div>
       </motion.div>
     </div>
   )

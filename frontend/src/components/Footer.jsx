@@ -165,10 +165,10 @@ const Footer = () => {
                 schoolInfo.hours.map((hour, index) => (
                   <p key={index} className="text-gray-300 text-xs">{hour}</p>
                 ))
-              ) : (
+              ) : (//     Sun: Closed
                 <>
-                  <p className="text-gray-300 text-xs">Mon - Fri: 3:00 PM - 9:00 PM</p>
-                  <p className="text-gray-300 text-xs">Sat: 9:00 AM - 2:00 PM</p>
+                  <p className="text-gray-300 text-xs">Mon - Fri: 5:00 PM - 7:00 PM</p>
+                  <p className="text-gray-300 text-xs">Sat: 5:00 PM - 7:00 PM</p>
                   <p className="text-gray-300 text-xs">Sun: Closed</p>
                 </>
               )}
@@ -178,7 +178,7 @@ const Footer = () => {
 
         <div className="border-t border-gray-700 mt-8 pt-8 text-center">
           <p className="text-gray-400 text-sm">
-            © {currentYear} Hawk Taekwondo. All rights reserved.
+            © {currentYear} Hawk Taekwondo • Building Champions, One Kick at a Time 🥋
           </p>
         </div>
       </div>

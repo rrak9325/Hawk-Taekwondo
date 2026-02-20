@@ -4,6 +4,7 @@ import { shouldUseInfiniteLoops, isLowEndDevice } from '../utils/devicePerforman
 
 export default function WelcomeSplash() {
   const [isVisible, setIsVisible] = useState(true)
+  const [progress, setProgress] = useState(0)
 
   useEffect(() => {
     // Check if user has visited before
@@ -14,13 +15,27 @@ export default function WelcomeSplash() {
       return
     }
 
-    // Hide splash after 2.5 seconds (reduced for low-end devices)
+    // Progress bar animation
+    const progressInterval = setInterval(() => {
+      setProgress(prev => {
+        if (prev >= 100) {
+          clearInterval(progressInterval)
+          return 100
+        }
+        return prev + 2.5 // 100 / 40 steps = 2.5% per 100ms
+      })
+    }, 100)
+
+    // Hide splash after 4 seconds
     const timer = setTimeout(() => {
       setIsVisible(false)
       sessionStorage.setItem('hasVisitedHTTC', 'true')
-    }, isLowEndDevice ? 2000 : 3000)
+    }, isLowEndDevice ? 3000 : 4000)
 
-    return () => clearTimeout(timer)
+    return () => {
+      clearTimeout(timer)
+      clearInterval(progressInterval)
+    }
   }, [])
 
   // Low-end device: minimal splash
@@ -38,7 +53,7 @@ export default function WelcomeSplash() {
               <img
                 src="https://res.cloudinary.com/dem7arres/image/upload/v1771347376/eagle-modified_n3g8to.png"
                 alt="Hawk Taekwondo Logo"
-                className="w-32 h-32 mx-auto mb-6 object-contain"
+                className="w-32 h-32 mx-auto mb-6 object-contain drop-shadow-2xl"
               />
               <h1 className="text-4xl font-black text-gray-900 mb-3">
                 Welcome to <span className="text-red-600">HTTC</span>
@@ -51,199 +66,150 @@ export default function WelcomeSplash() {
     )
   }
 
-  // High-end device: full experience
+  // High-end device: modern white experience
   return (
     <AnimatePresence>
       {isVisible && (
         <motion.div
           initial={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 1 }}
-          className="fixed inset-0 z-[9999] flex items-center justify-center bg-white overflow-hidden"
+          transition={{ duration: 0.8 }}
+          className="fixed inset-0 z-[9999] flex items-center justify-center overflow-hidden"
         >
-          {/* Background Elements */}
-          <div className="absolute inset-0">
-            <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-white to-red-50/20"></div>
-            
-            {/* Shimmer Effect - Only on high-end */}
-            {shouldUseInfiniteLoops() && (
-              <motion.div
-                className="absolute inset-0 opacity-30"
-                style={{
-                  background: 'linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.8) 50%, transparent 70%)',
-                  backgroundSize: '200% 200%'
-                }}
-                animate={{
-                  backgroundPosition: ['0% 0%', '100% 100%']
-                }}
-                transition={{
-                  duration: 3,
-                  repeat: Infinity,
-                  repeatType: 'reverse'
-                }}
-              />
-            )}
-            
-            {/* Corner Frames */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.3, duration: 1 }}
-            >
-              <div className="absolute top-8 left-8 w-24 h-24">
-                <div className="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-gray-300 to-transparent"></div>
-                <div className="absolute top-0 left-0 w-0.5 h-full bg-gradient-to-b from-gray-300 to-transparent"></div>
-              </div>
-              <div className="absolute top-8 right-8 w-24 h-24">
-                <div className="absolute top-0 right-0 w-full h-0.5 bg-gradient-to-l from-gray-300 to-transparent"></div>
-                <div className="absolute top-0 right-0 w-0.5 h-full bg-gradient-to-b from-gray-300 to-transparent"></div>
-              </div>
-              <div className="absolute bottom-8 left-8 w-24 h-24">
-                <div className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-gray-300 to-transparent"></div>
-                <div className="absolute bottom-0 left-0 w-0.5 h-full bg-gradient-to-t from-gray-300 to-transparent"></div>
-              </div>
-              <div className="absolute bottom-8 right-8 w-24 h-24">
-                <div className="absolute bottom-0 right-0 w-full h-0.5 bg-gradient-to-l from-gray-300 to-transparent"></div>
-                <div className="absolute bottom-0 right-0 w-0.5 h-full bg-gradient-to-t from-gray-300 to-transparent"></div>
-              </div>
-            </motion.div>
-          </div>
+          {/* Modern White Gradient Background */}
+          <div className="absolute inset-0 bg-gradient-to-br from-white via-gray-50 to-red-50"></div>
+          
+          {/* Animated Gradient Overlay */}
+          <motion.div
+            className="absolute inset-0 opacity-30"
+            style={{
+              background: 'radial-gradient(circle at 50% 50%, rgba(220, 38, 38, 0.1), transparent 70%)'
+            }}
+            animate={{
+              scale: [1, 1.2, 1],
+              opacity: [0.2, 0.3, 0.2]
+            }}
+            transition={{
+              duration: 4,
+              ease: 'easeInOut'
+            }}
+          />
 
-          {/* Content */}
-          <div className="relative z-10 text-center px-6 max-w-3xl">
-            {/* Logo */}
+          {/* Floating Particles */}
+          {shouldUseInfiniteLoops() && (
+            <div className="absolute inset-0">
+              {[...Array(15)].map((_, i) => (
+                <motion.div
+                  key={i}
+                  className="absolute w-1 h-1 bg-red-300/30 rounded-full"
+                  style={{
+                    left: `${Math.random() * 100}%`,
+                    top: `${Math.random() * 100}%`,
+                  }}
+                  animate={{
+                    y: [0, -30, 0],
+                    opacity: [0, 0.6, 0],
+                  }}
+                  transition={{
+                    duration: 3 + Math.random() * 2,
+                    repeat: Infinity,
+                    delay: Math.random() * 2,
+                    ease: 'easeInOut'
+                  }}
+                />
+              ))}
+            </div>
+          )}
+
+          {/* Glassmorphism Container */}
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.6, ease: 'easeOut' }}
+            className="relative z-10 text-center px-8 py-12 max-w-2xl backdrop-blur-xl bg-white/60 rounded-3xl border border-gray-200/50 shadow-2xl"
+          >
+            {/* Logo with Modern Animation */}
             <motion.div
-              initial={{ scale: 0.5, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
+              initial={{ scale: 0, rotate: -180, opacity: 0 }}
+              animate={{ scale: 1, rotate: 0, opacity: 1 }}
               transition={{ 
                 type: "spring", 
-                stiffness: 120, 
+                stiffness: 200, 
                 damping: 20,
-                duration: 1.2 
+                duration: 1
               }}
-              className="mb-10 flex justify-center"
+              className="mb-8 flex justify-center"
             >
               <div className="relative">
-                {/* Glow Effect - Only on high-end */}
-                {shouldUseInfiniteLoops() && (
-                  <motion.div
-                    className="absolute inset-0 blur-2xl opacity-20"
-                    animate={{
-                      scale: [1, 1.1, 1],
-                      opacity: [0.2, 0.3, 0.2]
-                    }}
-                    transition={{
-                      duration: 3,
-                      repeat: Infinity,
-                      ease: 'easeInOut'
-                    }}
-                    style={{
-                      background: 'radial-gradient(circle, rgba(220, 38, 38, 0.4), transparent)'
-                    }}
-                  />
-                )}
+                {/* Glow Effect */}
+                <motion.div
+                  className="absolute inset-0 blur-3xl opacity-30"
+                  animate={{
+                    scale: [1, 1.2, 1],
+                  }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: 'easeInOut'
+                  }}
+                  style={{
+                    background: 'radial-gradient(circle, rgba(220, 38, 38, 0.4), transparent)'
+                  }}
+                />
                 
                 <img
                   src="https://res.cloudinary.com/dem7arres/image/upload/v1771347376/eagle-modified_n3g8to.png"
                   alt="Hawk Taekwondo Logo"
-                  className="w-48 h-48 object-contain drop-shadow-2xl"
+                  className="relative w-40 h-40 object-contain drop-shadow-2xl"
                 />
-                
-                {/* Pulsing Rings - Only on high-end */}
-                {shouldUseInfiniteLoops() && (
-                  <>
-                    <motion.div
-                      className="absolute inset-0 border border-gray-200 rounded-full"
-                      animate={{ 
-                        scale: [1, 1.3, 1],
-                        opacity: [0.5, 0, 0.5]
-                      }}
-                      transition={{ 
-                        duration: 3,
-                        repeat: Infinity,
-                        ease: "easeInOut"
-                      }}
-                    />
-                    <motion.div
-                      className="absolute inset-0 border border-red-200 rounded-full"
-                      animate={{ 
-                        scale: [1, 1.4, 1],
-                        opacity: [0.3, 0, 0.3]
-                      }}
-                      transition={{ 
-                        duration: 3,
-                        repeat: Infinity,
-                        ease: "easeInOut",
-                        delay: 0.5
-                      }}
-                    />
-                  </>
-                )}
               </div>
             </motion.div>
 
-            {/* Welcome Text */}
+            {/* Text - All fade in together */}
             <motion.div
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.8, duration: 1 }}
+              transition={{ delay: 0.4, duration: 0.8 }}
+              className="space-y-4"
             >
-              <h1 className="text-6xl md:text-7xl font-black text-gray-900 mb-6 tracking-tight">
+              <h1 className="text-5xl md:text-6xl font-black text-gray-900 mb-4 tracking-tight">
                 Welcome to <span className="text-red-600">HTTC</span>
               </h1>
               
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 1.4, duration: 1 }}
-                className="space-y-3"
-              >
-                <p className="text-xl md:text-2xl text-gray-700 leading-relaxed font-semibold tracking-wide">
-                  Hawk Taekwondo Training Centre
-                </p>
-                
-                <motion.div
-                  className="flex items-center justify-center gap-3"
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 1.8, duration: 0.8 }}
-                >
-                  <div className="h-px w-12 bg-gradient-to-r from-transparent to-gray-300"></div>
-                  <p className="text-base md:text-lg text-gray-500 italic font-light">
-                    A Korean martial arts club for Taekwondo Lovers
-                  </p>
-                  <div className="h-px w-12 bg-gradient-to-l from-transparent to-gray-300"></div>
-                </motion.div>
-              </motion.div>
+              <p className="text-xl md:text-2xl text-gray-700 font-semibold">
+                Hawk Taekwondo Training Centre
+              </p>
+              
+              <p className="text-base md:text-lg text-gray-500 italic">
+                A Korean martial arts club for Taekwondo Lovers
+              </p>
             </motion.div>
 
-            {/* Loading Indicator */}
+            {/* Modern Progress Bar */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: 2.2, duration: 0.6 }}
-              className="mt-14"
+              transition={{ delay: 0.8, duration: 0.6 }}
+              className="mt-10"
             >
-              <div className="flex justify-center items-center gap-2">
-                {[0, 1, 2, 3].map((i) => (
-                  <motion.div
-                    key={i}
-                    className="w-1.5 h-1.5 rounded-full bg-gradient-to-r from-gray-400 to-red-400"
-                    animate={{ 
-                      scale: [1, 1.5, 1],
-                      opacity: [0.3, 1, 0.3]
-                    }}
-                    transition={{ 
-                      duration: 1.5,
-                      repeat: Infinity,
-                      delay: i * 0.15,
-                      ease: 'easeInOut'
-                    }}
-                  />
-                ))}
+              <div className="relative w-full h-1 bg-gray-200 rounded-full overflow-hidden">
+                <motion.div
+                  className="absolute inset-y-0 left-0 bg-gradient-to-r from-red-500 to-red-600 rounded-full"
+                  style={{ width: `${progress}%` }}
+                  transition={{ duration: 0.1 }}
+                />
+                {/* Glow on progress bar */}
+                <motion.div
+                  className="absolute inset-y-0 left-0 bg-gradient-to-r from-red-400 to-red-500 rounded-full blur-sm opacity-50"
+                  style={{ width: `${progress}%` }}
+                  transition={{ duration: 0.1 }}
+                />
               </div>
+              <p className="text-xs text-gray-500 mt-3 font-medium">
+                Loading experience... {Math.round(progress)}%
+              </p>
             </motion.div>
-          </div>
+          </motion.div>
         </motion.div>
       )}
     </AnimatePresence>

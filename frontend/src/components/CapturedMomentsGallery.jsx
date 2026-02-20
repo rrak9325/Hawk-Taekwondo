@@ -1,11 +1,14 @@
-import { useState, useEffect, useCallback, useMemo } from 'react'
-import { X, ChevronLeft, ChevronRight, ZoomIn } from 'lucide-react'
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react'
+import { X, ChevronLeft, ChevronRight, ZoomIn, Maximize, Minimize } from 'lucide-react'
 import RobustImage from './RobustImage'
 
 export default function CapturedMomentsGallery({ gallery }) {
   const [isOpen, setIsOpen] = useState(false)
   const [currentIndex, setCurrentIndex] = useState(0)
   const [visibleRange, setVisibleRange] = useState({ start: 0, end: 20 })
+  const [isFullscreen, setIsFullscreen] = useState(false)
+  const [slideDirection, setSlideDirection] = useState('none')
+  const imageContainerRef = useRef(null)
 
   // Handle both array and object formats for gallery.featured
   const rawImages = gallery?.featured || []
@@ -47,7 +50,11 @@ export default function CapturedMomentsGallery({ gallery }) {
   // Close lightbox
   const closeLightbox = useCallback(() => {
     setIsOpen(false)
+    setIsFullscreen(false)
     document.body.style.overflow = ''
+    if (document.fullscreenElement) {
+      document.exitFullscreen()
+    }
   }, [])
   
   // Cleanup on unmount
@@ -57,14 +64,47 @@ export default function CapturedMomentsGallery({ gallery }) {
     }
   }, [])
 
-  // Navigation
+  // Navigation with slide animation
   const goToPrev = useCallback(() => {
-    setCurrentIndex(prev => (prev === 0 ? images.length - 1 : prev - 1))
+    setSlideDirection('right')
+    setTimeout(() => {
+      setCurrentIndex(prev => (prev === 0 ? images.length - 1 : prev - 1))
+      setSlideDirection('none')
+    }, 150)
   }, [images.length])
 
   const goToNext = useCallback(() => {
-    setCurrentIndex(prev => (prev === images.length - 1 ? 0 : prev + 1))
+    setSlideDirection('left')
+    setTimeout(() => {
+      setCurrentIndex(prev => (prev === images.length - 1 ? 0 : prev + 1))
+      setSlideDirection('none')
+    }, 150)
   }, [images.length])
+
+  // Toggle fullscreen
+  const toggleFullscreen = useCallback(async () => {
+    if (!document.fullscreenElement) {
+      try {
+        await imageContainerRef.current?.requestFullscreen()
+        setIsFullscreen(true)
+      } catch (err) {
+        console.log('Fullscreen not supported')
+      }
+    } else {
+      await document.exitFullscreen()
+      setIsFullscreen(false)
+    }
+  }, [])
+
+  // Listen for fullscreen changes
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement)
+    }
+    
+    document.addEventListener('fullscreenchange', handleFullscreenChange)
+    return () => document.removeEventListener('fullscreenchange', handleFullscreenChange)
+  }, [])
 
   // Keyboard navigation
   useEffect(() => {
@@ -185,6 +225,7 @@ export default function CapturedMomentsGallery({ gallery }) {
       {/* Full-screen Lightbox */}
       {isOpen && (
         <div
+          ref={imageContainerRef}
           className="fixed inset-0 z-50 bg-black/95 backdrop-blur-sm flex items-center justify-center animate-fade-in"
           onClick={closeLightbox}
           onTouchStart={onTouchStart}
@@ -198,6 +239,22 @@ export default function CapturedMomentsGallery({ gallery }) {
             aria-label="Close"
           >
             <X size={24} className="sm:w-7 sm:h-7" />
+          </button>
+
+          {/* Fullscreen button */}
+          <button
+            className="absolute top-3 sm:top-4 md:top-6 right-14 sm:right-16 md:right-20 z-30 p-2 sm:p-3 bg-black/70 rounded-full text-white hover:bg-black/90 hover:scale-110 transition-all duration-300 shadow-2xl"
+            onClick={(e) => {
+              e.stopPropagation()
+              toggleFullscreen()
+            }}
+            aria-label="Toggle Fullscreen"
+          >
+            {isFullscreen ? (
+              <Minimize size={24} className="sm:w-7 sm:h-7" />
+            ) : (
+              <Maximize size={24} className="sm:w-7 sm:h-7" />
+            )}
           </button>
 
           {/* Navigation arrows */}
@@ -227,15 +284,23 @@ export default function CapturedMomentsGallery({ gallery }) {
             </>
           )}
 
-          {/* Current image with preloading */}
+          {/* Current image with slide animation - bigger in fullscreen */}
           <div
-            className="relative max-w-[92vw] sm:max-w-[90vw] max-h-[80vh] sm:max-h-[85vh] flex items-center justify-center px-2 sm:px-4 z-10 animate-scale-in"
+            className={`relative ${
+              isFullscreen ? 'w-screen h-screen' : 'max-w-[92vw] sm:max-w-[90vw] max-h-[80vh] sm:max-h-[85vh]'
+            } flex items-center justify-center px-2 sm:px-4 z-10 transition-all duration-300 ${
+              slideDirection === 'left' ? 'animate-slide-out-left' : 
+              slideDirection === 'right' ? 'animate-slide-out-right' : 
+              'animate-slide-in'
+            }`}
             onClick={(e) => e.stopPropagation()}
           >
             <RobustImage
               src={images[currentIndex].image}
               alt={images[currentIndex].title || `Image ${currentIndex + 1}`}
-              className="max-w-full max-h-full object-contain rounded-md sm:rounded-lg shadow-2xl"
+              className={`${
+                isFullscreen ? 'w-full h-full' : 'max-w-full max-h-full'
+              } object-contain rounded-md sm:rounded-lg shadow-2xl`}
               width={1920}
               height={1080}
               optimize={true}
@@ -277,12 +342,57 @@ export default function CapturedMomentsGallery({ gallery }) {
           }
         }
         
+        @keyframes slideIn {
+          from {
+            opacity: 0;
+            transform: translateX(0) scale(0.95);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0) scale(1);
+          }
+        }
+        
+        @keyframes slideOutLeft {
+          from {
+            opacity: 1;
+            transform: translateX(0);
+          }
+          to {
+            opacity: 0;
+            transform: translateX(-50px);
+          }
+        }
+        
+        @keyframes slideOutRight {
+          from {
+            opacity: 1;
+            transform: translateX(0);
+          }
+          to {
+            opacity: 0;
+            transform: translateX(50px);
+          }
+        }
+        
         .animate-fade-in {
           animation: fadeIn 0.3s ease-out;
         }
         
         .animate-scale-in {
           animation: scaleIn 0.4s ease-out;
+        }
+        
+        .animate-slide-in {
+          animation: slideIn 0.3s ease-out;
+        }
+        
+        .animate-slide-out-left {
+          animation: slideOutLeft 0.15s ease-in;
+        }
+        
+        .animate-slide-out-right {
+          animation: slideOutRight 0.15s ease-in;
         }
         
         .fade-in {

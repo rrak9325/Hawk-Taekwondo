@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://hawktaekwondo.onrender.com/sitemap.xml
+Sitemap: https://www.hawktaekwondo.com/sitemap.xml

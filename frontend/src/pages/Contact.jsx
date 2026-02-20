@@ -68,6 +68,18 @@ export default function Contact() {
       isMounted = false
     }
   }, [])
+  
+  // Scroll to form if hash is #form
+  useEffect(() => {
+    if (window.location.hash === '#form') {
+      setTimeout(() => {
+        const formElement = document.getElementById('contact-form')
+        if (formElement) {
+          formElement.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        }
+      }, 300) // Wait for page to render
+    }
+  }, [])
 
   const [formData, setFormData] = useState({
     name: '',
@@ -223,7 +235,7 @@ Message: ${formData.message}`
 
           </div>
 
-          <div className="bg-white p-8 rounded-2xl shadow-lg border border-gray-100 animate-fade-in">
+          <div id="contact-form" className="bg-white p-8 rounded-2xl shadow-lg border border-gray-100 animate-fade-in">
             <h2 className="text-3xl font-bold text-gray-900 mb-6">
               Send a Message
             </h2>

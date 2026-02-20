@@ -207,7 +207,7 @@ export default function Home() {
               Build confidence, discipline, and strength in a supportive community.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <Link to="/contact" className="btn-secondary px-6 lg:px-8 py-3 lg:py-4 text-base lg:text-lg font-semibold w-full sm:w-auto hover-lift">
+              <Link to="/contact#form" className="btn-secondary px-6 lg:px-8 py-3 lg:py-4 text-base lg:text-lg font-semibold w-full sm:w-auto hover-lift">
                 Book A Free Trial
               </Link>
             </div>

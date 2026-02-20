@@ -117,7 +117,7 @@ const ProgramCard = memo(({ program, index }) => {
           </div>
           
           <a 
-            href="/contact" 
+            href="/contact#form" 
             className="program-cta"
           >
             Enroll Now

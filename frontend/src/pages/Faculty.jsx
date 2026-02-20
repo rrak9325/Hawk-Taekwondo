@@ -88,7 +88,7 @@ const InstructorCard = memo(({ instructor, index, isActive }) => {
             
             <div className="flex gap-2">
               <a 
-                href="/contact" 
+                href="/contact#form"
                 className="flex-1 bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-white text-center py-2.5 rounded-xl font-semibold transition-all duration-300 transform hover:scale-[1.02]"
               >
                 Contact Instructor

@@ -1113,7 +1113,7 @@ function CTASection({ cta }) {
             {cta.text || 'Become part of a legacy that builds confidence, resilience, and lifelong skills. Train with us in Ahmedabad today.'}
           </p>
           <a
-            href={cta.buttonLink || '#contact'}
+            href="/contact#form"
             className="cta-button"
           >
             {cta.buttonLabel || 'Start Your Journey'}

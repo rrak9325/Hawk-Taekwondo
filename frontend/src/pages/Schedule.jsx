@@ -672,10 +672,10 @@ export default function Schedule() {
               Join Hawk Taekwondo and transform your life through martial arts.
             </p>
             <a
-              href="/contact"
+              href="/contact#form"
               className="inline-block bg-white text-red-600 px-8 py-4 rounded-xl text-lg font-bold hover:bg-gray-100 transition transform hover:scale-105 shadow-xl"
             >
-              Book Your Free Trial
+              Contact Us
             </a>
           </div>
         </div>

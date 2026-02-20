@@ -136,6 +136,11 @@ export function createApp() {
         return callback(null, true)
       }
       
+      // Allow local network IPs for mobile testing (192.168.x.x, 10.x.x.x, 172.16-31.x.x)
+      if (origin && /^http:\/\/(192\.168\.\d{1,3}\.\d{1,3}|10\.\d{1,3}\.\d{1,3}\.\d{1,3}|172\.(1[6-9]|2[0-9]|3[0-1])\.\d{1,3}\.\d{1,3}):\d{4}$/.test(origin)) {
+        return callback(null, true)
+      }
+      
       if (allowedOrigins.includes(origin)) {
         callback(null, true)
       } else {

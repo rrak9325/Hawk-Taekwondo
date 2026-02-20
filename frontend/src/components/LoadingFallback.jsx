@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import { shouldUseInfiniteLoops } from '../utils/devicePerformance.js'
+import { SkeletonFeatureCard } from './LoadingSkeleton'
 
 export default function LoadingFallback({ message = "Loading..." }) {
   // Use CSS-only spinner on low-end devices
@@ -101,97 +102,11 @@ export default function LoadingFallback({ message = "Loading..." }) {
 }
 
 export function PageLoadingFallback() {
-  // Use CSS-only spinner on low-end devices
-  if (!shouldUseInfiniteLoops()) {
-    return (
-      <div className="flex items-center justify-center py-16 md:py-24">
-        <div className="flex flex-col items-center gap-4">
-          <div className="relative w-12 h-12">
-            <div className="absolute inset-0 bg-secondary rounded-md animate-spin" />
-            {[0, 120, 240].map((angle, i) => (
-              <div
-                key={i}
-                className="absolute w-3 h-3 bg-primary rounded-sm animate-pulse"
-                style={{
-                  top: '50%',
-                  left: '50%',
-                  marginTop: '-6px',
-                  marginLeft: '-6px',
-                  animationDelay: `${i * 200}ms`
-                }}
-              />
-            ))}
-          </div>
-          <p className="text-gray-600 text-sm font-medium animate-pulse">
-            Loading content...
-          </p>
-        </div>
-      </div>
-    )
-  }
-
   return (
-    <div className="flex items-center justify-center py-16 md:py-24">
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.4 }}
-        className="flex flex-col items-center gap-4"
-      >
-        {/* Mini blocks loader */}
-        <div className="relative w-12 h-12">
-          <motion.div
-            className="absolute inset-0 bg-secondary rounded-md"
-            animate={{
-              scale: [1, 0.8, 1],
-              rotate: [0, 180, 360],
-            }}
-            transition={{
-              duration: 1.5,
-              repeat: Infinity,
-              ease: "easeInOut"
-            }}
-          />
-          
-          {[0, 120, 240].map((angle, i) => (
-            <motion.div
-              key={i}
-              className="absolute w-3 h-3 bg-primary rounded-sm"
-              style={{
-                top: '50%',
-                left: '50%',
-                marginTop: '-6px',
-                marginLeft: '-6px',
-              }}
-              animate={{
-                x: [0, Math.cos((angle * Math.PI) / 180) * 20],
-                y: [0, Math.sin((angle * Math.PI) / 180) * 20],
-                rotate: 360,
-              }}
-              transition={{
-                duration: 1.5,
-                repeat: Infinity,
-                ease: "easeInOut",
-                delay: i * 0.2,
-              }}
-            />
-          ))}
-        </div>
-
-        <motion.p
-          className="text-gray-600 text-sm font-medium"
-          animate={{
-            opacity: [0.5, 1, 0.5],
-          }}
-          transition={{
-            duration: 1.5,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-        >
-          Loading content...
-        </motion.p>
-      </motion.div>
+    <div className="container mx-auto px-4 py-16 md:py-24">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <SkeletonFeatureCard count={4} />
+      </div>
     </div>
   )
 }

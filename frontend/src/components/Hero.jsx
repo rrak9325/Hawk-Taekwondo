@@ -1,6 +1,7 @@
-import { useState, useEffect, useMemo, useRef } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { ChevronDown } from 'lucide-react'
 import performanceDetector from '../utils/performanceDetector'
+import OptimizedVideo from './OptimizedVideo'
 
 // Use Cloudinary URL instead of local import to reduce bundle size
 const logo = 'https://res.cloudinary.com/dem7arres/image/upload/f_auto,q_auto:good,w_200/v1771436615/logo1_weejgq.png'
@@ -18,9 +19,7 @@ export default function Hero({
 }) {
   const [showContent, setShowContent] = useState(false)
   const [titleMoved, setTitleMoved] = useState(false)
-  const [videoReady, setVideoReady] = useState(false)
   const [useVideo, setUseVideo] = useState(true)
-  const videoRef = useRef(null)
   
   // Get performance config
   const perfConfig = useMemo(() => performanceDetector.getAnimationConfig(), [])
@@ -28,30 +27,13 @@ export default function Hero({
 
   // Detect if device should use video
   useEffect(() => {
-    if (import.meta.env.DEV) {
-      console.log('Hero videoUrl:', videoUrl)
-      console.log('Performance tier:', perfConfig.tier)
-    }
-    
     const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection
     const isSlow = connection && (connection.effectiveType === 'slow-2g' || connection.effectiveType === '2g')
     const isLowEnd = perfConfig.tier === 'minimal' || perfConfig.tier === 'low'
     
-    if (import.meta.env.DEV) {
-      console.log('Connection slow?', isSlow)
-      console.log('Low-end device?', isLowEnd)
-    }
-    
     // Disable video on low-end devices or slow connections
     if (isSlow || isLowEnd || !videoUrl) {
-      if (import.meta.env.DEV) {
-        console.log('Video disabled - reason:', !videoUrl ? 'no URL' : isSlow ? 'slow connection' : 'low-end device')
-      }
       setUseVideo(false)
-    } else {
-      if (import.meta.env.DEV) {
-        console.log('Video enabled')
-      }
     }
     
     // Show content immediately
@@ -65,40 +47,6 @@ export default function Hero({
     return () => clearTimeout(titleTimer)
   }, [videoUrl, perfConfig.tier])
 
-  // Handle video loading
-  const handleVideoCanPlay = () => {
-    if (import.meta.env.DEV) {
-      console.log('Video can play!')
-    }
-    setVideoReady(true)
-    if (videoRef.current) {
-      videoRef.current.play().catch((err) => {
-        if (import.meta.env.DEV) {
-          console.error('Autoplay blocked:', err)
-        }
-        // Autoplay blocked, fallback to image
-        setUseVideo(false)
-      })
-    }
-  }
-
-  // Load video when component mounts
-  useEffect(() => {
-    if (useVideo && videoRef.current) {
-      if (import.meta.env.DEV) {
-        console.log('Loading video...')
-      }
-      videoRef.current.load()
-    }
-  }, [useVideo])
-
-  const handleVideoError = (e) => {
-    if (import.meta.env.DEV) {
-      console.error('Video failed to load:', e)
-    }
-    setUseVideo(false)
-  }
-
   const scrollToContent = () => {
     window.scrollTo({
       top: window.innerHeight * 0.8,
@@ -111,12 +59,12 @@ export default function Hero({
 
   return (
     <section className={`relative w-full ${height} overflow-hidden bg-black`}>
-      {/* Decorative Pattern - Only on high-end devices */}
+      {/* Decorative Pattern - Only on high-end devices - Now using CSS animations! */}
       {shouldAnimate && perfConfig.complexAnimations && (
         <div className="absolute inset-0 z-0 opacity-10 pointer-events-none">
-          <div className="absolute top-10 left-10 w-32 h-32 border-4 border-red-500 rounded-full" style={{ animation: 'float 6s ease-in-out infinite' }} />
-          <div className="absolute top-40 right-20 w-24 h-24 border-4 border-white rotate-45" style={{ animation: 'float 8s ease-in-out infinite 1s' }} />
-          <div className="absolute bottom-32 left-1/4 w-40 h-40 border-4 border-red-500 rounded-full" style={{ animation: 'float 7s ease-in-out infinite 2s' }} />
+          <div className="absolute top-10 left-10 w-32 h-32 border-4 border-red-500 rounded-full animate-float" />
+          <div className="absolute top-40 right-20 w-24 h-24 border-4 border-white rotate-45 animate-float delay-100" />
+          <div className="absolute bottom-32 left-1/4 w-40 h-40 border-4 border-red-500 rounded-full animate-float delay-200" />
         </div>
       )}
 
@@ -126,7 +74,7 @@ export default function Hero({
         style={{ opacity: showContent ? 1 : 0 }}
       >
         {/* Background Image - Always loads first */}
-        {backgroundImage && backgroundImage.trim() !== '' && (
+        {backgroundImage && backgroundImage.trim() !== '' && !useVideo && (
           <img
             src={backgroundImage}
             alt={titleMain || 'Hero background'}
@@ -134,7 +82,6 @@ export default function Hero({
             loading="eager"
             fetchpriority="high"
             decoding="async"
-            style={{ zIndex: useVideo && videoReady ? 0 : 1 }}
             onError={(e) => {
               console.warn('Background image failed to load:', backgroundImage)
               e.target.style.display = 'none'
@@ -142,28 +89,14 @@ export default function Hero({
           />
         )}
         
-        {/* Video - Only on capable devices */}
+        {/* Optimized Video Component - Only on capable devices */}
         {useVideo && optimizedVideoUrl && (
-          <video
-            ref={videoRef}
-            loop
-            muted
-            playsInline
-            preload="auto"
+          <OptimizedVideo
+            src={optimizedVideoUrl}
             poster={backgroundImage}
             className="absolute w-full h-full object-cover"
-            style={{ 
-              transform: 'scale(1.15)',
-              top: '0%',
-              zIndex: videoReady ? 1 : 0,
-              opacity: videoReady ? 1 : 0,
-              transition: 'opacity 1.5s ease-in-out'
-            }}
-            onCanPlay={handleVideoCanPlay}
-            onError={handleVideoError}
-          >
-            <source src={optimizedVideoUrl} type="video/mp4" />
-          </video>
+            style={{ transform: 'scale(1.15)' }}
+          />
         )}
         
         {/* Fallback gradient */}
@@ -193,10 +126,9 @@ export default function Hero({
             <img 
               src={logo} 
               alt="Hawk Mascot" 
-              className="w-16 h-16 md:w-20 md:h-20 object-contain drop-shadow-2xl mb-4"
+              className={`w-16 h-16 md:w-20 md:h-20 object-contain drop-shadow-2xl mb-4 ${shouldAnimate ? 'animate-float' : ''}`}
               loading="lazy"
               decoding="async"
-              style={shouldAnimate ? { animation: 'hawkFloat 5s ease-in-out infinite' } : {}}
             />
           )}
           
@@ -221,40 +153,18 @@ export default function Hero({
         </div>
       </div>
 
-      {/* Scroll Down */}
+      {/* Scroll Down - Now using CSS animations! */}
       {showScroll && titleMoved && (
         <div 
-          className="hidden md:flex absolute bottom-10 left-1/2 -translate-x-1/2 z-20 text-white flex-col items-center gap-2 cursor-pointer opacity-80 hover:opacity-100 transition"
+          className="hidden md:flex absolute bottom-10 left-1/2 -translate-x-1/2 z-20 text-white flex-col items-center gap-2 cursor-pointer opacity-80 hover:opacity-100 transition animate-fade-in-up"
           onClick={scrollToContent}
-          style={{ animation: 'fadeIn 1s 1s both' }}
         >
           <span className="text-[10px] uppercase tracking-widest font-bold hover:text-red-500 transition-colors">Scroll Down</span>
-          <ChevronDown size={35} className="text-red-500" style={{ animation: 'bounce 2s infinite' }} />
+          <ChevronDown size={35} className="text-red-500 animate-bounce" />
         </div>
       )}
       
-      <style>{`
-        @keyframes fadeInUp {
-          from { opacity: 0; transform: translateY(30px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes fadeIn {
-          from { opacity: 0; }
-          to { opacity: 1; }
-        }
-        @keyframes bounce {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(12px); }
-        }
-        @keyframes hawkFloat {
-          0%, 100% { transform: translateY(0) rotate(0deg); }
-          50% { transform: translateY(-10px) rotate(0deg); }
-        }
-        @keyframes float {
-          0%, 100% { transform: translateY(0) rotate(0deg); }
-          50% { transform: translateY(-20px) rotate(10deg); }
-        }
-      `}</style>
+      {/* Removed inline keyframes - now using animations.css! */}
     </section>
   )
 }

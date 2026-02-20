@@ -106,19 +106,19 @@ export default function CapturedMomentsGallery({ gallery }) {
   return (
     <>
       {/* Gallery Grid */}
-      <section className="py-12 sm:py-16 lg:py-24 bg-gradient-to-b from-gray-50 to-white">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12 md:mb-16">
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4">
+      <section className="py-8 sm:py-12 md:py-16 lg:py-24 bg-gradient-to-b from-gray-50 to-white">
+        <div className="container mx-auto px-3 sm:px-4 md:px-6">
+          <div className="text-center mb-8 sm:mb-10 md:mb-12 lg:mb-16">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-3 sm:mb-4">
               Captured <span className="text-red-600">Moments</span>
             </h2>
-            <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+            <p className="text-gray-600 text-base sm:text-lg max-w-2xl mx-auto px-4">
               Witness the journey of our students as they master the art of Taekwondo
             </p>
           </div>
 
           {/* Masonry Grid Layout - Pinterest Style */}
-          <div className="columns-2 sm:columns-3 lg:columns-4 xl:columns-5 gap-3 sm:gap-4 lg:gap-6 space-y-3 sm:space-y-4 lg:space-y-6">
+          <div className="columns-2 sm:columns-3 lg:columns-4 xl:columns-5 gap-2 sm:gap-3 md:gap-4 lg:gap-6 space-y-2 sm:space-y-3 md:space-y-4 lg:space-y-6">
             {visibleImages.map((item, index) => {
               const actualIndex = visibleRange.start + index
               // Randomly vary heights for masonry effect
@@ -130,20 +130,17 @@ export default function CapturedMomentsGallery({ gallery }) {
               return (
                 <div
                   key={item.id || actualIndex}
-                  className="break-inside-avoid mb-3 sm:mb-4 lg:mb-6"
+                  className="break-inside-avoid mb-2 sm:mb-3 md:mb-4 lg:mb-6 fade-in"
+                  style={{ animationDelay: `${(index % 10) * 50}ms` }}
                 >
                   <div
-                    className={`group relative ${heightClass} overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer bg-gray-200 transform hover:-translate-y-1`}
+                    className={`group relative ${heightClass} overflow-hidden rounded-lg sm:rounded-xl md:rounded-2xl shadow-md hover:shadow-2xl transition-all duration-500 ease-out cursor-pointer bg-gray-200 hover:-translate-y-1 hover:scale-[1.02]`}
                     onClick={() => openLightbox(actualIndex)}
-                    style={{ 
-                      willChange: 'transform',
-                      transform: 'translateZ(0)'
-                    }}
                   >
                     <RobustImage
                       src={item.image}
                       alt={item.title || `Moment ${actualIndex + 1}`}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                      className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
                       width={window.innerWidth < 640 ? 200 : 300}
                       height={window.innerWidth < 640 ? 200 : 300}
                       optimize={true}
@@ -151,17 +148,17 @@ export default function CapturedMomentsGallery({ gallery }) {
                     />
                     
                     {/* Gradient overlay on hover */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                      <div className="absolute bottom-0 left-0 right-0 p-4 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                      <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 ease-out">
                         <div className="flex items-center justify-between text-white">
-                          <span className="text-sm font-medium">View Full Size</span>
-                          <ZoomIn className="w-5 h-5" />
+                          <span className="text-xs sm:text-sm font-medium">View Full Size</span>
+                          <ZoomIn className="w-4 h-4 sm:w-5 sm:h-5" />
                         </div>
                       </div>
                     </div>
                     
                     {/* Subtle border glow effect */}
-                    <div className="absolute inset-0 rounded-2xl ring-2 ring-red-500/0 group-hover:ring-red-500/50 transition-all duration-300"></div>
+                    <div className="absolute inset-0 rounded-lg sm:rounded-xl md:rounded-2xl ring-1 ring-red-500/0 group-hover:ring-2 group-hover:ring-red-500/50 transition-all duration-500"></div>
                   </div>
                 </div>
               )
@@ -170,16 +167,16 @@ export default function CapturedMomentsGallery({ gallery }) {
           
           {/* Loading indicator for more images */}
           {visibleRange.end < images.length && (
-            <div className="text-center mt-12">
-              <div className="inline-flex items-center gap-3 bg-white px-6 py-3 rounded-full shadow-lg">
-                <div className="w-5 h-5 border-3 border-red-500 border-t-transparent rounded-full animate-spin"></div>
-                <p className="text-gray-700 font-medium">Loading more memories...</p>
+            <div className="text-center mt-8 sm:mt-10 md:mt-12">
+              <div className="inline-flex items-center gap-2 sm:gap-3 bg-white px-4 sm:px-6 py-2.5 sm:py-3 rounded-full shadow-lg animate-pulse">
+                <div className="w-4 h-4 sm:w-5 sm:h-5 border-2 sm:border-3 border-red-500 border-t-transparent rounded-full animate-spin"></div>
+                <p className="text-gray-700 font-medium text-sm sm:text-base">Loading more memories...</p>
               </div>
             </div>
           )}
           
           {/* Show total count */}
-          <div className="text-center mt-8 text-gray-500 text-sm">
+          <div className="text-center mt-6 sm:mt-8 text-gray-500 text-xs sm:text-sm">
             Showing {visibleRange.end} of {images.length} moments
           </div>
         </div>
@@ -188,8 +185,7 @@ export default function CapturedMomentsGallery({ gallery }) {
       {/* Full-screen Lightbox */}
       {isOpen && (
         <div
-          className="fixed inset-0 z-50 bg-black flex items-center justify-center"
-          style={{ animation: 'fadeIn 0.2s' }}
+          className="fixed inset-0 z-50 bg-black/95 backdrop-blur-sm flex items-center justify-center animate-fade-in"
           onClick={closeLightbox}
           onTouchStart={onTouchStart}
           onTouchMove={onTouchMove}
@@ -197,49 +193,49 @@ export default function CapturedMomentsGallery({ gallery }) {
         >
           {/* Close button */}
           <button
-            className="absolute top-4 md:top-6 right-4 md:right-6 z-30 p-3 bg-black/70 rounded-full text-white hover:bg-black/90 transition shadow-2xl"
+            className="absolute top-3 sm:top-4 md:top-6 right-3 sm:right-4 md:right-6 z-30 p-2 sm:p-3 bg-black/70 rounded-full text-white hover:bg-black/90 hover:scale-110 transition-all duration-300 shadow-2xl"
             onClick={closeLightbox}
             aria-label="Close"
           >
-            <X size={28} />
+            <X size={24} className="sm:w-7 sm:h-7" />
           </button>
 
           {/* Navigation arrows */}
           {images.length > 1 && (
             <>
               <button
-                className="absolute left-4 md:left-6 top-1/2 -translate-y-1/2 z-20 p-3 md:p-4 bg-black/70 rounded-full text-white hover:bg-black/90 transition shadow-2xl"
+                className="absolute left-2 sm:left-4 md:left-6 top-1/2 -translate-y-1/2 z-20 p-2 sm:p-3 md:p-4 bg-black/70 rounded-full text-white hover:bg-black/90 hover:scale-110 transition-all duration-300 shadow-2xl"
                 onClick={(e) => {
                   e.stopPropagation()
                   goToPrev()
                 }}
                 aria-label="Previous"
               >
-                <ChevronLeft size={32} />
+                <ChevronLeft size={24} className="sm:w-7 sm:h-7 md:w-8 md:h-8" />
               </button>
 
               <button
-                className="absolute right-4 md:right-6 top-1/2 -translate-y-1/2 z-20 p-3 md:p-4 bg-black/70 rounded-full text-white hover:bg-black/90 transition shadow-2xl"
+                className="absolute right-2 sm:right-4 md:right-6 top-1/2 -translate-y-1/2 z-20 p-2 sm:p-3 md:p-4 bg-black/70 rounded-full text-white hover:bg-black/90 hover:scale-110 transition-all duration-300 shadow-2xl"
                 onClick={(e) => {
                   e.stopPropagation()
                   goToNext()
                 }}
                 aria-label="Next"
               >
-                <ChevronRight size={32} />
+                <ChevronRight size={24} className="sm:w-7 sm:h-7 md:w-8 md:h-8" />
               </button>
             </>
           )}
 
           {/* Current image with preloading */}
           <div
-            className="relative max-w-[90vw] max-h-[85vh] flex items-center justify-center px-4 z-10"
+            className="relative max-w-[92vw] sm:max-w-[90vw] max-h-[80vh] sm:max-h-[85vh] flex items-center justify-center px-2 sm:px-4 z-10 animate-scale-in"
             onClick={(e) => e.stopPropagation()}
           >
             <RobustImage
               src={images[currentIndex].image}
               alt={images[currentIndex].title || `Image ${currentIndex + 1}`}
-              className="max-w-full max-h-full object-contain rounded-lg shadow-2xl"
+              className="max-w-full max-h-full object-contain rounded-md sm:rounded-lg shadow-2xl"
               width={1920}
               height={1080}
               optimize={true}
@@ -258,7 +254,7 @@ export default function CapturedMomentsGallery({ gallery }) {
           </div>
 
           {/* Counter */}
-          <div className="absolute bottom-6 md:bottom-8 left-1/2 -translate-x-1/2 z-30 bg-black/80 px-5 py-2 rounded-full text-white text-sm font-medium shadow-xl">
+          <div className="absolute bottom-4 sm:bottom-6 md:bottom-8 left-1/2 -translate-x-1/2 z-30 bg-black/80 px-4 sm:px-5 py-1.5 sm:py-2 rounded-full text-white text-xs sm:text-sm font-medium shadow-xl">
             {currentIndex + 1} / {images.length}
           </div>
         </div>
@@ -268,6 +264,30 @@ export default function CapturedMomentsGallery({ gallery }) {
         @keyframes fadeIn {
           from { opacity: 0; }
           to { opacity: 1; }
+        }
+        
+        @keyframes scaleIn {
+          from { 
+            opacity: 0;
+            transform: scale(0.95);
+          }
+          to { 
+            opacity: 1;
+            transform: scale(1);
+          }
+        }
+        
+        .animate-fade-in {
+          animation: fadeIn 0.3s ease-out;
+        }
+        
+        .animate-scale-in {
+          animation: scaleIn 0.4s ease-out;
+        }
+        
+        .fade-in {
+          animation: fadeIn 0.6s ease-out forwards;
+          opacity: 0;
         }
       `}</style>
     </>

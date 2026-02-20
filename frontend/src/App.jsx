@@ -1,6 +1,13 @@
 import { lazy, Suspense } from 'react'
 import { Routes, Route, useLocation } from 'react-router-dom'
 
+// Import optimized CSS animations
+import './styles/animations.css'
+
+// Toast Provider
+import { ToastProvider } from './hooks/useToast'
+import ToastContainer from './components/Toast/ToastContainer'
+
 // 🔹 Lazy-loaded layouts
 const MainLayout = lazy(() => import('./layouts/MainLayout'))
 
@@ -21,6 +28,7 @@ import ScrollToTop from './components/ScrollToTop'
 import ErrorBoundary from './components/ErrorBoundary'
 import WelcomeSplash from './components/WelcomeSplash'
 import RouteCleanup from './components/RouteCleanup'
+import BackToTopButton from './components/BackToTopButton'
 // import QuantumParticles from './components/QuantumParticles'
 // import performanceDetector from './utils/performanceDetector'
 
@@ -116,7 +124,7 @@ const PageLoader = () => (
 
 const App = () => {
   return (
-    <>
+    <ToastProvider>
       {/* Welcome Splash Screen */}
       <WelcomeSplash />
       
@@ -155,7 +163,13 @@ const App = () => {
           </Routes>
         </RouteCleanup>
       </Suspense>
-    </>
+      
+      {/* Back to Top Button - Available on all pages */}
+      <BackToTopButton />
+      
+      {/* Toast Notifications Container */}
+      <ToastContainer />
+    </ToastProvider>
   )
 }
 

@@ -82,6 +82,12 @@ export default function AdminNew() {
       setIsAuthenticated(false)
       setShowLogin(true)
       setData(null)
+      // Reset to first section on logout
+      setActiveTab('school')
+      localStorage.setItem('adminActiveTab', 'school')
+      // Clear login form fields
+      setLoginForm({ username: '', password: '' })
+      setShowPassword(false)
       addToast('success', 'Logged out successfully')
     } catch (error) {
       addToast('error', 'Logout failed')
@@ -97,6 +103,10 @@ export default function AdminNew() {
     }, 3000)
 
     return () => clearTimeout(timeout)
+  }, [])
+
+  const removeToast = useCallback((id) => {
+    setToasts(prev => prev.filter(t => t.id !== id))
   }, [])
 
   const fetchData = useCallback(async () => {
@@ -473,7 +483,7 @@ export default function AdminNew() {
   if (showLogin || !isAuthenticated) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950 p-4">
-        <Toast toasts={toasts} />
+        <Toast toasts={toasts} onClose={removeToast} />
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -555,7 +565,7 @@ export default function AdminNew() {
 
   return (
     <div className={`min-h-screen ${darkMode ? 'bg-slate-950' : 'bg-slate-50'} transition-colors duration-300`}>
-      <Toast toasts={toasts} />
+      <Toast toasts={toasts} onClose={removeToast} />
 
       {/* Desktop Sidebar - Fixed */}
       <aside className={`fixed left-0 top-0 h-screen w-64 ${darkMode ? 'bg-slate-900/95' : 'bg-white'} backdrop-blur-xl border-r ${darkMode ? 'border-slate-800' : 'border-slate-200'} hidden lg:flex flex-col z-50 overflow-hidden`}>

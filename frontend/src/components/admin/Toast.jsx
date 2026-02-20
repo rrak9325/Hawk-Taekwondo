@@ -1,23 +1,23 @@
 import { motion, AnimatePresence } from 'framer-motion'
 import { CheckCircle, AlertCircle, Info, X } from 'lucide-react'
 
-export default function Toast({ toasts }) {
+export default function Toast({ toasts, onClose }) {
   return (
-    <div className="fixed inset-0 z-[200] pointer-events-none flex items-center justify-center p-4">
+    <div className="fixed top-4 right-4 z-[200] pointer-events-none flex flex-col gap-3 max-w-sm">
       <AnimatePresence>
         {toasts.map(toast => (
           <motion.div
             key={toast.id}
-            initial={{ opacity: 0, scale: 0.9, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.9, y: -20 }}
+            initial={{ opacity: 0, x: 100 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 100 }}
             transition={{ 
               type: "spring", 
               stiffness: 400, 
               damping: 30,
               duration: 0.3 
             }}
-            className="pointer-events-auto w-full max-w-sm sm:max-w-md"
+            className="pointer-events-auto w-full"
           >
             <div className={`
               relative w-full p-4 sm:p-6 rounded-2xl shadow-2xl backdrop-blur-xl border-2
@@ -32,7 +32,7 @@ export default function Toast({ toasts }) {
               <div className="absolute inset-0 bg-black/70 rounded-2xl -z-10"></div>
               
               {/* Content */}
-              <div className="relative z-10 flex items-center gap-3 sm:gap-4">
+              <div className="relative z-10 flex items-start gap-3 sm:gap-4">
                 {/* Icon */}
                 <div className={`
                   flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center
@@ -73,6 +73,21 @@ export default function Toast({ toasts }) {
                     {toast.text}
                   </p>
                 </div>
+                
+                {/* Close button */}
+                <button
+                  onClick={() => onClose && onClose(toast.id)}
+                  className={`flex-shrink-0 p-1 rounded-lg transition-colors ${
+                    toast.type === 'success' 
+                      ? 'hover:bg-green-500/20 text-green-400' 
+                      : toast.type === 'info'
+                      ? 'hover:bg-blue-500/20 text-blue-400'
+                      : 'hover:bg-red-500/20 text-red-400'
+                  }`}
+                  aria-label="Close notification"
+                >
+                  <X size={18} />
+                </button>
               </div>
               
               {/* Progress bar */}

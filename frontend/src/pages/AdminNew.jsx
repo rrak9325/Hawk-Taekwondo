@@ -1070,6 +1070,7 @@ export default function AdminNew() {
                       rank: '',
                       specialization: '',
                       experience: '',
+                      instagram: '',
                       bio: '',
                       image: ''
                     }
@@ -1151,6 +1152,13 @@ export default function AdminNew() {
                           value={instructor.experience || ''}
                           onChange={v => updateField(`instructors.${key}.experience`, v)}
                           placeholder="e.g., 25 years, 10 years"
+                          darkMode={darkMode}
+                        />
+                        <AdminInput
+                          label="Instagram Handle"
+                          value={instructor.instagram || ''}
+                          onChange={v => updateField(`instructors.${key}.instagram`, v)}
+                          placeholder="e.g., @hawktaekwondo"
                           darkMode={darkMode}
                         />
                         <AdminInput

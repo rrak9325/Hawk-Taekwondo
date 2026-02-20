@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X, Trophy, Flame, Zap } from 'lucide-react'
 
 // Use Cloudinary URL instead of local import to reduce bundle size
@@ -56,21 +55,17 @@ const Navbar = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between h-16 md:h-20">
               
-              <motion.div 
-                className="flex items-center gap-2 md:gap-3"
-                whileHover={{ scale: 1.02 }}
-                transition={{ type: "spring", stiffness: 400, damping: 25 }}
+              <div 
+                className="flex items-center gap-2 md:gap-3 transition-transform duration-300 hover:scale-105"
               >
                 <Link to="/" className="flex items-center gap-2 md:gap-3">
                   <div className="relative">
-                    <motion.img 
+                    <img 
                       src={logo} 
                       alt="Hawk Taekwondo Logo" 
-                      className="h-10 w-auto md:h-14 md:w-24 object-contain" 
+                      className="h-10 w-auto md:h-14 md:w-24 object-contain transition-transform duration-300 hover:rotate-6" 
                       loading="lazy"
                       decoding="async"
-                      whileHover={{ rotate: 5 }}
-                      transition={{ type: "spring", stiffness: 300, damping: 20 }}
                     />
                   </div>
                   <div className="flex flex-col relative overflow-visible">
@@ -92,7 +87,7 @@ const Navbar = () => {
                     </span>
                   </div>
                 </Link>
-              </motion.div>
+              </div>
 
               <div className="hidden md:flex items-center gap-2">
                 {NAV_LINKS.map((link) => {
@@ -128,54 +123,75 @@ const Navbar = () => {
           </div>
         </nav>
 
-        <AnimatePresence>
-          {isOpen && (
-            <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: 'auto', opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.4, ease: "easeInOut" }}
-              className="md:hidden w-full  bg-black border-t border-white/10 shadow-2xl"
-            >
-              <div className="max-w-7xl mx-auto px-4 py-4 space-y-2">
-                {NAV_LINKS.map((link, index) => {
-                  const isActive = location.pathname === link.path
-                  const Icon = link.icon
-                  return (
-                    <motion.div
-                      key={link.path}
-                      initial={{ x: -30, opacity: 0 }}
-                      animate={{ x: 0, opacity: 1 }}
-                      exit={{ x: -30, opacity: 0 }}
-                      transition={{ 
-                        delay: index * 0.05,
-                        type: "spring",
-                        stiffness: 300
-                      }}
+        {isOpen && (
+          <div
+            className="md:hidden w-full bg-black border-t border-white/10 shadow-2xl overflow-hidden mobile-menu-enter"
+          >
+            <div className="max-w-7xl mx-auto px-4 py-4 space-y-2">
+              {NAV_LINKS.map((link, index) => {
+                const isActive = location.pathname === link.path
+                const Icon = link.icon
+                return (
+                  <div
+                    key={link.path}
+                    className="mobile-menu-item"
+                    style={{ animationDelay: `${index * 50}ms` }}
+                  >
+                    <Link
+                      to={link.path}
+                      onClick={() => setIsOpen(false)}
+                      className={`flex items-center gap-4 px-4 py-4 rounded-xl font-bold transition-all ${
+                        isActive
+                          ? 'bg-secondary text-white shadow-lg ring-2 ring-secondary/30' 
+                          : 'hover:bg-white/10 text-white/90 hover:text-white hover:shadow-md'
+                      }`}
                     >
-                      <Link
-                        to={link.path}
-                        onClick={() => setIsOpen(false)}
-                        className={`flex items-center gap-4 px-4 py-4 rounded-xl font-bold transition-all ${
-                          isActive
-                            ? 'bg-secondary text-white shadow-lg ring-2 ring-secondary/30' 
-                            : 'hover:bg-white/10 text-white/90 hover:text-white hover:shadow-md'
-                        }`}
-                      >
-                        <Icon className={`w-4 h-4 transition-colors duration-300 ${isActive ? 'text-white' : 'text-white/80'}`} />
-                        <span className="text-lg">{link.label}</span>
-                      </Link>
-                    </motion.div>
-                  )
-                })}
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+                      <Icon className={`w-4 h-4 transition-colors duration-300 ${isActive ? 'text-white' : 'text-white/80'}`} />
+                      <span className="text-lg">{link.label}</span>
+                    </Link>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        )}
       </div>
       
       {/* Spacer div to push content down when menu is open */}
       <div className={`transition-all duration-500 ${isOpen ? 'h-80 md:h-20' : 'h-16 md:h-20'}`}></div>
+      
+      <style>{`
+        @keyframes slideDown {
+          from {
+            max-height: 0;
+            opacity: 0;
+          }
+          to {
+            max-height: 500px;
+            opacity: 1;
+          }
+        }
+        
+        @keyframes slideInLeft {
+          from {
+            transform: translateX(-30px);
+            opacity: 0;
+          }
+          to {
+            transform: translateX(0);
+            opacity: 1;
+          }
+        }
+        
+        .mobile-menu-enter {
+          animation: slideDown 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .mobile-menu-item {
+          animation: slideInLeft 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+          opacity: 0;
+        }
+      `}</style>
     </div>
   )
 }

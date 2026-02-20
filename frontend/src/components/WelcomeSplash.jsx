@@ -15,22 +15,22 @@ export default function WelcomeSplash() {
       return
     }
 
-    // Progress bar animation
+    // Progress bar animation (faster)
     const progressInterval = setInterval(() => {
       setProgress(prev => {
         if (prev >= 100) {
           clearInterval(progressInterval)
           return 100
         }
-        return prev + 2.5 // 100 / 40 steps = 2.5% per 100ms
+        return prev + 5 // Faster progress (100 / 20 steps = 5% per 100ms)
       })
     }, 100)
 
-    // Hide splash after 4 seconds
+    // Hide splash after 2 seconds (reduced from 4)
     const timer = setTimeout(() => {
       setIsVisible(false)
       sessionStorage.setItem('hasVisitedHTTC', 'true')
-    }, isLowEndDevice ? 3000 : 4000)
+    }, isLowEndDevice ? 1500 : 2000)
 
     return () => {
       clearTimeout(timer)

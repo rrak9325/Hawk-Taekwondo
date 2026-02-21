@@ -920,7 +920,7 @@ function LegacyStorySection() {
             {/* Current Training Images - Side by Side */}
             <div className="grid md:grid-cols-2 gap-6 md:gap-8">
               <PhotoFrame
-                src="https://res.cloudinary.com/dem7arres/image/upload/f_auto,q_auto:good/v1771335992/hawk-taekwondo/images/13a7ed63-bf70-4878-828d-e805933d354e.jpg"
+                src="https://res.cloudinary.com/dem7arres/image/upload/f_auto,q_auto:good/v1771696843/today-yaju_c7wnoy.jpg"
                 alt="Current students practicing high kicks during training session"
                 caption="Master Yajuvendrasinh Rathod training advanced students"
                 aspectRatio="1/1"

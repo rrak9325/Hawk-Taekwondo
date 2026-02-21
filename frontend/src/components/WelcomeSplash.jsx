@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { shouldUseInfiniteLoops, isLowEndDevice } from '../utils/devicePerformance.js'
+import { shouldUseInfiniteLoops } from '../utils/devicePerformance.js'
 
 export default function WelcomeSplash() {
   const [isVisible, setIsVisible] = useState(true)
@@ -26,14 +26,14 @@ export default function WelcomeSplash() {
       })
     }, 100)
 
-    // Hide splash after 2 seconds (reduced from 4)
+    // Hide splash after 2 seconds
     const timer = setTimeout(() => {
       setIsExiting(true)
       setTimeout(() => {
         setIsVisible(false)
         sessionStorage.setItem('hasVisitedHTTC', 'true')
       }, 800) // Wait for exit animation
-    }, isLowEndDevice ? 1500 : 2000)
+    }, 2000)
 
     return () => {
       clearTimeout(timer)
@@ -43,36 +43,7 @@ export default function WelcomeSplash() {
 
   if (!isVisible) return null
 
-  // Low-end device: minimal splash
-  if (isLowEndDevice) {
-    return (
-      <div className={`fixed inset-0 z-[9999] flex items-center justify-center bg-white ${isExiting ? 'splash-exit' : ''}`}>
-        <div className="text-center px-6">
-          <img
-            src="https://res.cloudinary.com/dem7arres/image/upload/v1771347376/eagle-modified_n3g8to.png"
-            alt="Hawk Taekwondo Logo"
-            className="w-32 h-32 mx-auto mb-6 object-contain drop-shadow-2xl"
-          />
-          <h1 className="text-4xl font-black text-gray-900 mb-3">
-            Welcome to <span className="text-red-600">HTTC</span>
-          </h1>
-          <p className="text-lg text-gray-600">Hawk Taekwondo Training Centre</p>
-        </div>
-        
-        <style>{`
-          .splash-exit {
-            animation: fadeOut 0.5s ease-out forwards;
-          }
-          
-          @keyframes fadeOut {
-            to { opacity: 0; }
-          }
-        `}</style>
-      </div>
-    )
-  }
-
-  // High-end device: modern white experience
+  // Full animated splash for all devices
   return (
     <div className={`fixed inset-0 z-[9999] flex items-center justify-center overflow-hidden ${isExiting ? 'splash-exit' : ''}`}>
       {/* Modern White Gradient Background */}

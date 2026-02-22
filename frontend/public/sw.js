@@ -1,5 +1,5 @@
 // Service worker - force clear old cache and always fetch fresh
-const CACHE_VERSION = 'v2' // Increment this to force cache clear
+const CACHE_VERSION = 'v3' // Increment this to force cache clear
 const CACHE_NAME = `hawk-taekwondo-${CACHE_VERSION}`
 
 // Install - clear all old caches
@@ -34,6 +34,24 @@ self.addEventListener('fetch', (event) => {
     event.respondWith(
       fetch(event.request).catch(() => {
         return caches.match(event.request)
+      })
+    )
+    return
+  }
+  
+  // Cache Cloudinary images (your images)
+  if (url.hostname === 'res.cloudinary.com') {
+    event.respondWith(
+      caches.open(CACHE_NAME).then((cache) => {
+        return cache.match(event.request).then((response) => {
+          return response || fetch(event.request).then((fetchResponse) => {
+            // Only cache successful responses
+            if (fetchResponse.ok) {
+              cache.put(event.request, fetchResponse.clone())
+            }
+            return fetchResponse
+          })
+        })
       })
     )
     return

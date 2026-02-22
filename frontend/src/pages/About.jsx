@@ -508,7 +508,7 @@ function HeroSection() {
 
       <div className="absolute inset-0 w-full h-full">
         <img
-          src="https://res.cloudinary.com/dem7arres/image/upload/f_auto,q_auto:good/v1771337575/hawk-taekwondo/images/cfd1516b-a500-4ed1-8197-067cca6132c6.jpg"
+          src="https://res.cloudinary.com/dem7arres/image/upload/f_auto,q_auto:good/v1771740720/childhod_t1dldd.jpg"
           alt="Hawk Taekwondo Training Centre"
           loading="eager"
           decoding="async"

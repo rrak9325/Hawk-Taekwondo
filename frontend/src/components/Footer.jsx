@@ -148,7 +148,7 @@ const Footer = () => {
                 <Instagram className="w-5 h-5 text-white" />
               </a>
               <a
-                href="https://wa.me/918487829291?text=Hello!%20I'm%20interested%20in%20joining%20your%20school.%20Please%20share%20more%20details."
+                href="https://wa.me/919898222359?text=Hello!%20I'm%20interested%20in%20joining%20your%20school.%20Please%20share%20more%20details."
                 target="_blank"
                 rel="noopener noreferrer"
                 className="p-2 bg-green-500 rounded-lg hover:bg-green-600 transition-colors"

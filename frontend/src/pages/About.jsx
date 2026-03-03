@@ -3,6 +3,7 @@ import { Shield, Award, Heart, Target, Users, TrendingUp } from 'lucide-react'
 import { useSchoolData } from '../hooks/useSchoolData.js'
 import { PageLoadingFallback } from '../components/LoadingFallback'
 import ServerDownPage from '../components/ServerDownPage'
+import PageNavigation from '../components/PageNavigation'
 import { currentAnimationConfig } from '../utils/devicePerformance.js'
 
 // Lightweight scroll animation hook
@@ -456,6 +457,8 @@ export default function About() {
           image-rendering: crisp-edges;
         }
       `}</style>
+
+      <PageNavigation />
     </div>
   )
 }

@@ -1,6 +1,7 @@
 import { useEffect, useState, useMemo, useCallback, memo } from 'react'
 import { Clock, Users, Calendar, ChevronLeft, ChevronRight, Zap } from 'lucide-react'
 import Hero from '../components/Hero'
+import PageNavigation from '../components/PageNavigation'
 
 const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 
@@ -698,6 +699,8 @@ export default function Schedule() {
           }
         `}</style>
       </section>
+
+      <PageNavigation />
     </div>
   )
 }

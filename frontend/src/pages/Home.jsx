@@ -4,6 +4,7 @@ import { Shield, CheckCircle, Award, Users, Target, Heart, TrendingUp, Star } fr
 import Hero from '../components/Hero'
 import CapturedMomentsGallery from '../components/CapturedMomentsGallery'
 import Testimonials from '../components/Testimonials'
+import PageNavigation from '../components/PageNavigation'
 import { useSchoolData } from '../hooks/useSchoolData.js'
 import { PageLoadingFallback } from '../components/LoadingFallback'
 import ServerDownPage from '../components/ServerDownPage'
@@ -132,7 +133,7 @@ export default function Home() {
     <div className="bg-white" style={{ opacity: ready ? 1 : 0, transition: 'opacity 0.3s' }}>
       <Hero
         {...hero}
-        height="h-[92vh]"
+        height="h-[80vh]"
         overlayOpacity="bg-black/1"
         showHawk={false}
       />
@@ -195,25 +196,8 @@ export default function Home() {
         <Testimonials testimonials={data.testimonials || []} />
       </LazySection>
 
-      {/* Call to Action Section - Only renders when in viewport */}
-      <LazySection className="py-12 lg:py-16 xl:py-20 bg-gradient-to-br from-primary to-primary-light text-white text-center" rootMargin="300px" keepMounted={true}>
-        <div className="container mx-auto px-4">
-          <ScrollReveal>
-            <h2 className="font-heading text-2xl md:text-3xl lg:text-4xl font-bold mb-4 lg:mb-6">
-              Ready to Start Your Journey?
-            </h2>
-            <p className="text-white/90 text-base lg:text-lg mb-6 lg:mb-8 max-w-2xl mx-auto">
-              Join {schoolInfo.name} and discover the transformative power of martial arts.
-              Build confidence, discipline, and strength in a supportive community.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <Link to="/contact#form" className="btn-secondary px-6 lg:px-8 py-3 lg:py-4 text-base lg:text-lg font-semibold w-full sm:w-auto hover-lift">
-                Book A Free Trial
-              </Link>
-            </div>
-          </ScrollReveal>
-        </div>
-      </LazySection>
+
+      <PageNavigation />
     </div>
   )
 }

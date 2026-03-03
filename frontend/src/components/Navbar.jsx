@@ -50,8 +50,8 @@ const Navbar = () => {
 
   return (
     <div className="w-full">
-      <div className={`fixed top-0 w-full z-50 transition-all duration-500 ${menuHeight}`}>
-        <nav className={`w-full transition-all duration-500 ${scrolled ? 'bg-primary/95 backdrop-blur-xl shadow-2xl' : 'bg-primary'} text-white`}>
+      <div className={`fixed top-0 w-full z-50 transition-all duration-500`}>
+        <nav className={`w-full transition-all duration-500 ${scrolled ? 'bg-primary/95 backdrop-blur-xl shadow-2xl' : 'bg-transparent'} text-white`}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between h-16 md:h-20">
               
@@ -79,10 +79,10 @@ const Navbar = () => {
                         zIndex: 10
                       }}
                     />
-                    <span className="text-lg md:text-3xl font-black tracking-tighter text-white">
+                    <span className="text-lg md:text-3xl font-black tracking-tighter text-white drop-shadow-lg">
                       HAWK 
                     </span>
-                    <span className="text-[0.5rem] md:text-xs font-bold text-secondary/80 tracking-widest uppercase">
+                    <span className="text-[0.5rem] md:text-xs font-bold text-secondary/80 tracking-widest uppercase drop-shadow-md">
                       MASTER YOUR STRIKE
                     </span>
                   </div>
@@ -112,12 +112,16 @@ const Navbar = () => {
 
               <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="md:hidden p-2 rounded-xl hover:bg-white/10 transition-all active:scale-95"
+                className="md:hidden p-3 rounded-xl hover:bg-white/20 transition-all active:scale-95 animate-pulse-custom relative group"
                 aria-label="Toggle menu"
               >
-                <div className="w-6 h-6">
+                <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-secondary/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                <div className="w-6 h-6 relative z-10 text-secondary">
                   {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
                 </div>
+                {!isOpen && (
+                  <div className="absolute top-1 right-1 w-2 h-2 bg-secondary rounded-full animate-bounce"></div>
+                )}
               </button>
             </div>
           </div>
@@ -125,7 +129,7 @@ const Navbar = () => {
 
         {isOpen && (
           <div
-            className="md:hidden w-full bg-black border-t border-white/10 shadow-2xl overflow-hidden mobile-menu-enter"
+            className="md:hidden w-full bg-black/95 backdrop-blur-md border-t-2 border-secondary/50 shadow-2xl overflow-hidden mobile-menu-enter"
           >
             <div className="max-w-7xl mx-auto px-4 py-4 space-y-2">
               {NAV_LINKS.map((link, index) => {
@@ -157,9 +161,6 @@ const Navbar = () => {
         )}
       </div>
       
-      {/* Spacer div to push content down when menu is open */}
-      <div className={`transition-all duration-500 ${isOpen ? 'h-80 md:h-20' : 'h-16 md:h-20'}`}></div>
-      
       <style>{`
         @keyframes slideDown {
           from {
@@ -181,6 +182,19 @@ const Navbar = () => {
             transform: translateX(0);
             opacity: 1;
           }
+        }
+
+        @keyframes pulse-custom {
+          0%, 100% {
+            box-shadow: 0 0 8px rgba(251, 191, 36, 0.6), inset 0 0 8px rgba(251, 191, 36, 0.2);
+          }
+          50% {
+            box-shadow: 0 0 16px rgba(251, 191, 36, 0.8), inset 0 0 12px rgba(251, 191, 36, 0.4);
+          }
+        }
+        
+        .animate-pulse-custom {
+          animation: pulse-custom 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
         }
         
         .mobile-menu-enter {

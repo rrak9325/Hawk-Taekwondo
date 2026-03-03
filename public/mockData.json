@@ -202,7 +202,7 @@
       "name": "Self Defence",
       "description": "Practical protection techniques designed for real-world situations and personal safety.",
       "benefits": {},
-      "image": "https://res.cloudinary.com/dem7arres/image/upload/v1771097913/hawk-taekwondo/images/a9a11a6e-d3a1-43c7-8358-d2cddb566088.jpg"
+      "image": "https://res.cloudinary.com/dem7arres/image/upload/v1772523703/hawk-taekwondo/images/7ff94fde-7323-41e0-9b61-196927c9a98d.jpg"
     },
     "3": {
       "id": 3,
@@ -220,8 +220,7 @@
       "specialization": "Chief Instructor",
       "experience": "25 years",
       "bio": "Asian Taekwondo Union Licensed Coach with over two decades of teaching experience. Specializes in advanced techniques and competition training.",
-      "image": "https://res.cloudinary.com/dem7arres/image/upload/v1771097343/hawk-taekwondo/images/b0eb6180-092a-43cf-ac42-ac67116bc657.jpg",
-      "instagram": "@yajurathod"
+      "image": "https://res.cloudinary.com/dem7arres/image/upload/v1772523660/hawk-taekwondo/images/267564ce-9762-49d2-a402-f7340fe4358e.jpg"
     },
     "1": {
       "id": 3,
@@ -230,8 +229,7 @@
       "specialization": "Assistant Coach",
       "experience": "10 years",
       "bio": "Passionate instructor focused on building strong fundamentals and creating a positive learning environment for students of all ages.",
-      "image": "https://res.cloudinary.com/dem7arres/image/upload/v1770911901/hawk-taekwondo/images/tmp-1-50761770911903864_jfv3ih.jpg",
-      "instagram": "@rohansahani0066"
+      "image": "https://res.cloudinary.com/dem7arres/image/upload/v1772523673/hawk-taekwondo/images/d40a5836-dacc-4225-b7f3-3a99257de2e8.png"
     }
   },
   "testimonials": {
@@ -406,36 +404,30 @@
   "gallery": {
     "featured": {
       "0": {
-        "id": 1771600851825.8118,
-        "image": "https://res.cloudinary.com/dem7arres/image/upload/v1771600852/hawk-taekwondo/images/2d45924f-b6ef-42ae-a033-bc03ad9b248d.jpg",
-        "publicId": "hawk-taekwondo/images/2d45924f-b6ef-42ae-a033-bc03ad9b248d",
-        "title": ""
-      },
-      "1": {
         "id": 1771600853318.7249,
         "image": "https://res.cloudinary.com/dem7arres/image/upload/v1771600853/hawk-taekwondo/images/62b9d111-eb99-4e53-ba7a-068ae4c889d3.jpg",
         "publicId": "hawk-taekwondo/images/62b9d111-eb99-4e53-ba7a-068ae4c889d3",
         "title": ""
       },
-      "2": {
+      "1": {
         "id": 1771600854911.1106,
         "image": "https://res.cloudinary.com/dem7arres/image/upload/v1771600855/hawk-taekwondo/images/e0df2ae9-859c-48e2-bbb9-d153a185bf22.jpg",
         "publicId": "hawk-taekwondo/images/e0df2ae9-859c-48e2-bbb9-d153a185bf22",
         "title": ""
       },
-      "3": {
+      "2": {
         "id": 1771600857491.8057,
         "image": "https://res.cloudinary.com/dem7arres/image/upload/v1771600856/hawk-taekwondo/images/29c58666-f1cc-4bc8-88ee-62675c674580.jpg",
         "publicId": "hawk-taekwondo/images/29c58666-f1cc-4bc8-88ee-62675c674580",
         "title": ""
       },
-      "4": {
+      "3": {
         "id": 1771600859761.3127,
         "image": "https://res.cloudinary.com/dem7arres/image/upload/v1771600859/hawk-taekwondo/images/5d739255-779b-4f00-868b-90aca882186d.jpg",
         "publicId": "hawk-taekwondo/images/5d739255-779b-4f00-868b-90aca882186d",
         "title": ""
       },
-      "5": {
+      "4": {
         "id": 1771577711300.3955,
         "image": "https://res.cloudinary.com/dem7arres/image/upload/v1771577709/hawk-taekwondo/images/3f44c5de-434d-4261-8002-0cbccab4534a.jpg",
         "publicId": "hawk-taekwondo/images/3f44c5de-434d-4261-8002-0cbccab4534a",

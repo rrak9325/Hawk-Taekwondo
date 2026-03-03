@@ -1,6 +1,7 @@
 import { useState, useEffect, memo, useCallback } from 'react'
 import { Shield, Target, Users, Award, Star, Check } from 'lucide-react'
 import Hero from '../components/Hero'
+import PageNavigation from '../components/PageNavigation'
 import { useSchoolData } from '../hooks/useSchoolData.js'
 import { PageLoadingFallback } from '../components/LoadingFallback'
 import ServerDownPage from '../components/ServerDownPage'
@@ -569,6 +570,8 @@ export default function Programs() {
           }
         `}</style>
       </section>
+
+      <PageNavigation />
     </div>
   )
 }

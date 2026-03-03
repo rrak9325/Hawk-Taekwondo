@@ -20,10 +20,21 @@ export default function Hero({
   const [showContent, setShowContent] = useState(false)
   const [titleMoved, setTitleMoved] = useState(false)
   const [useVideo, setUseVideo] = useState(true)
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768)
   
   // Get performance config
   const perfConfig = useMemo(() => performanceDetector.getAnimationConfig(), [])
   const shouldAnimate = perfConfig.enabled
+
+  // Detect mobile
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768)
+    }
+
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
 
   // Detect if device should use video
   useEffect(() => {
@@ -56,6 +67,9 @@ export default function Hero({
 
   // Optimize video URL with Cloudinary transformations
   const optimizedVideoUrl = videoUrl ? videoUrl.replace('/upload/', '/upload/q_auto,f_auto,vc_auto/') : null
+  
+  // Responsive video scaling - no scale on mobile to prevent overflow
+  const videoScale = isMobile ? 'scale(1)' : 'scale(1.15)'
 
   return (
     <section className={`relative w-full ${height} overflow-hidden bg-black`}>
@@ -68,7 +82,7 @@ export default function Hero({
         </div>
       )}
 
-      {/* Background Media */}
+      {/* Background Media - Constrained viewport to prevent overflow */}
       <div 
         className="absolute inset-0 w-full h-full transition-opacity duration-1000 overflow-hidden"
         style={{ opacity: showContent ? 1 : 0 }}
@@ -95,7 +109,7 @@ export default function Hero({
             src={optimizedVideoUrl}
             poster={backgroundImage}
             className="absolute w-full h-full object-cover"
-            style={{ transform: 'scale(1.15)' }}
+            style={{ transform: videoScale }}
           />
         )}
         
@@ -165,6 +179,13 @@ export default function Hero({
       )}
       
       {/* Removed inline keyframes - now using animations.css! */}
+      <style>{`
+        @media (max-width: 767px) {
+          section video {
+            transform: scale(1) !important;
+          }
+        }
+      `}</style>
     </section>
   )
 }

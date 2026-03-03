@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useMemo, memo } from 'react'
 import { MapPin, Phone, Mail, Clock, Send, CheckCircle, MessageCircle } from 'lucide-react'
 import Hero from '../components/Hero'
+import PageNavigation from '../components/PageNavigation'
 
 // Memoized IconWrap component
 const IconWrap = memo(({ icon: Icon }) => {
@@ -361,6 +362,7 @@ Message: ${formData.message}`
         }
       `}</style>
 
+      <PageNavigation />
     </div>
   )
 }

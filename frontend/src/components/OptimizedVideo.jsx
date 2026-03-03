@@ -108,8 +108,10 @@ export default function OptimizedVideo({
           ...style,
           willChange: 'transform', // GPU acceleration hint
           opacity: isReady ? 1 : 0,
-          transition: 'opacity 1s ease-in-out',
-          zIndex: isReady ? 1 : 0
+          transition: 'opacity 1s ease-in-out, transform 0.5s ease-in-out',
+          zIndex: isReady ? 1 : 0,
+          maxWidth: '100%',
+          maxHeight: '100%'
         }}
         poster={poster}
         autoPlay={autoPlay}
